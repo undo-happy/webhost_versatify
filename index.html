@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Versatify - 모든 도구가 하나로</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">
+                <div class="logo-icon">V</div>
+                <h1 class="brand-name">Versatify</h1>
+            </div>
+            <p class="tagline">모든 도구가 하나로 - 당신의 생산성을 극대화하세요</p>
+        </div>
+
+        <!-- Navigation -->
+        <div class="nav-tabs">
+            <button class="tab-button active" onclick="showTab('all')">전체 도구</button>
+            <button class="tab-button" onclick="showTab('popular')">인기 도구</button>
+            <button class="tab-button" onclick="showTab('new')">새로운 도구</button>
+            <button class="tab-button" onclick="showTab('favorites')">즐겨찾기</button>
+        </div>
+
+        <!-- All Tools Tab -->
+        <div id="all" class="tab-content active">
+            <div class="tools-grid" id="toolsContent">
+                <!-- 동적 콘텐츠 로드 -->
+            </div>
+        </div>
+
+        <!-- Popular Tab -->
+        <div id="popular" class="tab-content">
+            <div class="tools-grid">
+                <div class="tool-category core-tools-card">
+                    <div class="category-header">
+                        <div class="category-icon pdf-icon">🔥</div>
+                        <div>
+                            <div class="category-title">인기 도구 TOP 10</div>
+                            <div class="category-desc">가장 많이 사용되는 도구들</div>
+                        </div>
+                    </div>
+                    <div class="tool-list">
+                        <div class="tool-item" onclick="showFileConverter()">
+                            <div class="tool-name">파일 변환</div>
+                            <div class="tool-desc">#1 PDF, 이미지, 문서</div>
+                        </div>
+                        <div class="tool-item">
+                            <div class="tool-name">배경 제거</div>
+                            <div class="tool-desc">#2 AI 기반</div>
+                        </div>
+                        <div class="tool-item">
+                            <div class="tool-name">QR 코드 생성</div>
+                            <div class="tool-desc">#3 빠른 생성</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>&copy; 2025 Versatify.me - 모든 권리 보유</p>
+            <div class="footer-links">
+                <a href="#">개인정보보호정책</a>
+                <a href="#">이용약관</a>
+                <a href="#">고객지원</a>
+                <a href="#" class="admin-link" onclick="showAdminModal()">관리자 모드</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Login Modal -->
+    <div class="admin-modal" id="adminModal">
+        <div class="modal-content">
+            <div class="modal-header">🔐 관리자 로그인</div>
+            <input type="password" class="password-input" id="adminPassword" placeholder="비밀번호를 입력하세요">
+            <div class="error-message" id="errorMessage">비밀번호가 올바르지 않습니다.</div>
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-primary" onclick="checkAdminPassword()">로그인</button>
+                <button class="modal-btn modal-btn-secondary" onclick="closeAdminModal()">취소</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- File Converter Modal -->
+    <div class="converter-modal" id="converterModal">
+        <div class="converter-content">
+            <button class="close-button" onclick="closeConverterModal()">×</button>
+            <h2 class="converter-header">📄 파일 변환</h2>
+            
+            <div class="converter-section">
+                <label class="converter-label">파일 선택</label>
+                <div class="file-drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
+                    <p id="dropZoneText">파일을 드래그하거나 클릭하여 선택하세요</p>
+                    <div class="file-type-tags">
+                        <span class="file-type-tag">PDF</span>
+                        <span class="file-type-tag">DOCX</span>
+                        <span class="file-type-tag">XLSX</span>
+                        <span class="file-type-tag">이미지</span>
+                    </div>
+                </div>
+                <input type="file" id="fileInput" class="file-input">
+            </div>
+
+            <div class="converter-section">
+                <label class="converter-label">변환 형식</label>
+                <select id="targetFormat" class="format-selector">
+                    <option value="">변환할 형식을 선택하세요</option>
+                    <option value="pdf">PDF</option>
+                    <option value="docx">DOCX (Word)</option>
+                    <option value="xlsx">XLSX (Excel)</option>
+                    <option value="jpg">JPG</option>
+                    <option value="png">PNG</option>
+                </select>
+            </div>
+
+            <button id="convertButton" class="convert-button" disabled onclick="startConversion()">
+                변환 시작
+            </button>
+
+            <div class="progress-section" id="progressSection">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <p class="status-message" id="statusMessage">준비 중...</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
