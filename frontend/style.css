@@ -248,3 +248,107 @@ body {
     0%, 100% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
 }
+
+/* File Drop Zone Styling */
+.file-drop-zone {
+    border: 2px dashed #7E212C; /* Using a theme color from .tab-button */
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    background-color: rgba(254, 213, 217, 0.1); /* Light accent background, similar to .tool-item:hover */
+    border-radius: 10px; /* Consistent with other rounded elements like .category-icon */
+    margin-bottom: 1rem; /* Add some space below it */
+}
+
+.file-drop-zone p {
+    margin: 0; /* Reset paragraph margin if needed */
+    color: #636e72; /* Consistent with .tagline color */
+}
+
+.file-type-tags {
+    margin-top: 10px;
+}
+
+.file-type-tag {
+    display: inline-block;
+    background-color: #e9ecef;
+    color: #495057;
+    padding: 0.3rem 0.6rem;
+    border-radius: 15px; /* like .tab-button */
+    font-size: 0.8rem;
+    margin: 0 5px 5px 0;
+}
+
+/* Additional Modal Styling from Analysis */
+
+.close-button {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    background: transparent;
+    border: none;
+    font-size: 1.8rem;
+    color: #636e72; /* Consistent with .tagline */
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+}
+
+.close-button:hover {
+    color: #2d3436; /* Darker on hover */
+}
+
+.converter-section {
+    margin-bottom: 1.5rem; /* Space between sections */
+}
+
+.converter-section:last-of-type {
+    margin-bottom: 1rem; /* Less space for the last section before button */
+}
+
+.converter-label {
+    display: block;
+    font-weight: 600;
+    color: #2d3436; /* Consistent with .category-title */
+    margin-bottom: 0.5rem;
+}
+
+.format-selector {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 1px solid #CCD3D9; /* Theme color */
+    border-radius: 8px; /* Softer radius */
+    font-size: 1rem;
+    background-color: white;
+    color: #2d3436;
+    box-sizing: border-box; /* Ensure padding doesn't expand width */
+}
+
+.progress-section {
+    margin-top: 1.5rem;
+    /* display: none; /* Initially hidden, JS controls display */
+    /* Note: app.js already sets progressSection.style.display = 'block', so this can be removed or kept for clarity */
+}
+
+.progress-bar {
+    width: 100%;
+    background-color: #e9ecef; /* Light grey background */
+    border-radius: 8px;
+    height: 20px; /* Define a height */
+    overflow: hidden; /* To contain the fill */
+    margin-bottom: 0.5rem; /* Space before status message */
+}
+
+.progress-fill {
+    width: 0%; /* Initial width */
+    height: 100%;
+    background: linear-gradient(135deg, #7E212C, #a63d47); /* Theme color for progress */
+    border-radius: 8px; /* Match parent's radius */
+    transition: width 0.3s ease-in-out;
+}
+
+.status-message {
+    font-size: 0.9rem;
+    color: #636e72; /* Consistent with .category-desc */
+    text-align: center;
+}
