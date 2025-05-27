@@ -506,3 +506,26 @@ body {
 .status-message {
     /* These styles are being replaced */
 }
+
+/* 드래그 앤 드롭 하이라이트 효과 */
+.file-select-area.highlight {
+    border-color: #7E212C;
+    background-color: rgba(254, 213, 217, 0.3);
+    transform: scale(1.02);
+    transition: all 0.2s ease;
+}
+
+/* 성능 최적화 관련 스타일 */
+.file-select-area, .file-type-btn, .convert-button {
+    will-change: transform, background-color;
+}
+
+.converter-modal, .file-type-btn.selected {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+}
+
+/* 애니메이션 최적화 */
+.file-select-area, .file-type-btn, .convert-button, .converter-content {
+    transition-duration: 0.2s;
+}
