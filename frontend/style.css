@@ -352,3 +352,157 @@ body {
     color: #636e72; /* Consistent with .category-desc */
     text-align: center;
 }
+
+/* File Converter Modal Styling */
+.converter-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.converter-modal.show {
+    display: flex;
+}
+
+.converter-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    max-width: 600px;
+    width: 90%;
+    position: relative;
+}
+
+.converter-header {
+    display: flex;
+    align-items: center;
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: #333;
+}
+
+.header-icon {
+    margin-right: 10px;
+}
+
+.close-button {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    background: transparent;
+    border: none;
+    font-size: 1.8rem;
+    color: #636e72;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+}
+
+.close-button:hover {
+    color: #2d3436;
+}
+
+.converter-section {
+    margin-bottom: 1.5rem;
+}
+
+.converter-label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.file-select-area {
+    border: 2px dashed #ccc;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+.file-select-area p {
+    margin: 0 0 15px 0;
+    color: #666;
+}
+
+.file-type-buttons {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.file-type-btn {
+    background-color: #f1f1f1;
+    border: none;
+    border-radius: 20px;
+    padding: 8px 15px;
+    font-size: 0.9rem;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.file-type-btn:hover {
+    background-color: #e0e0e0;
+}
+
+.file-type-btn.selected {
+    background-color: #7E212C;
+    color: white;
+}
+
+.format-selector {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 1rem;
+    color: #333;
+    background-color: #fff;
+}
+
+.convert-button {
+    width: 100%;
+    padding: 12px;
+    background-color: #7E212C;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.convert-button:hover {
+    background-color: #6a1c26;
+}
+
+.convert-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+/* Remove old styles that are no longer needed */
+.file-drop-zone,
+.file-type-tags,
+.file-type-tag,
+.progress-section,
+.progress-bar,
+.progress-fill,
+.status-message {
+    /* These styles are being replaced */
+}
