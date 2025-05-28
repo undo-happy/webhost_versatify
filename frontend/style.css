@@ -326,8 +326,7 @@ body {
 
 .progress-section {
     margin-top: 1.5rem;
-    /* display: none; /* Initially hidden, JS controls display */
-    /* Note: app.js already sets progressSection.style.display = 'block', so this can be removed or kept for clarity */
+    display: none; /* Initially hidden, JS controls display */
 }
 
 .progress-bar {
