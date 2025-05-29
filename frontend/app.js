@@ -119,19 +119,166 @@ function checkConversionReady() {
     document.getElementById('convertButton').disabled = !(hasFile && hasFormat);
 }
 
-function startConversion() {
+async function startConversion() {
     document.getElementById('progressSection').style.display = 'block';
-    let progress = 0;
-    const interval = setInterval(() => {
-        progress += 10;
-        document.getElementById('progressFill').style.width = `${progress}%`;
-        document.getElementById('statusMessage').textContent = `변환 중... ${progress}%`;
-        
-        if (progress >= 100) {
-            clearInterval(interval);
-            document.getElementById('statusMessage').textContent = '변환 완료! (데모 모드)';
+    const statusMessage = document.getElementById('statusMessage');
+    const progressFill = document.getElementById('progressFill');
+    const convertButton = document.getElementById('convertButton');
+
+    convertButton.disabled = true;
+    statusMessage.textContent = '준비 중...';
+    progressFill.style.width = '0%';
+
+    if (!selectedFile || !document.getElementById('targetFormat').value) {
+        statusMessage.textContent = '파일과 변환 형식을 선택해주세요.';
+        convertButton.disabled = false;
+        return;
+    }
+
+    const targetFormat = document.getElementById('targetFormat').value;
+
+    try {
+        statusMessage.textContent = '업로드 준비 중...';
+        progressFill.style.width = '10%';
+
+        // 1. Call IssueSas API
+        const issueSasResponse = await fetch('/api/IssueSas', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ name: selectedFile.name }),
+        });
+
+        progressFill.style.width = '20%';
+
+        if (!issueSasResponse.ok) {
+            const errorText = await issueSasResponse.text();
+            throw new Error(`SAS URL 확보 실패: ${issueSasResponse.status} ${errorText}`);
         }
-    }, 200);
+
+        const { uploadUrl } = await issueSasResponse.json();
+
+        if (!uploadUrl) {
+            throw new Error('SAS URL이 응답에 포함되지 않았습니다.');
+        }
+
+        statusMessage.textContent = '파일 업로드 중...';
+        progressFill.style.width = '30%';
+
+        // 2. Upload the File to Azure Blob Storage
+        const uploadResponse = await fetch(uploadUrl, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': selectedFile.type,
+                'x-ms-blob-type': 'BlockBlob',
+            },
+            body: selectedFile,
+        });
+        
+        // Simulate upload progress for fetch
+        let progress = 30;
+        const uploadInterval = setInterval(() => {
+            progress += 5;
+            if (progress <= 80) { // Cap at 80% before actual completion
+                progressFill.style.width = `${progress}%`;
+                statusMessage.textContent = `파일 업로드 중... ${progress}%`;
+            } else {
+                clearInterval(uploadInterval);
+            }
+        }, 100);
+
+
+        if (!uploadResponse.ok) {
+            clearInterval(uploadInterval);
+            const errorText = await uploadResponse.text();
+            throw new Error(`파일 업로드 실패: ${uploadResponse.status} ${errorText}`);
+        }
+        
+        clearInterval(uploadInterval);
+        progressFill.style.width = '100%';
+        statusMessage.textContent = '파일 업로드 완료. 백엔드에서 변환이 처리 중입니다. 완료 시 알림 예정 (현재는 수동 확인).';
+
+    } catch (error) {
+        console.error('변환 프로세스 오류:', error);
+        statusMessage.textContent = `오류 발생: ${error.message}`;
+        progressFill.style.width = '0%'; // Reset progress on error
+    } finally {
+        // Re-enable button after a delay or based on outcome
+        // For now, keep it simple, it might be better to leave it disabled
+        // until a "new conversion" button is clicked or file is changed.
+        // convertButton.disabled = false; 
+        checkConversionReady(); // Re-evaluates if button should be enabled
+
+        // Simulate backend processing delay then enable download
+        const currentFileName = selectedFile.name; // Keep a local copy of selectedFile.name
+        const currentTargetFormat = document.getElementById('targetFormat').value; // Get target format
+
+        // document.getElementById('statusMessage').textContent = `File ${currentFileName} uploaded. Conversion processing...`;
+        // document.getElementById('progressFill').style.width = '100%'; // Show upload as complete
+
+        // Hide progress bar section after a short delay, show download button
+        setTimeout(() => {
+            document.getElementById('progressSection').style.display = 'none';
+            prepareDownloadLink(currentFileName, currentTargetFormat);
+            // Reset for next conversion
+            document.getElementById('convertButton').disabled = true;
+            selectedFile = null; 
+            // document.getElementById('fileInput').value = null; // Clear file input if desired
+            document.getElementById('targetFormat').value = ''; // Clear format 
+            document.getElementById('dropZoneText').textContent = '드래그 앤 드롭 또는 클릭하여 파일 선택';
+            document.getElementById('fileInput').value = null; // Clear file input display
+
+
+        }, 3000); // Simulate 3 seconds of conversion time
+    }
+}
+
+function prepareDownloadLink(originalFileName, targetFormat) {
+    const downloadButton = document.getElementById('downloadButton');
+    const statusMessage = document.getElementById('statusMessage');
+    
+    // Construct the expected converted file name. 
+    // Assuming backend saves as base_name.target_format (e.g., myimage.png)
+    // If originalFileName is 'myimage.jpg' and targetFormat is 'png'.
+    const baseName = originalFileName.substring(0, originalFileName.lastIndexOf('.'));
+    const convertedFileName = baseName + '.' + targetFormat;
+
+    statusMessage.textContent = `File ${originalFileName} converted to ${targetFormat}. Ready for download.`;
+    downloadButton.style.display = 'block';
+    downloadButton.disabled = false;
+
+
+    downloadButton.onclick = async () => {
+        statusMessage.textContent = `Preparing download for ${convertedFileName}...`;
+        downloadButton.disabled = true;
+        try {
+            // TODO: This is where the call to the backend to get a download SAS URL would go.
+            // Example: const response = await fetch(`/api/GetAzureDownloadSas?fileName=${convertedFileName}`);
+            // if (!response.ok) throw new Error('Failed to get download link.');
+            // const data = await response.json();
+            // const downloadUrl = data.downloadUrl;
+            
+            // For now, simulate getting a URL and log it.
+            const simulatedDownloadUrl = `https://example.com/converted/${convertedFileName}`; // Replace with actual logic
+            console.log(`TODO: Would download from: ${simulatedDownloadUrl}`);
+            
+            // Simulate download by opening a new tab (or could create an 'a' tag and click it)
+            // window.open(simulatedDownloadUrl, '_blank'); 
+
+            statusMessage.textContent = `Download would start for ${convertedFileName}. (Placeholder - check console).`;
+            // Re-enable button after a delay or if user needs to retry
+            setTimeout(() => { 
+               // downloadButton.disabled = false; // Keep disabled after click for now
+            }, 3000);
+
+        } catch (error) {
+            console.error('Download error:', error);
+            statusMessage.textContent = `Error preparing download: ${error.message}`;
+            downloadButton.style.display = 'block'; // Keep button visible for retry
+            downloadButton.disabled = false;
+        }
+    };
 }
 
 // 초기화
