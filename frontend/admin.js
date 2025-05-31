@@ -1,6 +1,37 @@
-// 관리자 인증 확인
-if (!sessionStorage.getItem('adminLoggedIn')) {
+// 관리자 인증 및 세션 확인
+function checkAdminAuth() {
+    const isLoggedIn = sessionStorage.getItem('adminLoggedIn');
+    const sessionTime = sessionStorage.getItem('adminSession');
+    
+    if (!isLoggedIn) {
+        redirectToLogin();
+        return false;
+    }
+    
+    // 세션 만료 확인 (4시간)
+    if (sessionTime) {
+        const timeElapsed = Date.now() - parseInt(sessionTime);
+        const maxSessionTime = 4 * 60 * 60 * 1000; // 4시간
+        
+        if (timeElapsed > maxSessionTime) {
+            sessionStorage.removeItem('adminLoggedIn');
+            sessionStorage.removeItem('adminSession');
+            alert('세션이 만료되었습니다. 다시 로그인해주세요.');
+            redirectToLogin();
+            return false;
+        }
+    }
+    
+    return true;
+}
+
+function redirectToLogin() {
     window.location.href = 'index.html';
+}
+
+// 초기 인증 확인
+if (!checkAdminAuth()) {
+    // 이미 리다이렉트됨
 }
 
 // 콘텐츠 로드

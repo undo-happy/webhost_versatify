@@ -83,6 +83,23 @@ function closeConverterModal() {
 
 // 관리자 모달
 function showAdminModal() {
+    // 차단 시간 확인
+    const lockoutTime = sessionStorage.getItem('lockoutTime');
+    if (lockoutTime) {
+        const timePassed = Date.now() - parseInt(lockoutTime);
+        const lockoutDuration = 5 * 60 * 1000; // 5분
+        
+        if (timePassed < lockoutDuration) {
+            const remainingTime = Math.ceil((lockoutDuration - timePassed) / 1000);
+            alert(`보안상 차단되었습니다. ${remainingTime}초 후에 다시 시도하세요.`);
+            return;
+        } else {
+            // 차단 시간 만료, 초기화
+            sessionStorage.removeItem('lockoutTime');
+            sessionStorage.removeItem('loginAttempts');
+        }
+    }
+    
     document.getElementById('adminModal').classList.add('show');
 }
 
@@ -92,13 +109,70 @@ function closeAdminModal() {
     document.getElementById('errorMessage').style.display = 'none';
 }
 
-function checkAdminPassword() {
+async function checkAdminPassword() {
     const password = document.getElementById('adminPassword').value;
-    if (password === '1234') {
-        sessionStorage.setItem('adminLoggedIn', 'true');
-        window.location.href = 'admin.html';
-    } else {
+    
+    if (!password) {
+        document.getElementById('errorMessage').textContent = '비밀번호를 입력해주세요.';
         document.getElementById('errorMessage').style.display = 'block';
+        return;
+    }
+    
+    // 로딩 상태 표시
+    const loginButton = document.querySelector('.modal-btn-primary');
+    const originalText = loginButton.textContent;
+    loginButton.textContent = '인증 중...';
+    loginButton.disabled = true;
+    
+    try {
+        // 백엔드 API로 인증 요청
+        const response = await fetch('/api/admin/auth', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ password: password })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            // 인증 성공
+            sessionStorage.setItem('adminLoggedIn', 'true');
+            sessionStorage.setItem('adminToken', result.token);
+            sessionStorage.setItem('adminSession', Date.now().toString());
+            sessionStorage.setItem('adminExpires', result.expiresAt.toString());
+            
+            // 로그인 시도 횟수 초기화
+            sessionStorage.removeItem('loginAttempts');
+            sessionStorage.removeItem('lockoutTime');
+            
+            window.location.href = 'admin.html';
+        } else {
+            // 인증 실패
+            document.getElementById('errorMessage').textContent = result.error || '인증에 실패했습니다.';
+            document.getElementById('errorMessage').style.display = 'block';
+            
+            // 실패 횟수 증가
+            const attempts = parseInt(sessionStorage.getItem('loginAttempts') || '0') + 1;
+            sessionStorage.setItem('loginAttempts', attempts.toString());
+            
+            if (attempts >= 3) {
+                sessionStorage.setItem('lockoutTime', Date.now().toString());
+                document.getElementById('errorMessage').textContent = '너무 많은 로그인 시도로 5분간 차단됩니다.';
+                closeAdminModal();
+            }
+        }
+        
+    } catch (error) {
+        console.error('인증 오류:', error);
+        document.getElementById('errorMessage').textContent = '서버 연결 오류가 발생했습니다.';
+        document.getElementById('errorMessage').style.display = 'block';
+        
+    } finally {
+        // 로딩 상태 해제
+        loginButton.textContent = originalText;
+        loginButton.disabled = false;
     }
 }
 
