@@ -36,9 +36,17 @@ module.exports = async function (context, req) {
             context.res.body = { error: 'Password is required' };
             return;
         }        // 환경 변수에서 관리자 비밀번호 해시 가져오기
-        // Azure Portal에서 Application Settings에 설정할 값
-        const adminPasswordHash = process.env.ADMIN_PASSWORD_HASH || '759ed13f2c90f62b475d12cbe0f9900f';
-        const salt = process.env.ADMIN_SALT || 'versatify_salt_2025';
+        // Azure Portal Application Settings에서 반드시 설정해야 함
+        const adminPasswordHash = process.env.ADMIN_PASSWORD_HASH;
+        const salt = process.env.ADMIN_SALT;
+        
+        // 환경 변수가 설정되지 않은 경우 즉시 오류 반환
+        if (!adminPasswordHash || !salt) {
+            context.log('ERROR: Admin credentials not configured in environment variables');
+            context.res.status = 500;
+            context.res.body = { error: 'Server configuration error' };
+            return;
+        }
         
         // 입력된 비밀번호 해시 생성
         const hash = crypto.createHash('sha256');
