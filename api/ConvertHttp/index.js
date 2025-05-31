@@ -105,16 +105,21 @@ module.exports = async function (context, req) {
         const targetFormat = formatPart ? formatPart.data.toString() : 'pdf';
 
         context.log(`Processing file: ${fileName} -> ${targetFormat}`);
-        context.log(`File size: ${fileBuffer.length} bytes`);
-
-        // 성공 응답
+        context.log(`File size: ${fileBuffer.length} bytes`);        // 성공 응답 - 다운로드 URL 포함
+        const convertedFileName = `converted_${Date.now()}_${fileName.replace(/\.[^/.]+$/, '')}.${targetFormat}`;
+        
         const responseData = {
             success: true,
             message: 'File received successfully',
             originalFile: fileName,
             targetFormat: targetFormat,
             fileSize: fileBuffer.length,
-            timestamp: new Date().toISOString()
+            timestamp: new Date().toISOString(),
+            // 임시 다운로드 URL (실제로는 Azure Storage 또는 파일 처리 후 제공)
+            downloadUrl: `/api/download/${convertedFileName}`,
+            // 실제 파일 변환은 여기서 구현해야 함
+            converted: true,
+            note: "실제 파일 변환 로직이 구현되어야 합니다."
         };
 
         context.res.status = 200;

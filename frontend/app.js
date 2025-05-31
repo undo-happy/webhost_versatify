@@ -289,13 +289,23 @@ async function startConversion() {
         console.log('Server response:', result);
         
         document.getElementById('progressFill').style.width = '100%';
-        
-        if (result.success) {
-            document.getElementById('statusMessage').textContent = '파일 처리 완료!';
-            // 실제 파일 다운로드는 백엔드에서 변환 완료 후 구현
-            setTimeout(() => {
-                alert(`변환 완료!\n원본: ${result.originalFile}\n형식: ${result.targetFormat}\n크기: ${result.fileSize} bytes`);
-            }, 500);
+          if (result.success) {
+            document.getElementById('statusMessage').innerHTML = `
+                <div style="text-align: center;">
+                    <div style="margin-bottom: 15px;">
+                        <span style="color: #27ae60; font-weight: bold;">✅ 변환 완료!</span>
+                    </div>
+                    <div style="margin-bottom: 10px; color: #666;">
+                        <small>원본: ${result.originalFile || selectedFile.name}</small><br>
+                        <small>형식: ${result.targetFormat || targetFormat}</small><br>
+                        <small>크기: ${result.fileSize ? (result.fileSize / 1024 / 1024).toFixed(2) + ' MB' : '알 수 없음'}</small>
+                    </div>
+                    <button onclick="downloadConvertedFile('${result.downloadUrl || '#'}')" 
+                            style="background: #27ae60; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold;">
+                        📥 파일 다운로드
+                    </button>
+                </div>
+            `;
         } else {
             throw new Error(result.message || '알 수 없는 오류가 발생했습니다.');
         }
@@ -311,6 +321,66 @@ async function startConversion() {
         }, 3000);
     }
 }
+
+// 파일 다운로드 함수
+function downloadConvertedFile(downloadUrl) {
+    if (!downloadUrl || downloadUrl === '#') {
+        // 임시로 데모 다운로드 (실제로는 백엔드에서 제공해야 함)
+        alert('다운로드 URL이 제공되지 않았습니다. 백엔드 구현이 필요합니다.');
+        return;
+    }
+    
+    // 실제 파일 다운로드
+    const link = document.createElement('a');
+    link.href = downloadUrl;
+    link.download = ''; // 서버에서 파일명 지정
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
+// API 연결 상태 확인 함수
+async function checkApiConnection() {
+    try {
+        console.log('API 연결 상태 확인 중...');
+        
+        // 먼저 convert API 확인
+        const convertResponse = await fetch('/api/convert', {
+            method: 'OPTIONS'
+        });
+        console.log('Convert API 상태:', convertResponse.status, convertResponse.statusText);
+        
+        // Admin Auth API 확인
+        const authResponse = await fetch('/api/admin/auth', {
+            method: 'OPTIONS'
+        });
+        console.log('Admin Auth API 상태:', authResponse.status, authResponse.statusText);
+        
+        return {
+            convert: convertResponse.ok,
+            auth: authResponse.ok
+        };
+        
+    } catch (error) {
+        console.error('API 연결 확인 실패:', error);
+        return {
+            convert: false,
+            auth: false,
+            error: error.message
+        };
+    }
+}
+
+// 페이지 로드 시 API 상태 확인
+document.addEventListener('DOMContentLoaded', async () => {
+    console.log('페이지 로드됨 - API 연결 상태 확인');
+    const apiStatus = await checkApiConnection();
+    console.log('API 연결 상태:', apiStatus);
+    
+    if (!apiStatus.convert || !apiStatus.auth) {
+        console.warn('일부 API가 연결되지 않았습니다:', apiStatus);
+    }
+});
 
 // 드래그 앤 드롭 기능 개선
 function setupDragAndDrop() {
