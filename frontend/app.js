@@ -119,19 +119,73 @@ function checkConversionReady() {
     document.getElementById('convertButton').disabled = !(hasFile && hasFormat);
 }
 
-function startConversion() {
+async function startConversion() {
+    if (!selectedFile) {
+        alert('파일을 선택해주세요.');
+        return;
+    }
+
+    const targetFormat = document.getElementById('targetFormat').value;
+    if (!targetFormat) {
+        alert('변환할 형식을 선택해주세요.');
+        return;
+    }
+
     document.getElementById('progressSection').style.display = 'block';
-    let progress = 0;
-    const interval = setInterval(() => {
-        progress += 10;
-        document.getElementById('progressFill').style.width = `${progress}%`;
-        document.getElementById('statusMessage').textContent = `변환 중... ${progress}%`;
-        
-        if (progress >= 100) {
-            clearInterval(interval);
-            document.getElementById('statusMessage').textContent = '변환 완료! (데모 모드)';
+    document.getElementById('progressFill').style.width = '0%';
+    document.getElementById('statusMessage').textContent = '파일 업로드 중...';
+
+    try {
+        // FormData 생성
+        const formData = new FormData();
+        formData.append('file', selectedFile, selectedFile.name);
+        formData.append('targetFormat', targetFormat);
+
+        console.log('Sending file:', selectedFile.name, 'to format:', targetFormat);
+
+        // 진행률 업데이트
+        document.getElementById('progressFill').style.width = '25%';
+        document.getElementById('statusMessage').textContent = '서버에 연결 중...';
+
+        // API 호출
+        const response = await fetch('/api/convert', {
+            method: 'POST',
+            body: formData
+        });
+
+        document.getElementById('progressFill').style.width = '50%';
+        document.getElementById('statusMessage').textContent = '서버 응답 처리 중...';
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`HTTP ${response.status}: ${errorText}`);
         }
-    }, 200);
+
+        const result = await response.json();
+        console.log('Server response:', result);
+        
+        document.getElementById('progressFill').style.width = '100%';
+        
+        if (result.success) {
+            document.getElementById('statusMessage').textContent = '파일 처리 완료!';
+            // 실제 파일 다운로드는 백엔드에서 변환 완료 후 구현
+            setTimeout(() => {
+                alert(`변환 완료!\n원본: ${result.originalFile}\n형식: ${result.targetFormat}\n크기: ${result.fileSize} bytes`);
+            }, 500);
+        } else {
+            throw new Error(result.message || '알 수 없는 오류가 발생했습니다.');
+        }
+
+    } catch (error) {
+        console.error('변환 오류:', error);
+        document.getElementById('statusMessage').textContent = `오류: ${error.message}`;
+        document.getElementById('progressFill').style.width = '0%';
+        document.getElementById('progressFill').style.backgroundColor = '#e74c3c';
+        
+        setTimeout(() => {
+            document.getElementById('progressFill').style.backgroundColor = '#3498db';
+        }, 3000);
+    }
 }
 
 // 초기화
