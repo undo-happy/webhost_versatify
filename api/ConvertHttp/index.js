@@ -1,13 +1,12 @@
 const multipart = require('parse-multipart-data');
 
 module.exports = async function (context, req) {
-    context.log('HTTP trigger function processed a request.');
-
-    // CORS 헤더 설정
+    context.log('HTTP trigger function processed a request.');    // CORS 헤더 설정 - 더 포괄적으로
     const corsHeaders = {
         'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, Origin, X-Requested-With, Accept, Authorization'
+        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Origin, X-Requested-With, Accept, Authorization, Cache-Control',
+        'Access-Control-Max-Age': '86400'
     };
 
     // 모든 응답에 CORS 헤더 포함
@@ -16,9 +15,7 @@ module.exports = async function (context, req) {
     };
 
     context.log('Request method:', req.method);
-    context.log('Request headers:', req.headers);
-
-    // OPTIONS 요청 처리 (CORS preflight)
+    context.log('Request headers:', req.headers);    // OPTIONS 요청 처리 (CORS preflight)
     if (req.method === 'OPTIONS') {
         context.res.status = 200;
         context.res.body = 'OK';
@@ -26,11 +23,27 @@ module.exports = async function (context, req) {
         return;
     }
 
+    // GET 요청 처리 (테스트용)
+    if (req.method === 'GET') {
+        context.res.status = 200;
+        context.res.body = { 
+            message: 'ConvertHttp API is running', 
+            timestamp: new Date().toISOString(),
+            methods: ['POST', 'OPTIONS'],
+            endpoint: '/api/convert'
+        };
+        context.log('Handled GET request - API status check');
+        return;
+    }
+
     // POST 요청만 허용
     if (req.method !== 'POST') {
         context.log('Method not allowed:', req.method);
         context.res.status = 405;
-        context.res.body = { error: 'Method not allowed. Use POST.' };
+        context.res.body = { 
+            error: 'Method not allowed. Use POST for file conversion or GET for status check.',
+            allowedMethods: ['GET', 'POST', 'OPTIONS']
+        };
         return;
     }
 

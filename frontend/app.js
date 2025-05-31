@@ -183,17 +183,24 @@ async function startConversion() {
 
         // 진행률 업데이트
         document.getElementById('progressFill').style.width = '25%';
-        document.getElementById('statusMessage').textContent = '서버에 연결 중...';
-
-        // API 호출
-        console.log('Making request to:', '/api/convert');
-        const response = await fetch('/api/convert', {
+        document.getElementById('statusMessage').textContent = '서버에 연결 중...';        // API 호출 - 더 자세한 디버깅 정보 추가
+        const apiUrl = '/api/convert';
+        console.log('Making request to:', apiUrl);
+        console.log('FormData contents:');
+        for (let [key, value] of formData.entries()) {
+            console.log(`  ${key}:`, value instanceof File ? `File(${value.name}, ${value.size} bytes)` : value);
+        }
+        
+        const response = await fetch(apiUrl, {
             method: 'POST',
-            body: formData
+            body: formData,
+            // CORS 헤더는 브라우저가 자동으로 처리하므로 명시적으로 설정하지 않음
         });
 
         console.log('Response status:', response.status);
+        console.log('Response statusText:', response.statusText);
         console.log('Response headers:', Object.fromEntries(response.headers));
+        console.log('Response URL:', response.url);
 
         document.getElementById('progressFill').style.width = '50%';
         document.getElementById('statusMessage').textContent = '서버 응답 처리 중...';
