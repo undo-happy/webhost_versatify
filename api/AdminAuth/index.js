@@ -37,7 +37,7 @@ module.exports = async function (context, req) {
             return;
         }        // 환경 변수에서 관리자 비밀번호 해시 가져오기
         // Azure Portal에서 Application Settings에 설정할 값
-        const adminPasswordHash = process.env.ADMIN_PASSWORD_HASH || '3bf3a27b51ab81169e4dd4ed009d6c8a';
+        const adminPasswordHash = process.env.ADMIN_PASSWORD_HASH || '759ed13f2c90f62b475d12cbe0f9900f';
         const salt = process.env.ADMIN_SALT || 'versatify_salt_2025';
         
         // 입력된 비밀번호 해시 생성
