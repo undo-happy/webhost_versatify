@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Versatify 관리자 패널</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+    <div class="admin-header">
+        <div class="admin-title">🛠️ Versatify 관리자 패널</div>
+        <div class="header-controls">
+            <div class="sync-status">
+                <div class="status-dot"></div>
+                실시간 동기화
+            </div>
+            <button class="btn btn-primary" id="previewBtn" onclick="togglePreview()">미리보기</button>
+            <button class="btn btn-secondary" onclick="backToSite()">사이트로 돌아가기</button>
+        </div>
+    </div>
+
+    <div class="container" id="mainContainer">
+        <!-- Action Toolbar -->
+        <div class="action-toolbar">
+            <div class="toolbar-section">
+                <h3>📊 데이터 관리</h3>
+                <button class="btn btn-success" onclick="exportData()">📥 데이터 내보내기</button>
+                <button class="btn btn-warning" onclick="document.getElementById('importFile').click()">📤 데이터 가져오기</button>
+                <input type="file" id="importFile" class="file-input" accept=".json" onchange="importData(this)">
+            </div>
+            
+            <div class="toolbar-section">
+                <h3>🔧 코드 생성</h3>
+                <button class="btn btn-info" onclick="generateWebsiteCode()">🌐 웹사이트 코드 생성</button>
+            </div>
+        </div>
+
+        <div class="tools-grid" id="toolsGrid">
+            <!-- 동적 콘텐츠 -->
+        </div>
+
+        <!-- Add new card button -->
+        <div class="tool-category add-card-btn" onclick="addNewCard()">
+            <div>+</div>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div class="notification" id="notification"></div>
+
+    <script src="admin.js"></script>
+</body>
+</html>
