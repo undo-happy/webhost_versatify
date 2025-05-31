@@ -73,6 +73,8 @@ function openTool(toolName) {
 // 파일 변환 모달
 function showFileConverter() {
     document.getElementById('converterModal').classList.add('show');
+    // 드래그 앤 드롭 기능 초기화
+    setupDragAndDrop();
 }
 
 function closeConverterModal() {
@@ -106,7 +108,29 @@ let selectedFile = null;
 document.getElementById('fileInput')?.addEventListener('change', function(e) {
     selectedFile = e.target.files[0];
     if (selectedFile) {
+        // 파일명 표시
         document.getElementById('dropZoneText').textContent = `선택된 파일: ${selectedFile.name}`;
+        
+        // 파일 타입 감지 및 변환 옵션 업데이트
+        const fileType = getFileType(selectedFile.name);
+        updateTargetFormatOptions(fileType);
+        
+        // 파일 정보 표시
+        const fileInfo = document.getElementById('fileInfo');
+        const fileTypeDisplay = document.querySelector('.file-type-display');
+        
+        if (fileInfo && fileTypeDisplay) {
+            fileTypeDisplay.innerHTML = `
+                <span class="file-type-tag" style="background: #3498db; color: white; margin-right: 10px;">
+                    ${fileType ? fileType.toUpperCase() : '알 수 없음'}
+                </span>
+                <span class="file-size" style="color: #7f8c8d;">
+                    ${(selectedFile.size / 1024 / 1024).toFixed(2)} MB
+                </span>
+            `;
+            fileInfo.style.display = 'block';
+        }
+        
         checkConversionReady();
     }
 });
@@ -115,8 +139,24 @@ document.getElementById('targetFormat')?.addEventListener('change', checkConvers
 
 function checkConversionReady() {
     const hasFile = selectedFile !== null;
-    const hasFormat = document.getElementById('targetFormat').value !== '';
-    document.getElementById('convertButton').disabled = !(hasFile && hasFormat);
+    const hasValidFormat = document.getElementById('targetFormat').value !== '';
+    const isFormatSupported = !document.getElementById('targetFormat').disabled;
+    
+    const convertButton = document.getElementById('convertButton');
+    const canConvert = hasFile && hasValidFormat && isFormatSupported;
+    
+    convertButton.disabled = !canConvert;
+    
+    // 버튼 텍스트 업데이트
+    if (!hasFile) {
+        convertButton.textContent = '파일을 선택하세요';
+    } else if (!isFormatSupported) {
+        convertButton.textContent = '지원하지 않는 파일 형식';
+    } else if (!hasValidFormat) {
+        convertButton.textContent = '변환 형식을 선택하세요';
+    } else {
+        convertButton.textContent = '🚀 변환 시작';
+    }
 }
 
 async function startConversion() {
@@ -188,7 +228,189 @@ async function startConversion() {
     }
 }
 
+// 드래그 앤 드롭 기능 개선
+function setupDragAndDrop() {
+    const dropZone = document.getElementById('dropZone');
+    
+    if (!dropZone) return;
+    
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        dropZone.addEventListener(eventName, preventDefaults, false);
+    });
+    
+    function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+    
+    ['dragenter', 'dragover'].forEach(eventName => {
+        dropZone.addEventListener(eventName, highlight, false);
+    });
+    
+    ['dragleave', 'drop'].forEach(eventName => {
+        dropZone.addEventListener(eventName, unhighlight, false);
+    });
+    
+    function highlight(e) {
+        dropZone.style.backgroundColor = '#e8f4f8';
+        dropZone.style.borderColor = '#3498db';
+    }
+    
+    function unhighlight(e) {
+        dropZone.style.backgroundColor = '';
+        dropZone.style.borderColor = '';
+    }
+    
+    dropZone.addEventListener('drop', handleDrop, false);
+    
+    function handleDrop(e) {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        
+        if (files.length > 0) {
+            const file = files[0];
+            selectedFile = file;
+            
+            // 파일 선택 이벤트와 동일한 처리
+            document.getElementById('dropZoneText').textContent = `선택된 파일: ${file.name}`;
+            
+            const fileType = getFileType(file.name);
+            updateTargetFormatOptions(fileType);
+            
+            const fileInfo = document.getElementById('fileInfo');
+            const fileTypeDisplay = document.querySelector('.file-type-display');
+            
+            if (fileInfo && fileTypeDisplay) {
+                fileTypeDisplay.innerHTML = `
+                    <span class="file-type-tag" style="background: #3498db; color: white; margin-right: 10px;">
+                        ${fileType ? fileType.toUpperCase() : '알 수 없음'}
+                    </span>
+                    <span class="file-size" style="color: #7f8c8d;">
+                        ${(file.size / 1024 / 1024).toFixed(2)} MB
+                    </span>
+                `;
+                fileInfo.style.display = 'block';
+            }
+            
+            checkConversionReady();
+        }
+    }
+}
+
+// 파일 타입별 변환 가능한 형식 매핑
+const CONVERSION_FORMATS = {
+    // 이미지 파일들
+    'image': {
+        extensions: ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'tiff', 'tif', 'webp'],
+        targetFormats: [
+            { value: 'jpg', label: 'JPG (JPEG 이미지)' },
+            { value: 'png', label: 'PNG (투명 이미지)' },
+            { value: 'gif', label: 'GIF (움짤)' },
+            { value: 'bmp', label: 'BMP (비트맵)' },
+            { value: 'tiff', label: 'TIFF (고품질)' },
+            { value: 'webp', label: 'WebP (웹 최적화)' },
+            { value: 'pdf', label: 'PDF (문서)' }
+        ]
+    },
+    
+    // 문서 파일들
+    'document': {
+        extensions: ['doc', 'docx', 'odt', 'rtf', 'txt'],
+        targetFormats: [
+            { value: 'pdf', label: 'PDF (범용 문서)' },
+            { value: 'docx', label: 'DOCX (Word 문서)' },
+            { value: 'odt', label: 'ODT (OpenDocument)' },
+            { value: 'rtf', label: 'RTF (서식 있는 텍스트)' },
+            { value: 'txt', label: 'TXT (일반 텍스트)' },
+            { value: 'html', label: 'HTML (웹 페이지)' }
+        ]
+    },
+    
+    // 스프레드시트 파일들
+    'spreadsheet': {
+        extensions: ['xls', 'xlsx', 'ods', 'csv'],
+        targetFormats: [
+            { value: 'xlsx', label: 'XLSX (Excel)' },
+            { value: 'xls', label: 'XLS (Excel 97-2003)' },
+            { value: 'ods', label: 'ODS (OpenDocument 스프레드시트)' },
+            { value: 'csv', label: 'CSV (쉼표로 구분)' },
+            { value: 'pdf', label: 'PDF (문서)' },
+            { value: 'html', label: 'HTML (웹 테이블)' }
+        ]
+    },
+    
+    // 프레젠테이션 파일들
+    'presentation': {
+        extensions: ['ppt', 'pptx', 'odp'],
+        targetFormats: [
+            { value: 'pptx', label: 'PPTX (PowerPoint)' },
+            { value: 'ppt', label: 'PPT (PowerPoint 97-2003)' },
+            { value: 'odp', label: 'ODP (OpenDocument 프레젠테이션)' },
+            { value: 'pdf', label: 'PDF (문서)' },
+            { value: 'html', label: 'HTML (웹 슬라이드)' },
+            { value: 'jpg', label: 'JPG (이미지로 변환)' }
+        ]
+    },
+    
+    // PDF 파일
+    'pdf': {
+        extensions: ['pdf'],
+        targetFormats: [
+            { value: 'docx', label: 'DOCX (Word 문서)' },
+            { value: 'txt', label: 'TXT (텍스트 추출)' },
+            { value: 'html', label: 'HTML (웹 페이지)' },
+            { value: 'jpg', label: 'JPG (이미지로 변환)' },
+            { value: 'png', label: 'PNG (이미지로 변환)' }
+        ]
+    }
+};
+
+// 파일 확장자로 파일 타입 감지
+function getFileType(filename) {
+    const extension = filename.split('.').pop().toLowerCase();
+    
+    for (const [type, config] of Object.entries(CONVERSION_FORMATS)) {
+        if (config.extensions.includes(extension)) {
+            return type;
+        }
+    }
+    
+    return null; // 지원하지 않는 파일 타입
+}
+
+// 대상 형식 옵션 업데이트
+function updateTargetFormatOptions(fileType) {
+    const targetFormatSelect = document.getElementById('targetFormat');
+    
+    // 기존 옵션 제거
+    targetFormatSelect.innerHTML = '<option value="">변환할 형식을 선택하세요</option>';
+    
+    if (!fileType || !CONVERSION_FORMATS[fileType]) {
+        targetFormatSelect.innerHTML = '<option value="">❌ 지원하지 않는 파일 형식입니다</option>';
+        targetFormatSelect.disabled = true;
+        return;
+    }
+    
+    targetFormatSelect.disabled = false;
+    
+    // 새로운 옵션 추가
+    CONVERSION_FORMATS[fileType].targetFormats.forEach(format => {
+        const option = document.createElement('option');
+        option.value = format.value;
+        option.textContent = format.label;
+        targetFormatSelect.appendChild(option);
+    });
+    
+    // 첫 번째 옵션에 도움말 추가
+    const helpOption = document.createElement('option');
+    helpOption.value = '';
+    helpOption.textContent = `💡 ${CONVERSION_FORMATS[fileType].targetFormats.length}개 형식으로 변환 가능`;
+    helpOption.disabled = true;
+    targetFormatSelect.insertBefore(helpOption, targetFormatSelect.children[1]);
+}
+
 // 초기화
 window.onload = function() {
     loadContent();
+    setupDragAndDrop();
 };

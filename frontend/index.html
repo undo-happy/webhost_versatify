@@ -93,14 +93,17 @@
             <h2 class="converter-header">📄 파일 변환</h2>
             
             <div class="converter-section">
-                <label class="converter-label">파일 선택</label>
-                <div class="file-drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
+                <label class="converter-label">파일 선택</label>                <div class="file-drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
                     <p id="dropZoneText">파일을 드래그하거나 클릭하여 선택하세요</p>
+                    <div class="file-info" style="margin-top: 10px; display: none;" id="fileInfo">
+                        <div class="file-type-display"></div>
+                    </div>
                     <div class="file-type-tags">
                         <span class="file-type-tag">PDF</span>
                         <span class="file-type-tag">DOCX</span>
                         <span class="file-type-tag">XLSX</span>
                         <span class="file-type-tag">이미지</span>
+                        <span class="file-type-tag">PPT</span>
                     </div>
                 </div>
                 <input type="file" id="fileInput" class="file-input">
