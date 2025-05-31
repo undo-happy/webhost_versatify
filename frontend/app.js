@@ -179,25 +179,28 @@ async function startConversion() {
         // FormData 생성
         const formData = new FormData();
         formData.append('file', selectedFile, selectedFile.name);
-        formData.append('targetFormat', targetFormat);
-
-        console.log('Sending file:', selectedFile.name, 'to format:', targetFormat);
+        formData.append('targetFormat', targetFormat);        console.log('Sending file:', selectedFile.name, 'to format:', targetFormat);
 
         // 진행률 업데이트
         document.getElementById('progressFill').style.width = '25%';
         document.getElementById('statusMessage').textContent = '서버에 연결 중...';
 
         // API 호출
+        console.log('Making request to:', '/api/convert');
         const response = await fetch('/api/convert', {
             method: 'POST',
             body: formData
         });
+
+        console.log('Response status:', response.status);
+        console.log('Response headers:', Object.fromEntries(response.headers));
 
         document.getElementById('progressFill').style.width = '50%';
         document.getElementById('statusMessage').textContent = '서버 응답 처리 중...';
 
         if (!response.ok) {
             const errorText = await response.text();
+            console.error('Error response:', errorText);
             throw new Error(`HTTP ${response.status}: ${errorText}`);
         }
 
