@@ -1,0 +1,16 @@
+{
+  "name": "convert-image-function",
+  "version": "1.0.0",
+  "description": "Image conversion function using Cloudflare R2 for storage and @napi-rs/image for processing",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.534.0",
+    "@aws-sdk/s3-request-presigner": "^3.534.0",
+    "@napi-rs/image": "^1.9.1",
+    "parse-multipart-data": "1.5.0",
+    "uuid": "9.0.0"
+  }
+} 

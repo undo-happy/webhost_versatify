@@ -1,7 +1,29 @@
 const multipart = require('parse-multipart-data');
+const { Image } = require('@napi-rs/image');
+const { v4: uuidv4 } = require('uuid');
+const { S3Client, PutObjectCommand, GetObjectCommand } = require('@aws-sdk/client-s3');
+const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
+
+// R2 설정
+const R2_ENDPOINT = process.env.R2_ENDPOINT || 'https://YOUR_ACCOUNT_ID.r2.cloudflarestorage.com';
+const R2_ACCESS_KEY_ID = process.env.R2_ACCESS_KEY_ID || 'YOUR_ACCESS_KEY_ID';
+const R2_SECRET_ACCESS_KEY = process.env.R2_SECRET_ACCESS_KEY || 'YOUR_SECRET_ACCESS_KEY';
+const R2_BUCKET_NAME = process.env.R2_BUCKET_NAME || 'converted-images';
+
+// S3 클라이언트 초기화 (R2 호환)
+const s3Client = new S3Client({
+    region: 'auto',
+    endpoint: R2_ENDPOINT,
+    credentials: {
+        accessKeyId: R2_ACCESS_KEY_ID,
+        secretAccessKey: R2_SECRET_ACCESS_KEY
+    }
+});
 
 module.exports = async function (context, req) {
-    context.log('HTTP trigger function processed a request.');    // CORS 헤더 설정 - 더 포괄적으로
+    context.log('HTTP trigger function processed a request.');
+    
+    // CORS 헤더 설정
     const corsHeaders = {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
@@ -14,12 +36,10 @@ module.exports = async function (context, req) {
         headers: corsHeaders
     };
 
-    context.log('Request method:', req.method);
-    context.log('Request headers:', req.headers);    // OPTIONS 요청 처리 (CORS preflight)
+    // OPTIONS 요청 처리 (CORS preflight)
     if (req.method === 'OPTIONS') {
         context.res.status = 200;
         context.res.body = 'OK';
-        context.log('Handled OPTIONS request');
         return;
     }
 
@@ -27,35 +47,31 @@ module.exports = async function (context, req) {
     if (req.method === 'GET') {
         context.res.status = 200;
         context.res.body = { 
-            message: 'ConvertHttp API is running', 
+            message: 'Image Conversion API is running', 
             timestamp: new Date().toISOString(),
-            methods: ['POST', 'OPTIONS'],
-            endpoint: '/api/convert'
+            supportedFormats: ['jpeg', 'png', 'webp', 'avif'],
+            endpoint: '/api/convert',
+            storage: 'Cloudflare R2',
+            library: '@napi-rs/image'
         };
-        context.log('Handled GET request - API status check');
         return;
     }
 
     // POST 요청만 허용
     if (req.method !== 'POST') {
-        context.log('Method not allowed:', req.method);
         context.res.status = 405;
         context.res.body = { 
-            error: 'Method not allowed. Use POST for file conversion or GET for status check.',
+            error: 'Method not allowed. Use POST for image conversion or GET for status check.',
             allowedMethods: ['GET', 'POST', 'OPTIONS']
         };
         return;
     }
 
     try {
-        context.log('Processing POST request...');
-        
         // Content-Type 확인
         const contentType = req.headers['content-type'];
-        context.log('Content-Type:', contentType);
         
         if (!contentType || !contentType.includes('multipart/form-data')) {
-            context.log('Invalid content type');
             context.res.status = 400;
             context.res.body = { error: 'Content-Type must be multipart/form-data' };
             return;
@@ -63,7 +79,6 @@ module.exports = async function (context, req) {
 
         // 요청 바디 확인
         if (!req.body) {
-            context.log('No request body');
             context.res.status = 400;
             context.res.body = { error: 'No request body' };
             return;
@@ -71,7 +86,6 @@ module.exports = async function (context, req) {
 
         // multipart 데이터 파싱
         const boundary = contentType.split('boundary=')[1];
-        context.log('Boundary:', boundary);
         
         if (!boundary) {
             context.res.status = 400;
@@ -82,8 +96,6 @@ module.exports = async function (context, req) {
         const bodyBuffer = Buffer.isBuffer(req.body) ? req.body : Buffer.from(req.body);
         const parts = multipart.parse(bodyBuffer, boundary);
 
-        context.log('Parsed parts count:', parts ? parts.length : 0);
-
         if (!parts || parts.length === 0) {
             context.res.status = 400;
             context.res.body = { error: 'No multipart data found' };
@@ -93,6 +105,8 @@ module.exports = async function (context, req) {
         // 파일 찾기
         const filePart = parts.find(part => part.name === 'file');
         const formatPart = parts.find(part => part.name === 'targetFormat');
+        const widthPart = parts.find(part => part.name === 'width');
+        const heightPart = parts.find(part => part.name === 'height');
 
         if (!filePart) {
             context.res.status = 400;
@@ -102,28 +116,103 @@ module.exports = async function (context, req) {
 
         const fileName = filePart.filename || 'unknown';
         const fileBuffer = filePart.data;
-        const targetFormat = formatPart ? formatPart.data.toString() : 'pdf';
-
-        context.log(`Processing file: ${fileName} -> ${targetFormat}`);
-        context.log(`File size: ${fileBuffer.length} bytes`);        // 성공 응답 - 다운로드 URL 포함
-        const convertedFileName = `converted_${Date.now()}_${fileName.replace(/\.[^/.]+$/, '')}.${targetFormat}`;
         
-        const responseData = {
+        // 이미지 형식 확인 및 변환
+        const targetFormat = formatPart ? formatPart.data.toString() : 'webp';
+        
+        // 지원하는 형식 확인 (@napi-rs/image 지원 포맷)
+        const supportedFormats = ['jpeg', 'png', 'webp', 'avif'];
+        if (!supportedFormats.includes(targetFormat)) {
+            context.res.status = 400;
+            context.res.body = { 
+                error: 'Unsupported format', 
+                supportedFormats 
+            };
+            return;
+        }
+        
+        // 이미지 처리 (@napi-rs/image 사용)
+        // Buffer에서 이미지 로드
+        let image = await Image.load(fileBuffer);
+        
+        // 크기 조정 요청이 있으면 적용
+        const width = widthPart ? parseInt(widthPart.data.toString()) : null;
+        const height = heightPart ? parseInt(heightPart.data.toString()) : null;
+        
+        if (width && height) {
+            image = image.resize({
+                width,
+                height
+            });
+        } else if (width) {
+            // 너비만 지정된 경우 비율 유지
+            image = image.resize({
+                width,
+                height: Math.round(image.height * (width / image.width))
+            });
+        } else if (height) {
+            // 높이만 지정된 경우 비율 유지
+            image = image.resize({
+                width: Math.round(image.width * (height / image.height)),
+                height
+            });
+        }
+        
+        // 형식 변환 적용 및 인코딩
+        let outputBuffer;
+        switch (targetFormat) {
+            case 'jpeg':
+                outputBuffer = await image.encodeJpeg({ quality: 90 });
+                break;
+            case 'png':
+                outputBuffer = await image.encodePng();
+                break;
+            case 'webp':
+                outputBuffer = await image.encodeWebp({ quality: 90 });
+                break;
+            case 'avif':
+                outputBuffer = await image.encodeAvif({ quality: 85 });
+                break;
+            default:
+                outputBuffer = await image.encodeWebp({ quality: 90 });
+        }
+        
+        // 고유 파일 이름 생성
+        const convertedFileName = `${uuidv4()}.${targetFormat}`;
+        
+        // R2에 업로드
+        const uploadParams = {
+            Bucket: R2_BUCKET_NAME,
+            Key: convertedFileName,
+            Body: outputBuffer,
+            ContentType: `image/${targetFormat}`
+        };
+        
+        await s3Client.send(new PutObjectCommand(uploadParams));
+        
+        // 서명된 URL 생성
+        const getCommand = new GetObjectCommand({
+            Bucket: R2_BUCKET_NAME,
+            Key: convertedFileName
+        });
+        
+        const signedUrl = await getSignedUrl(s3Client, getCommand, { expiresIn: 3600 });
+        
+        // 응답 반환
+        context.res.status = 200;
+        context.res.body = {
             success: true,
-            message: 'File received successfully',
+            message: 'Image converted successfully with @napi-rs/image',
             originalFile: fileName,
             targetFormat: targetFormat,
-            fileSize: fileBuffer.length,
-            timestamp: new Date().toISOString(),
-            // 임시 다운로드 URL (실제로는 Azure Storage 또는 파일 처리 후 제공)
-            downloadUrl: `/api/download/${convertedFileName}`,
-            // 실제 파일 변환은 여기서 구현해야 함
-            converted: true,
-            note: "실제 파일 변환 로직이 구현되어야 합니다."
+            fileSize: outputBuffer.length,
+            downloadUrl: signedUrl,
+            storage: 'Cloudflare R2',
+            dimensions: {
+                width: image.width,
+                height: image.height
+            }
         };
-
-        context.res.status = 200;
-        context.res.body = responseData;
 
     } catch (error) {
         context.log('Error processing request:', error);

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Versatify - 모든 도구가 하나로</title>
+    <title>Versatify - 이미지 변환 도구</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -14,14 +14,14 @@
                 <div class="logo-icon">V</div>
                 <h1 class="brand-name">Versatify</h1>
             </div>
-            <p class="tagline">모든 도구가 하나로 - 당신의 생산성을 극대화하세요</p>
+            <p class="tagline">간편한 이미지 변환 - 최고의 품질로</p>
         </div>
 
         <!-- Navigation -->
         <div class="nav-tabs">
-            <button class="tab-button active" onclick="showTab('all')">전체 도구</button>
-            <button class="tab-button" onclick="showTab('popular')">인기 도구</button>
-            <button class="tab-button" onclick="showTab('new')">새로운 도구</button>
+            <button class="tab-button active" onclick="showTab('all')">이미지 도구</button>
+            <button class="tab-button" onclick="showTab('popular')">인기 기능</button>
+            <button class="tab-button" onclick="showTab('new')">사용 방법</button>
             <button class="tab-button" onclick="showTab('favorites')">즐겨찾기</button>
         </div>
 
@@ -37,24 +37,24 @@
             <div class="tools-grid">
                 <div class="tool-category core-tools-card">
                     <div class="category-header">
-                        <div class="category-icon pdf-icon">🔥</div>
+                        <div class="category-icon image-icon">🔥</div>
                         <div>
-                            <div class="category-title">인기 도구 TOP 10</div>
-                            <div class="category-desc">가장 많이 사용되는 도구들</div>
+                            <div class="category-title">인기 이미지 기능</div>
+                            <div class="category-desc">가장 많이 사용되는 변환 옵션</div>
                         </div>
                     </div>
                     <div class="tool-list">
                         <div class="tool-item" onclick="showFileConverter()">
-                            <div class="tool-name">파일 변환</div>
-                            <div class="tool-desc">#1 PDF, 이미지, 문서</div>
+                            <div class="tool-name">JPG → WebP</div>
+                            <div class="tool-desc">#1 웹 최적화</div>
                         </div>
-                        <div class="tool-item">
-                            <div class="tool-name">배경 제거</div>
-                            <div class="tool-desc">#2 AI 기반</div>
+                        <div class="tool-item" onclick="showFileConverter()">
+                            <div class="tool-name">PNG → JPG</div>
+                            <div class="tool-desc">#2 크기 최적화</div>
                         </div>
-                        <div class="tool-item">
-                            <div class="tool-name">QR 코드 생성</div>
-                            <div class="tool-desc">#3 빠른 생성</div>
+                        <div class="tool-item" onclick="showFileConverter()">
+                            <div class="tool-name">이미지 압축</div>
+                            <div class="tool-desc">#3 용량 축소</div>
                         </div>
                     </div>
                 </div>
@@ -86,39 +86,55 @@
         </div>
     </div>
 
-    <!-- File Converter Modal -->
+    <!-- Image Converter Modal -->
     <div class="converter-modal" id="converterModal">
         <div class="converter-content">
             <button class="close-button" onclick="closeConverterModal()">×</button>
-            <h2 class="converter-header">📄 파일 변환</h2>
+            <h2 class="converter-header">🖼️ 이미지 변환</h2>
             
             <div class="converter-section">
-                <label class="converter-label">파일 선택</label>                <div class="file-drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
-                    <p id="dropZoneText">파일을 드래그하거나 클릭하여 선택하세요</p>
+                <label class="converter-label">이미지 선택</label>
+                <div class="file-drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
+                    <p id="dropZoneText">이미지 파일을 드래그하거나 클릭하여 선택하세요</p>
                     <div class="file-info" style="margin-top: 10px; display: none;" id="fileInfo">
                         <div class="file-type-display"></div>
                     </div>
                     <div class="file-type-tags">
-                        <span class="file-type-tag">PDF</span>
-                        <span class="file-type-tag">DOCX</span>
-                        <span class="file-type-tag">XLSX</span>
-                        <span class="file-type-tag">이미지</span>
-                        <span class="file-type-tag">PPT</span>
+                        <span class="file-type-tag">JPG</span>
+                        <span class="file-type-tag">PNG</span>
+                        <span class="file-type-tag">WebP</span>
+                        <span class="file-type-tag">GIF</span>
+                        <span class="file-type-tag">AVIF</span>
                     </div>
                 </div>
-                <input type="file" id="fileInput" class="file-input">
+                <input type="file" id="fileInput" class="file-input" accept="image/*">
             </div>
 
             <div class="converter-section">
                 <label class="converter-label">변환 형식</label>
                 <select id="targetFormat" class="format-selector">
                     <option value="">변환할 형식을 선택하세요</option>
-                    <option value="pdf">PDF</option>
-                    <option value="docx">DOCX (Word)</option>
-                    <option value="xlsx">XLSX (Excel)</option>
-                    <option value="jpg">JPG</option>
-                    <option value="png">PNG</option>
+                    <option value="jpg">JPG (일반 이미지)</option>
+                    <option value="png">PNG (투명 배경)</option>
+                    <option value="webp">WebP (웹 최적화)</option>
+                    <option value="avif">AVIF (고압축률)</option>
+                    <option value="gif">GIF (애니메이션)</option>
                 </select>
+            </div>
+            
+            <div class="converter-section">
+                <label class="converter-label">크기 조정 (선택사항)</label>
+                <div class="size-inputs">
+                    <div class="size-input-group">
+                        <label>너비:</label>
+                        <input type="number" id="imageWidth" placeholder="픽셀 단위" class="size-input">
+                    </div>
+                    <div class="size-input-group">
+                        <label>높이:</label>
+                        <input type="number" id="imageHeight" placeholder="픽셀 단위" class="size-input">
+                    </div>
+                </div>
+                <p class="size-hint">빈칸으로 두면 원본 크기를 유지합니다</p>
             </div>
 
             <button id="convertButton" class="convert-button" disabled onclick="startConversion()">

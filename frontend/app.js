@@ -12,40 +12,20 @@ function loadDefaultContent() {
     const defaultContent = `
         <div class="tool-category">
             <div class="category-header">
-                <div class="category-icon pdf-icon">🏠</div>
+                <div class="category-icon image-icon">🖼️</div>
                 <div>
-                    <div class="category-title">HUB</div>
-                    <div class="category-desc">통합 조작 센터</div>
+                    <div class="category-title">이미지 변환</div>
+                    <div class="category-desc">모든 이미지 형식 지원</div>
                 </div>
             </div>
             <div class="tool-list">
                 <div class="tool-item" onclick="showFileConverter()">
-                    <div class="tool-name">파일 변환</div>
-                    <div class="tool-desc">모든 형식 지원</div>
+                    <div class="tool-name">이미지 변환</div>
+                    <div class="tool-desc">JPG, PNG, WebP, AVIF 등</div>
                 </div>
-                <div class="tool-item" onclick="openTool('batch-process')">
-                    <div class="tool-name">일괄 처리</div>
-                    <div class="tool-desc">여러 작업 동시</div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="tool-category">
-            <div class="category-header">
-                <div class="category-icon image-icon">📋</div>
-                <div>
-                    <div class="category-title">INDEX</div>
-                    <div class="category-desc">지식 검색 허브</div>
-                </div>
-            </div>
-            <div class="tool-list">
-                <div class="tool-item" onclick="openTool('search')">
-                    <div class="tool-name">FLOWS 검색</div>
-                    <div class="tool-desc">도구 빠른 검색</div>
-                </div>
-                <div class="tool-item" onclick="openTool('categories')">
-                    <div class="tool-name">카테고리</div>
-                    <div class="tool-desc">체계적 분류</div>
+                <div class="tool-item" onclick="openTool('image-resize')">
+                    <div class="tool-name">이미지 크기 조정</div>
+                    <div class="tool-desc">비율에 맞게 크기 변경</div>
                 </div>
             </div>
         </div>
@@ -250,25 +230,24 @@ async function startConversion() {
     document.getElementById('statusMessage').textContent = '파일 업로드 중...';
 
     try {
-        // FormData 생성
+        // 폼 데이터 생성
         const formData = new FormData();
-        formData.append('file', selectedFile, selectedFile.name);
-        formData.append('targetFormat', targetFormat);        console.log('Sending file:', selectedFile.name, 'to format:', targetFormat);
-
-        // 진행률 업데이트
-        document.getElementById('progressFill').style.width = '25%';
-        document.getElementById('statusMessage').textContent = '서버에 연결 중...';        // API 호출 - 더 자세한 디버깅 정보 추가
-        const apiUrl = '/api/convert';
-        console.log('Making request to:', apiUrl);
-        console.log('FormData contents:');
-        for (let [key, value] of formData.entries()) {
-            console.log(`  ${key}:`, value instanceof File ? `File(${value.name}, ${value.size} bytes)` : value);
-        }
+        formData.append('file', selectedFile);
+        formData.append('targetFormat', targetFormat);
         
-        const response = await fetch(apiUrl, {
+        // 이미지 변환에 필요한 옵션 추가
+        const width = document.getElementById('imageWidth')?.value || '';
+        const height = document.getElementById('imageHeight')?.value || '';
+        
+        if (width) formData.append('width', width);
+        if (height) formData.append('height', height);
+        
+        progressUpdate('변환 중... 서버로 이미지 전송 완료');
+        
+        // API 호출
+        const response = await fetch('/api/convert', {
             method: 'POST',
-            body: formData,
-            // CORS 헤더는 브라우저가 자동으로 처리하므로 명시적으로 설정하지 않음
+            body: formData
         });
 
         console.log('Response status:', response.status);
@@ -455,66 +434,13 @@ function setupDragAndDrop() {
 const CONVERSION_FORMATS = {
     // 이미지 파일들
     'image': {
-        extensions: ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'tiff', 'tif', 'webp'],
+        extensions: ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'tiff', 'tif', 'webp', 'svg', 'heic', 'avif'],
         targetFormats: [
             { value: 'jpg', label: 'JPG (JPEG 이미지)' },
             { value: 'png', label: 'PNG (투명 이미지)' },
-            { value: 'gif', label: 'GIF (움짤)' },
-            { value: 'bmp', label: 'BMP (비트맵)' },
-            { value: 'tiff', label: 'TIFF (고품질)' },
             { value: 'webp', label: 'WebP (웹 최적화)' },
-            { value: 'pdf', label: 'PDF (문서)' }
-        ]
-    },
-    
-    // 문서 파일들
-    'document': {
-        extensions: ['doc', 'docx', 'odt', 'rtf', 'txt'],
-        targetFormats: [
-            { value: 'pdf', label: 'PDF (범용 문서)' },
-            { value: 'docx', label: 'DOCX (Word 문서)' },
-            { value: 'odt', label: 'ODT (OpenDocument)' },
-            { value: 'rtf', label: 'RTF (서식 있는 텍스트)' },
-            { value: 'txt', label: 'TXT (일반 텍스트)' },
-            { value: 'html', label: 'HTML (웹 페이지)' }
-        ]
-    },
-    
-    // 스프레드시트 파일들
-    'spreadsheet': {
-        extensions: ['xls', 'xlsx', 'ods', 'csv'],
-        targetFormats: [
-            { value: 'xlsx', label: 'XLSX (Excel)' },
-            { value: 'xls', label: 'XLS (Excel 97-2003)' },
-            { value: 'ods', label: 'ODS (OpenDocument 스프레드시트)' },
-            { value: 'csv', label: 'CSV (쉼표로 구분)' },
-            { value: 'pdf', label: 'PDF (문서)' },
-            { value: 'html', label: 'HTML (웹 테이블)' }
-        ]
-    },
-    
-    // 프레젠테이션 파일들
-    'presentation': {
-        extensions: ['ppt', 'pptx', 'odp'],
-        targetFormats: [
-            { value: 'pptx', label: 'PPTX (PowerPoint)' },
-            { value: 'ppt', label: 'PPT (PowerPoint 97-2003)' },
-            { value: 'odp', label: 'ODP (OpenDocument 프레젠테이션)' },
-            { value: 'pdf', label: 'PDF (문서)' },
-            { value: 'html', label: 'HTML (웹 슬라이드)' },
-            { value: 'jpg', label: 'JPG (이미지로 변환)' }
-        ]
-    },
-    
-    // PDF 파일
-    'pdf': {
-        extensions: ['pdf'],
-        targetFormats: [
-            { value: 'docx', label: 'DOCX (Word 문서)' },
-            { value: 'txt', label: 'TXT (텍스트 추출)' },
-            { value: 'html', label: 'HTML (웹 페이지)' },
-            { value: 'jpg', label: 'JPG (이미지로 변환)' },
-            { value: 'png', label: 'PNG (이미지로 변환)' }
+            { value: 'avif', label: 'AVIF (최신 압축)' },
+            { value: 'gif', label: 'GIF (애니메이션)' }
         ]
     }
 };
@@ -523,10 +449,9 @@ const CONVERSION_FORMATS = {
 function getFileType(filename) {
     const extension = filename.split('.').pop().toLowerCase();
     
-    for (const [type, config] of Object.entries(CONVERSION_FORMATS)) {
-        if (config.extensions.includes(extension)) {
-            return type;
-        }
+    // 이미지 파일 타입만 지원
+    if (CONVERSION_FORMATS['image'].extensions.includes(extension)) {
+        return 'image';
     }
     
     return null; // 지원하지 않는 파일 타입
