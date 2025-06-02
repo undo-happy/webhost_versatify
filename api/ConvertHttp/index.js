@@ -180,12 +180,20 @@ module.exports = async function (context, req) {
         // 고유 파일 이름 생성
         const convertedFileName = `${uuidv4()}.${targetFormat}`;
         
+        // 파일 만료 시간 설정 (현재 시간 + 3분)
+        const expirationTime = new Date();
+        expirationTime.setMinutes(expirationTime.getMinutes() + 3);
+
         // R2에 업로드
         const uploadParams = {
             Bucket: R2_BUCKET_NAME,
             Key: convertedFileName,
             Body: outputBuffer,
-            ContentType: `image/${targetFormat}`
+            ContentType: `image/${targetFormat}`,
+            Metadata: {
+                'expires-at': expirationTime.toISOString(),
+                'original-filename': encodeURIComponent(fileName)
+            }
         };
         
         await s3Client.send(new PutObjectCommand(uploadParams));
