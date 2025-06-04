@@ -1,0 +1,9 @@
+{
+  "name": "generate-qr-function",
+  "version": "1.0.0",
+  "description": "Function to generate QR codes",
+  "main": "index.js",
+  "dependencies": {
+    "qrcode": "^1.5.3"
+  }
+}
