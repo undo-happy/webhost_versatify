@@ -78,4 +78,25 @@ Existing image and file tools are fragmented. Users often download and upload fi
 - Multi-language and global user support.
 - Offer APIs for B2B/B2C partners.
 
+## 13. Development Status (June 2025)
+현재 개발 진행 상황은 `docs/PROGRESS.md` 문서에 기록되어 있습니다. 요약은 다음과 같습니다:
+
+- [x] 파일 변환 API (Cloudflare R2)
+- [x] 이미지 포맷 변환
+- [ ] 이미지 업스케일링(예정)
+- [ ] 선택 영역 확대(예정)
+- [x] QR 코드 생성 API
+- [ ] 이미지 워터마킹(예정)
+
+테스트는 각 패키지에서 `npm install` 후 `npm test` 명령을 실행하여 기본 동작을 확인했습니다.
+
 Repository reference: [https://github.com/undo-happy/webhost_versatify](https://github.com/undo-happy/webhost_versatify)
+
+## 14. 인수인계
+이 문서는 개발 인수인계를 위한 요약입니다. 다음 정보를 참고하여 프로젝트를 이어서 진행하십시오.
+
+1. 기능 진행 상황은 위 개발 상태 요약 및 `docs/PROGRESS.md`를 확인합니다.
+2. 추가 기능 개발 시 PRD와 PROGRESS 문서를 함께 갱신합니다.
+3. 테스트는 각 패키지 디렉터리(`api`, `frontend`)에서 `npm install` 후 `npm test`를 실행해 기본 동작을 확인합니다.
+4. Azure Static Web Apps 배포는 `.github/workflows/azure-static-web-apps.yml` 파일을 통해 자동화되어 있습니다.
+
