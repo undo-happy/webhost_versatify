@@ -1,5 +1,5 @@
 const { S3Client, GetObjectCommand } = require("@aws-sdk/client-s3");
-const { createPresignedUrl } = require("@aws-sdk/s3-request-presigner");
+const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 
 module.exports = async function(context, req) {
   try {
@@ -10,7 +10,7 @@ module.exports = async function(context, req) {
     }
 
     // 환경 변수 검증
-    const requiredEnvVars = ['R2_ENDPOINT', 'R2_ACCESS_KEY', 'R2_SECRET_KEY', 'R2_BUCKET'];
+  const requiredEnvVars = ['R2_ENDPOINT', 'R2_ACCESS_KEY_ID', 'R2_SECRET_ACCESS_KEY', 'R2_BUCKET_NAME'];
     const missingEnvVars = requiredEnvVars.filter(varName => !process.env[varName]);
     
     if (missingEnvVars.length > 0) {
@@ -22,23 +22,23 @@ module.exports = async function(context, req) {
       return;
     }
 
-    const s3 = new S3Client({
+  const s3 = new S3Client({
       region: "auto",
       endpoint: process.env.R2_ENDPOINT,
       credentials: {
-        accessKeyId: process.env.R2_ACCESS_KEY,
-        secretAccessKey: process.env.R2_SECRET_KEY
+        accessKeyId: process.env.R2_ACCESS_KEY_ID,
+        secretAccessKey: process.env.R2_SECRET_ACCESS_KEY
       }
     });
 
     // GetObjectCommand 객체 생성
-    const command = new GetObjectCommand({ 
-      Bucket: process.env.R2_BUCKET, 
-      Key: file 
+    const command = new GetObjectCommand({
+      Bucket: process.env.R2_BUCKET_NAME,
+      Key: file
     });
 
     // 5분 동안 유효한 Presigned URL 생성
-    const url = await createPresignedUrl(s3, command, { expiresIn: 5 * 60 });
+    const url = await getSignedUrl(s3, command, { expiresIn: 5 * 60 });
 
     // 응답 로깅 및 반환
     context.log.info(`다운로드 URL 생성 성공: ${file}`);
