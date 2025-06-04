@@ -1,6 +1,6 @@
 # Versatify
 
-Versatify is a collection of Azure Functions and a simple front-end that together provide tools described in the PRD. The project currently supports image conversion and QR code generation.
+Versatify is a collection of Azure Functions and a simple front-end that together provide tools described in the PRD. The project currently supports image conversion, image upscaling, and QR code generation.
 
 ## Development
 

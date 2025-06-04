@@ -150,6 +150,36 @@
         </div>
     </div>
 
+    <!-- Image Upscale Modal -->
+    <div class="converter-modal" id="upscaleModal">
+        <div class="converter-content">
+            <button class="close-button" onclick="closeUpscaleModal()">×</button>
+            <h2 class="converter-header">🔍 이미지 업스케일</h2>
+
+            <div class="converter-section">
+                <label class="converter-label">이미지 선택</label>
+                <input type="file" id="upscaleFile" class="file-input" accept="image/*">
+            </div>
+
+            <div class="converter-section">
+                <label class="converter-label">배율 선택</label>
+                <select id="upscaleScale" class="format-selector">
+                    <option value="2">2배 확대</option>
+                    <option value="4">4배 확대</option>
+                </select>
+            </div>
+
+            <button id="upscaleButton" class="convert-button" onclick="startUpscale()">업스케일 시작</button>
+
+            <div class="progress-section" id="upscaleProgress" style="display:none;">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="upscaleFill"></div>
+                </div>
+                <p class="status-message" id="upscaleStatus">준비 중...</p>
+            </div>
+        </div>
+    </div>
+
     <script src="app.js"></script>
 </body>
 </html>
