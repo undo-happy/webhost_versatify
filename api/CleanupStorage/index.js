@@ -16,14 +16,10 @@ const s3Client = new S3Client({
     }
 });
 
-module.exports = async function (context, myTimer) {
+module.exports = async function (context, req) {
     const timeStamp = new Date().toISOString();
-    
-    if (myTimer.isPastDue) {
-        context.log('CleanupStorage 함수가 예정보다 늦게 실행되었습니다.');
-    }
-    
-    context.log('CleanupStorage 함수가 실행됨:', timeStamp);
+
+    context.log('CleanupStorage HTTP 함수가 실행됨:', timeStamp);
     
     try {
         const now = new Date();
@@ -97,8 +93,17 @@ module.exports = async function (context, myTimer) {
             continuationToken = response.NextContinuationToken;
         } while (continuationToken);
         
-        context.log(`스토리지 정리 완료: 총 ${totalProcessed}개 파일 중 ${deletedCount}개 만료 파일 삭제됨`);
+        const message = `스토리지 정리 완료: 총 ${totalProcessed}개 파일 중 ${deletedCount}개 만료 파일 삭제됨`;
+        context.log(message);
+        context.res = {
+            status: 200,
+            body: message
+        };
     } catch (error) {
         context.log.error('스토리지 정리 중 오류 발생:', error);
+        context.res = {
+            status: 500,
+            body: '스토리지 정리 실패'
+        };
     }
-}; 
+};
