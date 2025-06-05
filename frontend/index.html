@@ -180,6 +180,60 @@
         </div>
     </div>
 
+<<<<<<< HEAD
+=======
+    <!-- Image Zoom Modal -->
+    <div class="converter-modal" id="zoomModal">
+        <div class="converter-content">
+            <button class="close-button" onclick="closeZoomModal()">×</button>
+            <h2 class="converter-header">🔎 부분 확대</h2>
+
+            <div class="converter-section">
+                <label class="converter-label">이미지 선택</label>
+                <input type="file" id="zoomFile" class="file-input" accept="image/*">
+            </div>
+
+            <div class="converter-section">
+                <label class="converter-label">좌표 및 크기</label>
+                <div class="size-inputs">
+                    <div class="size-input-group">
+                        <label>X:</label>
+                        <input type="number" id="zoomX" class="size-input">
+                    </div>
+                    <div class="size-input-group">
+                        <label>Y:</label>
+                        <input type="number" id="zoomY" class="size-input">
+                    </div>
+                    <div class="size-input-group">
+                        <label>너비:</label>
+                        <input type="number" id="zoomWidth" class="size-input">
+                    </div>
+                    <div class="size-input-group">
+                        <label>높이:</label>
+                        <input type="number" id="zoomHeight" class="size-input">
+                    </div>
+                </div>
+            </div>
+
+            <div class="converter-section">
+                <label class="converter-label">배율 선택</label>
+                <select id="zoomScale" class="format-selector">
+                    <option value="2">2배 확대</option>
+                    <option value="4">4배 확대</option>
+                </select>
+            </div>
+
+            <button id="zoomButton" class="convert-button" onclick="startZoom()">확대 시작</button>
+
+            <div class="progress-section" id="zoomProgress" style="display:none;">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="zoomFill"></div>
+                </div>
+                <p class="status-message" id="zoomStatus">준비 중...</p>
+            </div>
+        </div>
+    </div>
+>>>>>>> origin/x1lutv-codex/작업-인수인계-및-에러-확인
     <script src="app.js"></script>
 </body>
 </html>

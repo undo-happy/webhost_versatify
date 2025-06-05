@@ -31,6 +31,10 @@ function loadDefaultContent() {
                     <div class="tool-name">이미지 업스케일</div>
                     <div class="tool-desc">2배 또는 4배 확대</div>
                 </div>
+                <div class="tool-item" onclick="showZoomModal()">
+                    <div class="tool-name">부분 확대</div>
+                    <div class="tool-desc">영역 지정 확대</div>
+                </div>
             </div>
         </div>
     `;
@@ -72,8 +76,73 @@ function closeUpscaleModal() {
     document.getElementById('upscaleFill').style.width = '0%';
 }
 
+function showZoomModal() {
+    document.getElementById('zoomModal').classList.add('show');
+}
+
+function closeZoomModal() {
+    document.getElementById('zoomModal').classList.remove('show');
+    document.getElementById('zoomFile').value = '';
+    document.getElementById('zoomProgress').style.display = 'none';
+    document.getElementById('zoomFill').style.width = '0%';
+}
+
 function closeConverterModal() {
     document.getElementById('converterModal').classList.remove('show');
+}
+
+async function startZoom() {
+    const fileInput = document.getElementById('zoomFile');
+    const scale = document.getElementById('zoomScale').value;
+    const x = document.getElementById('zoomX').value;
+    const y = document.getElementById('zoomY').value;
+    const width = document.getElementById('zoomWidth').value;
+    const height = document.getElementById('zoomHeight').value;
+
+    if (!fileInput.files[0]) {
+        alert('이미지를 선택하세요.');
+        return;
+    }
+    if (!width || !height) {
+        alert('잘라낼 영역의 크기를 입력하세요.');
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', fileInput.files[0]);
+    formData.append('scale', scale);
+    formData.append('x', x);
+    formData.append('y', y);
+    formData.append('width', width);
+    formData.append('height', height);
+
+    document.getElementById('zoomProgress').style.display = 'block';
+    document.getElementById('zoomFill').style.width = '0%';
+    document.getElementById('zoomStatus').textContent = '서버에 업로드 중...';
+
+    try {
+        const response = await fetch('/api/zoom', {
+            method: 'POST',
+            body: formData
+        });
+
+        if (!response.ok) {
+            const text = await response.text();
+            throw new Error(text);
+        }
+
+        document.getElementById('zoomFill').style.width = '50%';
+        document.getElementById('zoomStatus').textContent = '처리 중...';
+
+        const result = await response.json();
+
+        document.getElementById('zoomFill').style.width = '100%';
+        document.getElementById('zoomStatus').innerHTML =
+            `<a href="${result.downloadUrl}" target="_blank">확대된 이미지 다운로드</a>`;
+
+    } catch (err) {
+        document.getElementById('zoomStatus').textContent = `오류: ${err.message}`;
+    }
 }
 
 // 관리자 모달

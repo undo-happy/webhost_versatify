@@ -4,8 +4,8 @@ This document tracks implemented features from the PRD.
 
 - [x] File Conversion API using Cloudflare R2
 - [x] Image Format Conversion with @napi-rs/image
- - [x] Image Upscaling
-- [ ] Selective Image Zoom
+- [x] Image Upscaling
+- [x] Selective Image Zoom
 - [x] QR Code Generation API
 - [ ] Image Watermarking
 
