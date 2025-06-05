@@ -1,0 +1,7 @@
+{
+  "name": "versatify-root",
+  "private": true,
+  "scripts": {
+    "test": "echo \"No tests at repo root\""
+  }
+}
