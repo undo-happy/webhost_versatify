@@ -2,6 +2,12 @@
   "name": "versatify-root",
   "private": true,
   "scripts": {
-    "test": "echo \"No tests at repo root\""
+    "test": "echo \"No tests at repo root\"",
+    "start-api": "sh -c 'cd api && npm run start-local'",
+    "start-frontend": "sh -c 'cd frontend && npm run dev'",
+    "dev": "concurrently \"npm run start-api\" \"npm run start-frontend\""
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
   }
 }

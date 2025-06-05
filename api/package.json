@@ -4,6 +4,7 @@
   "description": "Azure Functions API for Versatify image conversion service with Cloudflare R2",
   "scripts": {
     "start": "func start",
+    "start-local": "npx func start",
     "test": "jest",
     "build": "echo \"No build step required\""
   },
@@ -19,6 +20,7 @@
   },
   "devDependencies": {
     "@azure/functions": "4.7.2",
+    "azure-functions-core-tools": "^4.0.7317",
     "jest": "^29.5.0"
   }
 }

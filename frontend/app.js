@@ -1,3 +1,5 @@
+const API_BASE = import.meta.env.VITE_API_BASE || '';
+
 // 기본 콘텐츠 로드
 function loadContent() {
     const savedContent = localStorage.getItem('versatifyContent');
@@ -206,6 +208,7 @@ function closeConverterModal() {
     document.getElementById('converterModal').classList.remove('show');
 }
 
+
 async function startZoom() {
     const fileInput = document.getElementById('zoomFile');
     const scale = document.getElementById('zoomScale').value;
@@ -236,7 +239,7 @@ async function startZoom() {
     document.getElementById('zoomStatus').textContent = '서버에 업로드 중...';
 
     try {
-        const response = await fetch('/api/zoom', {
+        const response = await fetch(`${API_BASE}/api/zoom`, {
             method: 'POST',
             body: formData
         });
@@ -305,7 +308,7 @@ async function checkAdminPassword() {
     
     try {
         // 백엔드 API로 인증 요청
-        const response = await fetch('/api/admin/auth', {
+        const response = await fetch(`${API_BASE}/api/admin-auth`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -449,7 +452,7 @@ async function startConversion() {
         progressUpdate('변환 중... 서버로 이미지 전송 완료');
         
         // API 호출
-        const response = await fetch('/api/convert', {
+        const response = await fetch(`${API_BASE}/api/convert`, {
             method: 'POST',
             body: formData
         });
@@ -557,7 +560,7 @@ async function startUpscale() {
     document.getElementById('upscaleStatus').textContent = '서버에 업로드 중...';
 
     try {
-        const response = await fetch('/api/upscale', {
+        const response = await fetch(`${API_BASE}/api/upscale`, {
             method: 'POST',
             body: formData
         });
@@ -587,13 +590,13 @@ async function checkApiConnection() {
         console.log('API 연결 상태 확인 중...');
         
         // 먼저 convert API 확인
-        const convertResponse = await fetch('/api/convert', {
+        const convertResponse = await fetch(`${API_BASE}/api/convert`, {
             method: 'OPTIONS'
         });
         console.log('Convert API 상태:', convertResponse.status, convertResponse.statusText);
         
         // Admin Auth API 확인
-        const authResponse = await fetch('/api/admin/auth', {
+        const authResponse = await fetch(`${API_BASE}/api/admin-auth`, {
             method: 'OPTIONS'
         });
         console.log('Admin Auth API 상태:', authResponse.status, authResponse.statusText);
