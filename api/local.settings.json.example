@@ -1,0 +1,13 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "FUNCTIONS_WORKER_RUNTIME": "node",
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "R2_ENDPOINT": "https://YOUR_ACCOUNT_ID.r2.cloudflarestorage.com",
+    "R2_ACCESS_KEY_ID": "YOUR_ACCESS_KEY_ID",
+    "R2_SECRET_ACCESS_KEY": "YOUR_SECRET_ACCESS_KEY",
+    "R2_BUCKET_NAME": "converted-images",
+    "ADMIN_PASSWORD_HASH": "your_admin_hash",
+    "ADMIN_SALT": "your_admin_salt"
+  }
+}

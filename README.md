@@ -26,6 +26,9 @@ The API returns a signed URL for downloading the watermarked image.
 ## Development
 
 ```bash
+# Install root dependencies (dev tools)
+npm install
+
 # Install dependencies for the API
 cd api && npm install
 
@@ -37,6 +40,21 @@ cd .. && npm test
 cd api && npm test
 cd ../frontend && npm test
 ```
+
+### Local Development
+
+Start both the Azure Functions backend and the Vite frontend together:
+
+```bash
+npm run dev
+```
+
+The script uses `npx` to launch Azure Functions. If you prefer a global
+installation, run `npm install -g azure-functions-core-tools@4`.
+
+Copy `api/local.settings.json.example` to `api/local.settings.json` for local
+credentials. The default values use the Azurite emulator and dummy R2
+credentials.
 
 ```bash
 # Build frontend and API
