@@ -6,8 +6,22 @@ Versatify는 이미지와 파일 도구를 한곳에서 제공하는 웹 서비�
 - 이미지 업스케일
 - 선택 영역 확대
 - QR 코드 생성
+- 이미지 워터마킹
 
 Versatify is built with Azure Static Web Apps and provides these tools via serverless functions.
+
+### Watermark API
+
+`POST /api/watermark`
+
+Parameters:
+
+- `file`: image file to watermark (multipart field)
+- `text`: watermark text
+- `opacity`: optional transparency between 0 and 1
+- `position`: `top-left`, `top-right`, `bottom-left`, `bottom-right`, or `center`
+
+The API returns a signed URL for downloading the watermarked image.
 
 ## Development
 
