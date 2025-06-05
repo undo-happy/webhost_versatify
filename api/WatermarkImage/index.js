@@ -149,7 +149,7 @@ module.exports = async function (context, req) {
         context.res.status = 200;
         context.res.body = { success: true, downloadUrl: signedUrl };
     } catch (err) {
-        context.log('Watermark error:', err);
+        context.log.error('Watermark error:', err);
         context.res.status = 500;
         context.res.body = { error: 'Watermark failed', message: err.message };
     }
