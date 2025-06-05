@@ -759,3 +759,19 @@ window.onload = function() {
     loadContent();
     setupDragAndDrop();
 };
+
+// Inline 이벤트 핸들러에서 사용할 수 있도록 함수들을 전역 객체에 노출
+window.showTab = showTab;
+window.openTool = openTool;
+window.showFileConverter = showFileConverter;
+window.closeConverterModal = closeConverterModal;
+window.showUpscaleModal = showUpscaleModal;
+window.closeUpscaleModal = closeUpscaleModal;
+window.showZoomModal = showZoomModal;
+window.closeZoomModal = closeZoomModal;
+window.startConversion = startConversion;
+window.startUpscale = startUpscale;
+window.startZoom = startZoom;
+window.showAdminModal = showAdminModal;
+window.closeAdminModal = closeAdminModal;
+window.checkAdminPassword = checkAdminPassword;
