@@ -258,6 +258,7 @@ body {
     background-color: rgba(254, 213, 217, 0.1); /* Light accent background, similar to .tool-item:hover */
     border-radius: 10px; /* Consistent with other rounded elements like .category-icon */
     margin-bottom: 1rem; /* Add some space below it */
+    transition: all 0.3s ease;
 }
 
 .file-drop-zone p {
@@ -527,4 +528,129 @@ body {
 /* 애니메이션 최적화 */
 .file-select-area, .file-type-btn, .convert-button, .converter-content {
     transition-duration: 0.2s;
+}
+
+/* 단계별 변환 과정을 위한 스타일 */
+.conversion-steps {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px 0 30px;
+    position: relative;
+    padding: 0 10px;
+}
+
+.conversion-steps::before {
+    content: '';
+    position: absolute;
+    top: 14px;
+    left: 40px;
+    right: 40px;
+    height: 2px;
+    background: #e0e0e0;
+    z-index: 1;
+}
+
+.conversion-steps .step {
+    position: relative;
+    z-index: 2;
+    background: #f5f5f5;
+    border: 2px solid #e0e0e0;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: bold;
+    color: #777;
+    transition: all 0.3s ease;
+}
+
+.conversion-steps .step::after {
+    content: attr(id);
+    position: absolute;
+    bottom: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    font-size: 12px;
+    font-weight: normal;
+}
+
+.conversion-steps .step.active {
+    background: #3498db;
+    border-color: #3498db;
+    color: white;
+}
+
+.conversion-steps .step.active::after {
+    font-weight: bold;
+    color: #3498db;
+}
+
+#nextStepBtn {
+    margin-top: 20px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+#nextStepBtn:hover {
+    background-color: #2980b9;
+}
+
+#nextStepBtn:disabled {
+    background-color: #bdc3c7;
+    cursor: not-allowed;
+}
+
+.steps-description {
+    display: flex;
+    justify-content: space-between;
+    margin: 5px 0 20px;
+    padding: 0 10px;
+    text-align: center;
+}
+
+.steps-description .step-desc {
+    flex: 1;
+    font-size: 13px;
+    color: #777;
+    padding: 0 5px;
+}
+
+.steps-description .step-desc.active {
+    font-weight: bold;
+    color: #3498db;
+}
+
+/* 파일 드롭존 개선 */
+.file-drop-zone:hover {
+    border-color: #3498db;
+    background-color: #f8f9fa;
+}
+
+/* 변환 버튼 개선 */
+.convert-button:not(:disabled):hover {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* 모달 내용 개선 */
+.converter-content {
+    max-width: 600px;
+    width: 90%;
+    margin: 0 auto;
+    padding: 30px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    position: relative;
 }

@@ -63,6 +63,121 @@ function showFileConverter() {
     document.getElementById('converterModal').classList.add('show');
     // 드래그 앤 드롭 기능 초기화
     setupDragAndDrop();
+    
+    // 파일 선택 단계 표시
+    showFileSelectionStep();
+}
+
+// 파일 선택 단계 표시
+function showFileSelectionStep() {
+    const converterContent = document.querySelector('.converter-content');
+    
+    // 단계 표시기 추가
+    if (!document.getElementById('conversionSteps')) {
+        const stepsIndicator = document.createElement('div');
+        stepsIndicator.id = 'conversionSteps';
+        stepsIndicator.className = 'conversion-steps';
+        stepsIndicator.innerHTML = `
+            <div class="step active" id="step1">1</div>
+            <div class="step" id="step2">2</div>
+            <div class="step" id="step3">3</div>
+        `;
+        
+        // 단계 설명 추가
+        const stepsDescription = document.createElement('div');
+        stepsDescription.className = 'steps-description';
+        stepsDescription.innerHTML = `
+            <div class="step-desc active" id="step1-desc">파일 선택</div>
+            <div class="step-desc" id="step2-desc">옵션 설정</div>
+            <div class="step-desc" id="step3-desc">변환 완료</div>
+        `;
+        
+        converterContent.insertBefore(stepsIndicator, converterContent.firstChild.nextSibling);
+        converterContent.insertBefore(stepsDescription, stepsIndicator.nextSibling);
+    }
+    
+    // 파일 선택 단계만 표시
+    document.getElementById('step1').classList.add('active');
+    document.getElementById('step2').classList.remove('active');
+    document.getElementById('step3').classList.remove('active');
+    
+    document.getElementById('step1-desc').classList.add('active');
+    document.getElementById('step2-desc').classList.remove('active');
+    document.getElementById('step3-desc').classList.remove('active');
+    
+    // 파일 선택 섹션만 표시
+    const sections = document.querySelectorAll('.converter-section');
+    sections.forEach((section, index) => {
+        if (index === 0) { // 첫 번째 섹션(파일 선택)만 표시
+            section.style.display = 'block';
+        } else {
+            section.style.display = 'none';
+        }
+    });
+    
+    // 다음 단계 버튼 표시
+    if (!document.getElementById('nextStepBtn')) {
+        const nextBtn = document.createElement('button');
+        nextBtn.id = 'nextStepBtn';
+        nextBtn.className = 'convert-button';
+        nextBtn.disabled = true;
+        nextBtn.textContent = '다음 단계 →';
+        nextBtn.onclick = showOptionsStep;
+        
+        // 변환 시작 버튼 앞에 삽입
+        const convertBtn = document.getElementById('convertButton');
+        convertBtn.style.display = 'none';
+        convertBtn.parentNode.insertBefore(nextBtn, convertBtn);
+    } else {
+        document.getElementById('nextStepBtn').style.display = 'block';
+        document.getElementById('nextStepBtn').disabled = !selectedFile;
+        document.getElementById('convertButton').style.display = 'none';
+    }
+    
+    // 진행 상태 표시 숨기기
+    document.getElementById('progressSection').style.display = 'none';
+}
+
+// 옵션 설정 단계 표시
+function showOptionsStep() {
+    if (!selectedFile) {
+        alert('먼저 파일을 선택해주세요.');
+        return;
+    }
+    
+    // 단계 표시기 업데이트
+    document.getElementById('step1').classList.remove('active');
+    document.getElementById('step2').classList.add('active');
+    document.getElementById('step3').classList.remove('active');
+    
+    document.getElementById('step1-desc').classList.remove('active');
+    document.getElementById('step2-desc').classList.add('active');
+    document.getElementById('step3-desc').classList.remove('active');
+    
+    // 모든 섹션 표시
+    const sections = document.querySelectorAll('.converter-section');
+    sections.forEach(section => {
+        section.style.display = 'block';
+    });
+    
+    // 버튼 전환
+    document.getElementById('nextStepBtn').style.display = 'none';
+    document.getElementById('convertButton').style.display = 'block';
+    
+    // 변환 버튼 활성화 상태 확인
+    checkConversionReady();
+}
+
+// 변환 완료 단계 표시
+function showCompletionStep() {
+    // 단계 표시기 업데이트
+    document.getElementById('step1').classList.remove('active');
+    document.getElementById('step2').classList.remove('active');
+    document.getElementById('step3').classList.add('active');
+    
+    document.getElementById('step1-desc').classList.remove('active');
+    document.getElementById('step2-desc').classList.remove('active');
+    document.getElementById('step3-desc').classList.add('active');
 }
 
 function showUpscaleModal() {
@@ -269,6 +384,11 @@ document.getElementById('fileInput')?.addEventListener('change', function(e) {
             fileInfo.style.display = 'block';
         }
         
+        // 다음 단계 버튼 활성화
+        if (document.getElementById('nextStepBtn')) {
+            document.getElementById('nextStepBtn').disabled = false;
+        }
+        
         checkConversionReady();
     }
 });
@@ -352,7 +472,10 @@ async function startConversion() {
         console.log('Server response:', result);
         
         document.getElementById('progressFill').style.width = '100%';
-          if (result.success) {
+        if (result.success) {
+            // 변환 완료 단계로 전환
+            showCompletionStep();
+            
             document.getElementById('statusMessage').innerHTML = `
                 <div style="text-align: center;">
                     <div style="margin-bottom: 15px;">
@@ -382,6 +505,20 @@ async function startConversion() {
         setTimeout(() => {
             document.getElementById('progressFill').style.backgroundColor = '#3498db';
         }, 3000);
+    }
+}
+
+// 진행 상태 업데이트 함수
+function progressUpdate(message, progress = null) {
+    const statusMessage = document.getElementById('statusMessage');
+    const progressFill = document.getElementById('progressFill');
+    
+    if (statusMessage) {
+        statusMessage.textContent = message;
+    }
+    
+    if (progress !== null && progressFill) {
+        progressFill.style.width = `${progress}%`;
     }
 }
 
