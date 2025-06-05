@@ -4,7 +4,7 @@
   "description": "Azure Functions API for Versatify image conversion service with Cloudflare R2",
   "scripts": {
     "start": "func start",
-    "test": "echo \"No tests yet...\"",
+    "test": "jest",
     "build": "echo \"No build step required\""
   },
   "dependencies": {

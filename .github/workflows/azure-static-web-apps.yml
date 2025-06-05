@@ -42,7 +42,6 @@ jobs:
           skip_app_build: false
           app_build_command: "npm install && npm run build"
           api_build_command: "npm install && npm run build"
-          build_timeout_in_minutes: 30
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
