@@ -148,6 +148,43 @@
                 <p class="status-message" id="statusMessage">준비 중...</p>
             </div>
         </div>
+</div>
+
+    <!-- Image Resize Modal -->
+    <div class="converter-modal" id="resizeModal">
+        <div class="converter-content">
+            <button class="close-button" onclick="closeResizeModal()">×</button>
+            <h2 class="converter-header">📐 이미지 크기 조정</h2>
+
+            <div class="converter-section">
+                <label class="converter-label">이미지 선택</label>
+                <input type="file" id="resizeFile" class="file-input" accept="image/*">
+            </div>
+
+            <div class="converter-section">
+                <label class="converter-label">새 크기</label>
+                <div class="size-inputs">
+                    <div class="size-input-group">
+                        <label>너비:</label>
+                        <input type="number" id="resizeWidth" class="size-input" placeholder="px">
+                    </div>
+                    <div class="size-input-group">
+                        <label>높이:</label>
+                        <input type="number" id="resizeHeight" class="size-input" placeholder="px">
+                    </div>
+                </div>
+                <p class="size-hint">한쪽만 입력하면 비율을 유지합니다</p>
+            </div>
+
+            <button id="resizeButton" class="convert-button" onclick="startResize()">크기 조정</button>
+
+            <div class="progress-section" id="resizeProgress" style="display:none;">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="resizeFill"></div>
+                </div>
+                <p class="status-message" id="resizeStatus">준비 중...</p>
+            </div>
+        </div>
     </div>
 
     <!-- Image Upscale Modal -->
