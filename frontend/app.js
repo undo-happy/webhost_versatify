@@ -65,7 +65,11 @@ function showTab(tabName) {
 
 // 도구 열기
 function openTool(toolName) {
-    alert(`${toolName} 도구를 준비 중입니다!`);
+    if (toolName === 'image-resize') {
+        showResizeModal();
+    } else {
+        alert(`${toolName} 도구를 준비 중입니다!`);
+    }
 }
 
 // 파일 변환 모달
@@ -199,6 +203,17 @@ function closeUpscaleModal() {
     document.getElementById('upscaleFile').value = '';
     document.getElementById('upscaleProgress').style.display = 'none';
     document.getElementById('upscaleFill').style.width = '0%';
+}
+
+function showResizeModal() {
+    document.getElementById('resizeModal').classList.add('show');
+}
+
+function closeResizeModal() {
+    document.getElementById('resizeModal').classList.remove('show');
+    document.getElementById('resizeFile').value = '';
+    document.getElementById('resizeProgress').style.display = 'none';
+    document.getElementById('resizeFill').style.width = '0%';
 }
 
 function showZoomModal() {
@@ -667,6 +682,54 @@ async function startUpscale() {
     }
 }
 
+async function startResize() {
+    const fileInput = document.getElementById('resizeFile');
+    const width = document.getElementById('resizeWidth').value;
+    const height = document.getElementById('resizeHeight').value;
+
+    if (!fileInput.files[0]) {
+        alert('이미지를 선택하세요.');
+        return;
+    }
+    if (!width && !height) {
+        alert('너비나 높이를 입력하세요.');
+        return;
+    }
+
+    const file = fileInput.files[0];
+    const ext = (file.name.split('.').pop() || 'png').toLowerCase();
+
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('targetFormat', ext);
+    if (width) formData.append('width', width);
+    if (height) formData.append('height', height);
+
+    document.getElementById('resizeProgress').style.display = 'block';
+    document.getElementById('resizeFill').style.width = '0%';
+    document.getElementById('resizeStatus').textContent = '서버에 업로드 중...';
+
+    try {
+        const response = await fetch(`${API_BASE}/api/convert`, {
+            method: 'POST',
+            body: formData
+        });
+        if (!response.ok) throw new Error(await response.text());
+
+        document.getElementById('resizeFill').style.width = '50%';
+        document.getElementById('resizeStatus').textContent = '처리 중...';
+
+        const result = await response.json();
+
+        document.getElementById('resizeFill').style.width = '100%';
+        document.getElementById('resizeStatus').innerHTML =
+            `<a href="${result.downloadUrl}" target="_blank">변환된 이미지 다운로드</a>`;
+
+    } catch (err) {
+        document.getElementById('resizeStatus').textContent = `오류: ${err.message}`;
+    }
+}
+
 // API 연결 상태 확인 함수
 async function checkApiConnection() {
     try {
@@ -848,11 +911,14 @@ window.showTab = showTab;
 window.openTool = openTool;
 window.showFileConverter = showFileConverter;
 window.closeConverterModal = closeConverterModal;
+window.showResizeModal = showResizeModal;
+window.closeResizeModal = closeResizeModal;
 window.showUpscaleModal = showUpscaleModal;
 window.closeUpscaleModal = closeUpscaleModal;
 window.showZoomModal = showZoomModal;
 window.closeZoomModal = closeZoomModal;
 window.startConversion = startConversion;
+window.startResize = startResize;
 window.startUpscale = startUpscale;
 window.startZoom = startZoom;
 window.showAdminModal = showAdminModal;
