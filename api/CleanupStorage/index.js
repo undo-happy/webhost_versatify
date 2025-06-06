@@ -16,26 +16,9 @@ const s3Client = new S3Client({
     }
 });
 
-module.exports = async function (context, req) {
+module.exports = async function (context, myTimer) {
     const timeStamp = new Date().toISOString();
-
-    // CORS 헤더 설정
-    const corsHeaders = {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, Origin, X-Requested-With, Accept',
-        'Access-Control-Max-Age': '86400'
-    };
-    context.res = { headers: corsHeaders };
-
-    // OPTIONS 요청 처리
-    if (req.method === 'OPTIONS') {
-        context.res.status = 200;
-        context.res.body = 'OK';
-        return;
-    }
-
-    context.log('CleanupStorage HTTP 함수가 실행됨:', timeStamp);
+    context.log('CleanupStorage timer 함수가 실행됨:', timeStamp);
     
     try {
         const now = new Date();
@@ -111,15 +94,7 @@ module.exports = async function (context, req) {
         
         const message = `스토리지 정리 완료: 총 ${totalProcessed}개 파일 중 ${deletedCount}개 만료 파일 삭제됨`;
         context.log(message);
-        context.res = {
-            status: 200,
-            body: message
-        };
     } catch (error) {
         context.log.error('스토리지 정리 중 오류 발생:', error);
-        context.res = {
-            status: 500,
-            body: '스토리지 정리 실패'
-        };
     }
 };

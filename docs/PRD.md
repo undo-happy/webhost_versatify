@@ -109,13 +109,11 @@ Repository reference: [https://github.com/undo-happy/webhost_versatify](https://
    - `openTool('image-resize')` 호출 시 알림만 표시되고 있습니다.
    - Convert API(`/api/convert`)의 `width`와 `height` 매개변수를 사용하여 실제 이미지 리사이즈 모달을 구현합니다.
 
-2. **워터마킹 기능 연동**
-   - `WatermarkImage` API(`/api/watermark`)는 UI 연결이 없습니다.
-   - 텍스트, 위치, 투명도 옵션을 입력받는 모달을 추가하고 결과 이미지를 다운로드할 수 있도록 합니다.
+2. **워터마킹 기능 연동** ✅
+   - 워터마크 모달을 통해 텍스트, 위치, 투명도 옵션을 입력 받아 `/api/watermark`와 연결했습니다.
 
-3. **QR 코드 생성기 추가**
-   - `GenerateQr` API(`/api/generate`) 호출 UI가 누락돼 있습니다.
-   - 사용자가 문자열을 입력하면 QR 이미지를 보여주는 간단한 도구를 구현합니다.
+3. **QR 코드 생성기 추가** ✅
+   - 문자열 입력 후 `/api/generate` 호출로 QR 이미지를 표시하는 모달을 구현했습니다.
 
 4. **관리자 패널 기능 강화**
    - `generateWebsiteCode()`는 미구현 상태입니다. 편집된 카드 정보를 기반으로 정적 HTML을 생성하고 다운로드할 수 있게 합니다.

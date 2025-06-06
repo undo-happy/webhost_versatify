@@ -188,10 +188,22 @@ function showCompletionStep() {
     document.getElementById('step1').classList.remove('active');
     document.getElementById('step2').classList.remove('active');
     document.getElementById('step3').classList.add('active');
-    
+
     document.getElementById('step1-desc').classList.remove('active');
     document.getElementById('step2-desc').classList.remove('active');
     document.getElementById('step3-desc').classList.add('active');
+}
+
+function showResizeModal() {
+    document.getElementById('resizeModal').classList.add('show');
+}
+
+function closeResizeModal() {
+    document.getElementById('resizeModal').classList.remove('show');
+    document.getElementById('resizeFile').value = '';
+    document.getElementById('resizeWidth').value = '';
+    document.getElementById('resizeHeight').value = '';
+    document.getElementById('resizeResult').style.display = 'none';
 }
 
 function showUpscaleModal() {
@@ -336,6 +348,38 @@ async function startWatermark() {
         document.getElementById('watermarkResult').style.display = 'block';
     } catch (err) {
         alert('워터마크 실패: ' + err.message);
+    }
+}
+
+async function startResize() {
+    const fileInput = document.getElementById('resizeFile');
+    const width = document.getElementById('resizeWidth').value;
+    const height = document.getElementById('resizeHeight').value;
+    const format = document.getElementById('resizeFormat').value;
+
+    if (!fileInput.files[0] || (!width && !height)) {
+        alert('이미지와 크기를 입력하세요.');
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', fileInput.files[0]);
+    formData.append('targetFormat', format);
+    if (width) formData.append('width', width);
+    if (height) formData.append('height', height);
+
+    try {
+        const response = await fetch(`${API_BASE}/api/convert`, {
+            method: 'POST',
+            body: formData
+        });
+        if (!response.ok) throw new Error(await response.text());
+
+        const result = await response.json();
+        document.getElementById('resizeDownload').href = result.downloadUrl;
+        document.getElementById('resizeResult').style.display = 'block';
+    } catch (err) {
+        alert('크기 조정 실패: ' + err.message);
     }
 }
 
@@ -930,3 +974,6 @@ window.generateQr = generateQr;
 window.showWatermarkModal = showWatermarkModal;
 window.closeWatermarkModal = closeWatermarkModal;
 window.startWatermark = startWatermark;
+window.showResizeModal = showResizeModal;
+window.closeResizeModal = closeResizeModal;
+window.startResize = startResize;

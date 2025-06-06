@@ -206,7 +206,23 @@ function showNotification(message, type) {
 
 // 웹사이트 코드 생성
 function generateWebsiteCode() {
-    alert('전체 웹사이트 코드 생성 기능은 준비 중입니다.');
+    const saved = localStorage.getItem('versatifyContent') || '';
+    fetch('index.html')
+        .then(r => r.text())
+        .then(html => {
+            const output = html.replace('<!-- 동적 콘텐츠 로드 -->', saved);
+            const blob = new Blob([output], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'versatify-static.html';
+            a.click();
+            URL.revokeObjectURL(url);
+            showNotification('정적 HTML 파일이 생성되었습니다', 'success');
+        })
+        .catch(err => {
+            showNotification('코드 생성 실패: ' + err.message, 'error');
+        });
 }
 
 // 자동 저장 (5초마다)

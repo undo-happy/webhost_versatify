@@ -269,6 +269,49 @@
         </div>
     </div>
 
+    <!-- Image Resize Modal -->
+    <div class="converter-modal" id="resizeModal">
+        <div class="converter-content">
+            <button class="close-button" onclick="closeResizeModal()">×</button>
+            <h2 class="converter-header">📐 이미지 크기 조정</h2>
+
+            <div class="converter-section">
+                <label class="converter-label">이미지 선택</label>
+                <input type="file" id="resizeFile" class="file-input" accept="image/*">
+            </div>
+
+            <div class="converter-section">
+                <label class="converter-label">새 크기</label>
+                <div class="size-inputs">
+                    <div class="size-input-group">
+                        <label>너비:</label>
+                        <input type="number" id="resizeWidth" class="size-input">
+                    </div>
+                    <div class="size-input-group">
+                        <label>높이:</label>
+                        <input type="number" id="resizeHeight" class="size-input">
+                    </div>
+                </div>
+            </div>
+
+            <div class="converter-section">
+                <label class="converter-label">출력 형식</label>
+                <select id="resizeFormat" class="format-selector">
+                    <option value="png">PNG</option>
+                    <option value="jpeg">JPEG</option>
+                    <option value="webp">WebP</option>
+                    <option value="avif">AVIF</option>
+                </select>
+            </div>
+
+            <button id="resizeButton" class="convert-button" onclick="startResize()">변환</button>
+
+            <div class="progress-section" id="resizeResult" style="display:none;">
+                <a id="resizeDownload" href="#" target="_blank" class="convert-button" style="margin-top:10px;">다운로드</a>
+            </div>
+        </div>
+    </div>
+
     <!-- QR Code Modal -->
     <div class="converter-modal" id="qrModal">
         <div class="converter-content">
