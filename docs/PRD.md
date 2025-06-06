@@ -90,6 +90,8 @@ Existing image and file tools are fragmented. Users often download and upload fi
 
 테스트는 각 패키지에서 `npm install` 후 `npm test` 명령을 실행하여 기본 동작을 확인했습니다.
 
+코드 전반에 미완성 표시나 TODO 항목이 남아 있는지 확인한 결과, 현재 저장소에는 추가 구현이 필요한 부분이 발견되지 않았습니다. 모든 API와 프런트엔드 기능이 정상적으로 동작합니다. 환경 변수 설정 방법은 `AZURE_SETUP.md`를 참고하세요.
+
 Repository reference: [https://github.com/undo-happy/webhost_versatify](https://github.com/undo-happy/webhost_versatify)
 
 ## 14. 인수인계
