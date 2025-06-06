@@ -37,6 +37,10 @@ function loadDefaultContent() {
                     <div class="tool-name">부분 확대</div>
                     <div class="tool-desc">영역 지정 확대</div>
                 </div>
+                <div class="tool-item" onclick="showQrModal()">
+                    <div class="tool-name">QR 코드 생성</div>
+                    <div class="tool-desc">텍스트로 QR 이미지 만들기</div>
+                </div>
             </div>
         </div>
     `;
@@ -260,6 +264,38 @@ async function startZoom() {
 
     } catch (err) {
         document.getElementById('zoomStatus').textContent = `오류: ${err.message}`;
+    }
+}
+
+function showQrModal() {
+    document.getElementById('qrModal').classList.add('show');
+}
+
+function closeQrModal() {
+    document.getElementById('qrModal').classList.remove('show');
+    document.getElementById('qrText').value = '';
+    document.getElementById('qrResult').style.display = 'none';
+}
+
+async function generateQr() {
+    const text = document.getElementById('qrText').value.trim();
+    if (!text) {
+        alert('텍스트를 입력하세요.');
+        return;
+    }
+
+    try {
+        const response = await fetch(`${API_BASE}/api/generate?text=${encodeURIComponent(text)}`);
+        if (!response.ok) throw new Error(await response.text());
+
+        const blob = await response.blob();
+        const url = URL.createObjectURL(blob);
+
+        document.getElementById('qrImage').src = url;
+        document.getElementById('qrDownload').href = url;
+        document.getElementById('qrResult').style.display = 'block';
+    } catch (err) {
+        alert('QR 코드 생성 실패: ' + err.message);
     }
 }
 
@@ -775,3 +811,6 @@ window.startZoom = startZoom;
 window.showAdminModal = showAdminModal;
 window.closeAdminModal = closeAdminModal;
 window.checkAdminPassword = checkAdminPassword;
+window.showQrModal = showQrModal;
+window.closeQrModal = closeQrModal;
+window.generateQr = generateQr;
