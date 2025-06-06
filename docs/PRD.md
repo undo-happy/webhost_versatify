@@ -102,3 +102,31 @@ Repository reference: [https://github.com/undo-happy/webhost_versatify](https://
 3. 테스트는 각 패키지 디렉터리(`api`, `frontend`)에서 `npm install` 후 `npm test`를 실행해 기본 동작을 확인합니다.
 4. Azure Static Web Apps 배포는 `.github/workflows/azure-static-web-apps.yml` 파일을 통해 자동화되어 있습니다.
 
+## 15. Web UI Integration Tasks (July 2025)
+현재 API 함수들은 동작 가능하지만 프런트엔드와 완전히 연결되지 않은 기능들이 있습니다. 다음 작업을 통해 웹사이트를 완성합니다.
+
+1. **이미지 크기 조정 도구**
+   - `openTool('image-resize')` 호출 시 알림만 표시되고 있습니다.
+   - Convert API(`/api/convert`)의 `width`와 `height` 매개변수를 사용하여 실제 이미지 리사이즈 모달을 구현합니다.
+
+2. **워터마킹 기능 연동**
+   - `WatermarkImage` API(`/api/watermark`)는 UI 연결이 없습니다.
+   - 텍스트, 위치, 투명도 옵션을 입력받는 모달을 추가하고 결과 이미지를 다운로드할 수 있도록 합니다.
+
+3. **QR 코드 생성기 추가**
+   - `GenerateQr` API(`/api/generate`) 호출 UI가 누락돼 있습니다.
+   - 사용자가 문자열을 입력하면 QR 이미지를 보여주는 간단한 도구를 구현합니다.
+
+4. **관리자 패널 기능 강화**
+   - `generateWebsiteCode()`는 미구현 상태입니다. 편집된 카드 정보를 기반으로 정적 HTML을 생성하고 다운로드할 수 있게 합니다.
+
+5. **자동 스토리지 정리**
+   - `CleanupStorage` 함수는 수동 호출 방식입니다. Timer Trigger를 추가해 하루 한 번 자동 실행하도록 배포 설정을 수정합니다.
+
+6. **테스트 보강**
+   - 프런트엔드 모달 렌더링 테스트와 각 API 성공 케이스 테스트를 추가해 품질을 유지합니다.
+
+7. **문서 업데이트**
+   - 위 작업을 완료한 후 `README.md`의 사용 예와 배포 절차를 갱신합니다.
+
+
