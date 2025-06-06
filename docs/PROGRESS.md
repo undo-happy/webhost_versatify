@@ -20,7 +20,8 @@ This document tracks implemented features from the PRD.
 - PRD의 "Future Considerations" 섹션에 명시된 기능(동영상 변환, 고급 AI 편집, 다국어 지원, B2B/B2C API 제공) 구현을 검토합니다.
 - `AZURE_SETUP.md`의 지침에 따라 관리자 비밀번호 해시와 기타 환경 변수를 설정합니다.
 - 배포 후 `generate-admin-hash.js`로 새 비밀번호 해시를 생성해 보안을 유지합니다.
-- 프런트엔드에서 Watermark API와 QR 코드 생성 기능을 사용할 수 있도록 UI를 추가합니다.
+- [x] 프런트엔드에 QR 코드 생성 UI를 추가하여 Generate API와 연동했습니다.
+- [ ] Watermark API UI 연동을 완료합니다.
 - `openTool('image-resize')`를 실제 이미지 크기 조정 모달로 구현하고 Convert API에 연동합니다.
 - 관리자 패널의 `generateWebsiteCode()` 기능을 완성하여 편집한 콘텐츠를 정적 HTML로 내보냅니다.
 - Cloudflare R2 저장소 정리 함수(`CleanupStorage`)를 타이머 트리거로 배포하여 자동화합니다.

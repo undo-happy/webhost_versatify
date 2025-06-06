@@ -23,6 +23,16 @@ Parameters:
 
 The API returns a signed URL for downloading the watermarked image.
 
+### QR Code API
+
+`GET /api/generate?text=YOUR_TEXT`
+
+Parameters:
+
+- `text`: string to encode in the QR code
+
+The API returns the QR code image (PNG by default).
+
 ## Development
 
 ```bash

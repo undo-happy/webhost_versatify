@@ -231,6 +231,26 @@
             </div>
         </div>
     </div>
+
+    <!-- QR Code Modal -->
+    <div class="converter-modal" id="qrModal">
+        <div class="converter-content">
+            <button class="close-button" onclick="closeQrModal()">×</button>
+            <h2 class="converter-header">🔗 QR 코드 생성</h2>
+
+            <div class="converter-section">
+                <label class="converter-label">텍스트 입력</label>
+                <input type="text" id="qrText" class="file-input" placeholder="https://example.com">
+            </div>
+
+            <button id="qrButton" class="convert-button" onclick="generateQr()">QR 생성</button>
+
+            <div class="progress-section" id="qrResult" style="display:none;">
+                <img id="qrImage" alt="QR Code" style="max-width:200px; display:block; margin:10px auto;">
+                <a id="qrDownload" href="#" download="qr.png" class="convert-button" style="margin-top:10px;">다운로드</a>
+            </div>
+        </div>
+    </div>
     <script type="module" src="app.js"></script>
 </body>
 </html>
