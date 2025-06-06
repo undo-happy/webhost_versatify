@@ -5,6 +5,7 @@ Versatify는 이미지와 파일 도구를 한곳에서 제공하는 웹 서비�
 - 이미지 변환
 - 이미지 업스케일
 - 선택 영역 확대
+- 이미지 크기 조정
 - QR 코드 생성
 - 이미지 워터마킹
 
@@ -73,5 +74,7 @@ cd ../api && npm run build
 ```
 
 환경 변수 설정 예시는 `.env.example` 파일을 참고하세요. Cloudflare R2와 관리자 비밀번호 해시 등을 설정해야 합니다.
+
+CleanupStorage 함수가 매일 자동 실행되어 만료된 R2 파일을 정리합니다.
 
 See `docs/PROGRESS.md` for feature checklist and progress.
