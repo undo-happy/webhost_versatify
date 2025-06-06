@@ -251,6 +251,46 @@
             </div>
         </div>
     </div>
+
+    <!-- Watermark Modal -->
+    <div class="converter-modal" id="watermarkModal">
+        <div class="converter-content">
+            <button class="close-button" onclick="closeWatermarkModal()">×</button>
+            <h2 class="converter-header">💧 워터마크</h2>
+
+            <div class="converter-section">
+                <label class="converter-label">이미지 선택</label>
+                <input type="file" id="watermarkFile" class="file-input" accept="image/*">
+            </div>
+
+            <div class="converter-section">
+                <label class="converter-label">텍스트</label>
+                <input type="text" id="watermarkText" class="file-input" placeholder="Sample">
+            </div>
+
+            <div class="converter-section">
+                <label class="converter-label">위치</label>
+                <select id="watermarkPosition" class="format-selector">
+                    <option value="bottom-right">오른쪽 하단</option>
+                    <option value="bottom-left">왼쪽 하단</option>
+                    <option value="top-right">오른쪽 상단</option>
+                    <option value="top-left">왼쪽 상단</option>
+                    <option value="center">중앙</option>
+                </select>
+            </div>
+
+            <div class="converter-section">
+                <label class="converter-label">투명도</label>
+                <input type="number" id="watermarkOpacity" class="size-input" min="0" max="1" step="0.1" value="0.5">
+            </div>
+
+            <button id="watermarkButton" class="convert-button" onclick="startWatermark()">워터마크 적용</button>
+
+            <div class="progress-section" id="watermarkResult" style="display:none;">
+                <a id="watermarkDownload" href="#" target="_blank" class="convert-button" style="margin-top:10px;">다운로드</a>
+            </div>
+        </div>
+    </div>
     <script type="module" src="app.js"></script>
 </body>
 </html>
