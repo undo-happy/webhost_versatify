@@ -200,10 +200,18 @@ function showResizeModal() {
 
 function closeResizeModal() {
     document.getElementById('resizeModal').classList.remove('show');
-    document.getElementById('resizeFile').value = '';
-    document.getElementById('resizeWidth').value = '';
-    document.getElementById('resizeHeight').value = '';
-    document.getElementById('resizeResult').style.display = 'none';
+    const file = document.getElementById('resizeFile');
+    if (file) file.value = '';
+    const width = document.getElementById('resizeWidth');
+    if (width) width.value = '';
+    const height = document.getElementById('resizeHeight');
+    if (height) height.value = '';
+    const result = document.getElementById('resizeResult');
+    if (result) result.style.display = 'none';
+    const progress = document.getElementById('resizeProgress');
+    if (progress) progress.style.display = 'none';
+    const fill = document.getElementById('resizeFill');
+    if (fill) fill.style.width = '0%';
 }
 
 function showUpscaleModal() {
@@ -217,16 +225,6 @@ function closeUpscaleModal() {
     document.getElementById('upscaleFill').style.width = '0%';
 }
 
-function showResizeModal() {
-    document.getElementById('resizeModal').classList.add('show');
-}
-
-function closeResizeModal() {
-    document.getElementById('resizeModal').classList.remove('show');
-    document.getElementById('resizeFile').value = '';
-    document.getElementById('resizeProgress').style.display = 'none';
-    document.getElementById('resizeFill').style.width = '0%';
-}
 
 function showZoomModal() {
     document.getElementById('zoomModal').classList.add('show');
@@ -351,37 +349,6 @@ async function startWatermark() {
     }
 }
 
-async function startResize() {
-    const fileInput = document.getElementById('resizeFile');
-    const width = document.getElementById('resizeWidth').value;
-    const height = document.getElementById('resizeHeight').value;
-    const format = document.getElementById('resizeFormat').value;
-
-    if (!fileInput.files[0] || (!width && !height)) {
-        alert('이미지와 크기를 입력하세요.');
-        return;
-    }
-
-    const formData = new FormData();
-    formData.append('file', fileInput.files[0]);
-    formData.append('targetFormat', format);
-    if (width) formData.append('width', width);
-    if (height) formData.append('height', height);
-
-    try {
-        const response = await fetch(`${API_BASE}/api/convert`, {
-            method: 'POST',
-            body: formData
-        });
-        if (!response.ok) throw new Error(await response.text());
-
-        const result = await response.json();
-        document.getElementById('resizeDownload').href = result.downloadUrl;
-        document.getElementById('resizeResult').style.display = 'block';
-    } catch (err) {
-        alert('크기 조정 실패: ' + err.message);
-    }
-}
 
 async function generateQr() {
     const text = document.getElementById('qrText').value.trim();
