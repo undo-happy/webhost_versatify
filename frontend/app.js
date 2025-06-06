@@ -37,6 +37,10 @@ function loadDefaultContent() {
                     <div class="tool-name">부분 확대</div>
                     <div class="tool-desc">영역 지정 확대</div>
                 </div>
+                <div class="tool-item" onclick="showWatermarkModal()">
+                    <div class="tool-name">이미지 워터마크</div>
+                    <div class="tool-desc">텍스트 삽입</div>
+                </div>
                 <div class="tool-item" onclick="showQrModal()">
                     <div class="tool-name">QR 코드 생성</div>
                     <div class="tool-desc">텍스트로 QR 이미지 만들기</div>
@@ -275,6 +279,49 @@ function closeQrModal() {
     document.getElementById('qrModal').classList.remove('show');
     document.getElementById('qrText').value = '';
     document.getElementById('qrResult').style.display = 'none';
+}
+
+function showWatermarkModal() {
+    document.getElementById('watermarkModal').classList.add('show');
+}
+
+function closeWatermarkModal() {
+    document.getElementById('watermarkModal').classList.remove('show');
+    document.getElementById('watermarkFile').value = '';
+    document.getElementById('watermarkText').value = '';
+    document.getElementById('watermarkResult').style.display = 'none';
+}
+
+async function startWatermark() {
+    const fileInput = document.getElementById('watermarkFile');
+    const text = document.getElementById('watermarkText').value.trim();
+    const position = document.getElementById('watermarkPosition').value;
+    const opacity = document.getElementById('watermarkOpacity').value;
+
+    if (!fileInput.files[0] || !text) {
+        alert('이미지와 텍스트를 입력하세요.');
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', fileInput.files[0]);
+    formData.append('text', text);
+    formData.append('position', position);
+    formData.append('opacity', opacity);
+
+    try {
+        const response = await fetch(`${API_BASE}/api/watermark`, {
+            method: 'POST',
+            body: formData
+        });
+        if (!response.ok) throw new Error(await response.text());
+
+        const result = await response.json();
+        document.getElementById('watermarkDownload').href = result.downloadUrl;
+        document.getElementById('watermarkResult').style.display = 'block';
+    } catch (err) {
+        alert('워터마크 실패: ' + err.message);
+    }
 }
 
 async function generateQr() {
@@ -814,3 +861,6 @@ window.checkAdminPassword = checkAdminPassword;
 window.showQrModal = showQrModal;
 window.closeQrModal = closeQrModal;
 window.generateQr = generateQr;
+window.showWatermarkModal = showWatermarkModal;
+window.closeWatermarkModal = closeWatermarkModal;
+window.startWatermark = startWatermark;
