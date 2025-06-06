@@ -83,14 +83,14 @@ Existing image and file tools are fragmented. Users often download and upload fi
 
 - [x] 파일 변환 API (Cloudflare R2)
 - [x] 이미지 포맷 변환
-- [x] 이미지 업스케일링
-- [x] 선택 영역 확대
+- [x] 이미지 업스케일링 *(API only)*
+- [x] 선택 영역 확대 *(API only)*
 - [x] QR 코드 생성 API
 - [x] 이미지 워터마킹
 
 테스트는 각 패키지에서 `npm install` 후 `npm test` 명령을 실행하여 기본 동작을 확인했습니다.
 
-코드 전반에 미완성 표시나 TODO 항목이 남아 있는지 확인한 결과, 현재 저장소에는 추가 구현이 필요한 부분이 발견되지 않았습니다. 모든 API와 프런트엔드 기능이 정상적으로 동작합니다. 환경 변수 설정 방법은 `AZURE_SETUP.md`를 참고하세요.
+일부 기능은 API 수준에서만 구현되어 있으며, 이를 호출할 수 있는 사용자 인터페이스가 제공되지 않은 상태입니다. 따라서 웹사이트에서는 업스케일링, 선택 영역 확대와 같은 도구가 눈에 띄지 않아 기능 존재 여부를 파악하기 어렵습니다. 환경 변수 설정 방법은 `AZURE_SETUP.md`를 참고하세요.
 
 Repository reference: [https://github.com/undo-happy/webhost_versatify](https://github.com/undo-happy/webhost_versatify)
 
@@ -103,11 +103,11 @@ Repository reference: [https://github.com/undo-happy/webhost_versatify](https://
 4. Azure Static Web Apps 배포는 `.github/workflows/azure-static-web-apps.yml` 파일을 통해 자동화되어 있습니다.
 
 ## 15. Web UI Integration Tasks (July 2025)
-현재 API 함수들은 동작 가능하지만 프런트엔드와 완전히 연결되지 않은 기능들이 있습니다. 다음 작업을 통해 웹사이트를 완성합니다.
+현재 API 함수들은 동작 가능하지만 프런트엔드와 완전히 연결되지 않은 기능들이 있습니다. 사이트 내에 진입 경로가 부족해 사용자가 기능 존재 자체를 알기 어렵습니다. 다음 작업을 통해 웹사이트를 완성합니다.
 
 1. **이미지 크기 조정 도구**
-   - `openTool('image-resize')` 호출 시 알림만 표시되고 있습니다.
-   - Convert API(`/api/convert`)의 `width`와 `height` 매개변수를 사용하여 실제 이미지 리사이즈 모달을 구현합니다.
+   - 현재 홈 화면에 해당 기능을 여는 버튼이 없으며, `openTool('image-resize')` 호출 시 알림만 표시됩니다.
+   - Convert API(`/api/convert`)의 `width`와 `height` 매개변수를 사용하여 실제 이미지 리사이즈 모달을 구현하고, 메뉴에서 접근할 수 있도록 링크를 추가합니다.
 
 2. **워터마킹 기능 연동** ✅
    - 워터마크 모달을 통해 텍스트, 위치, 투명도 옵션을 입력 받아 `/api/watermark`와 연결했습니다.
@@ -116,7 +116,7 @@ Repository reference: [https://github.com/undo-happy/webhost_versatify](https://
    - 문자열 입력 후 `/api/generate` 호출로 QR 이미지를 표시하는 모달을 구현했습니다.
 
 4. **관리자 패널 기능 강화**
-   - `generateWebsiteCode()`는 미구현 상태입니다. 편집된 카드 정보를 기반으로 정적 HTML을 생성하고 다운로드할 수 있게 합니다.
+   - `generateWebsiteCode()`는 미구현 상태입니다. 편집된 카드 정보를 기반으로 정적 HTML을 생성하고 다운로드할 수 있게 합니다. 또한 업스케일, 부분 확대 등 숨겨진 기능에 대한 편집 옵션을 추가합니다.
 
 5. **자동 스토리지 정리**
    - `CleanupStorage` 함수는 수동 호출 방식입니다. Timer Trigger를 추가해 하루 한 번 자동 실행하도록 배포 설정을 수정합니다.
@@ -124,7 +124,7 @@ Repository reference: [https://github.com/undo-happy/webhost_versatify](https://
 6. **테스트 보강**
    - 프런트엔드 모달 렌더링 테스트와 각 API 성공 케이스 테스트를 추가해 품질을 유지합니다.
 
-7. **문서 업데이트**
-   - 위 작업을 완료한 후 `README.md`의 사용 예와 배포 절차를 갱신합니다.
+7. **문서 업데이트** ✅
+   - 위 작업을 완료한 후 `README.md`의 사용 예와 배포 절차를 갱신했습니다.
 
 

@@ -22,7 +22,8 @@ This document tracks implemented features from the PRD.
 - 배포 후 `generate-admin-hash.js`로 새 비밀번호 해시를 생성해 보안을 유지합니다.
 - [x] 프런트엔드에 QR 코드 생성 UI를 추가하여 Generate API와 연동했습니다.
 - [x] Watermark API UI 연동을 완료합니다.
-- [x] `openTool('image-resize')`를 실제 이미지 크기 조정 모달로 구현하고 Convert API에 연동했습니다.
-- [x] 관리자 패널의 `generateWebsiteCode()` 기능을 완성하여 편집한 콘텐츠를 정적 HTML로 내보냅니다.
-- [x] Cloudflare R2 저장소 정리 함수(`CleanupStorage`)를 타이머 트리거로 배포하여 자동화합니다.
-- [x] 새로 추가되는 모달과 API 연동 로직에 대한 테스트 코드를 작성합니다.
+- [ ] `openTool('image-resize')`를 실제 이미지 크기 조정 모달로 구현하고 Convert API에 연동합니다.
+- [ ] 관리자 패널의 `generateWebsiteCode()` 기능을 완성하여 편집한 콘텐츠를 정적 HTML로 내보냅니다.
+- [ ] Cloudflare R2 저장소 정리 함수(`CleanupStorage`)를 타이머 트리거로 배포하여 자동화합니다.
+- [ ] 새로 추가되는 모달과 API 연동 로직에 대한 테스트 코드를 작성합니다.
+- [x] README 문서를 최신 기능 설명과 배포 절차에 맞게 업데이트했습니다.
