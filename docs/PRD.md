@@ -83,10 +83,10 @@ Existing image and file tools are fragmented. Users often download and upload fi
 
 - [x] 파일 변환 API (Cloudflare R2)
 - [x] 이미지 포맷 변환
-- [ ] 이미지 업스케일링(예정)
-- [ ] 선택 영역 확대(예정)
+- [x] 이미지 업스케일링
+- [x] 선택 영역 확대
 - [x] QR 코드 생성 API
-- [ ] 이미지 워터마킹(예정)
+- [x] 이미지 워터마킹
 
 테스트는 각 패키지에서 `npm install` 후 `npm test` 명령을 실행하여 기본 동작을 확인했습니다.
 
