@@ -974,6 +974,3 @@ window.generateQr = generateQr;
 window.showWatermarkModal = showWatermarkModal;
 window.closeWatermarkModal = closeWatermarkModal;
 window.startWatermark = startWatermark;
-window.showResizeModal = showResizeModal;
-window.closeResizeModal = closeResizeModal;
-window.startResize = startResize;
