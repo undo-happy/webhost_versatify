@@ -4,16 +4,34 @@
 param(
     [Parameter(Mandatory=$true)]
     [string]$ResourceGroupName,
-    
+
     [Parameter(Mandatory=$true)]
-    [string]$StaticWebAppName
+    [string]$StaticWebAppName,
+
+    [string]$AdminPassword,
+    [string]$AdminSalt = "versatify_salt_2025"
 )
 
 Write-Host "🔐 Versatify Azure 환경변수 설정 시작..." -ForegroundColor Green
 
-# 현재 생성된 해시 값들
-$AdminPasswordHash = "759ed13f2c90f62b475d12cbe0f9900f"
-$AdminSalt = "versatify_salt_2025"
+if (-not $AdminPassword) {
+    $AdminPassword = $Env:ADMIN_PASSWORD
+}
+
+if (-not $AdminPassword) {
+    Write-Host "❌ -AdminPassword 매개변수 또는 ADMIN_PASSWORD 환경 변수를 지정하세요." -ForegroundColor Red
+    exit 1
+}
+
+function Get-PasswordHash([string]$Password, [string]$Salt) {
+    $bytes = [System.Text.Encoding]::UTF8.GetBytes($Password + $Salt)
+    $sha256 = [System.Security.Cryptography.SHA256]::Create()
+    $hashBytes = $sha256.ComputeHash($bytes)
+    $hashHex = [System.BitConverter]::ToString($hashBytes).Replace("-", "").ToLower()
+    return $hashHex.Substring(0, 32)
+}
+
+$AdminPasswordHash = Get-PasswordHash $AdminPassword $AdminSalt
 
 try {
     # Azure CLI 로그인 확인
@@ -38,8 +56,7 @@ try {
         --setting-names "ADMIN_SALT=$AdminSalt"
 
     Write-Host "✅ Azure 환경변수 설정 완료!" -ForegroundColor Green
-    Write-Host "🔑 새 관리자 비밀번호: VersatifyAdmin2025!" -ForegroundColor Cyan
-    Write-Host "🚀 몇 분 후 배포가 완료되면 새 비밀번호로 로그인하세요." -ForegroundColor Cyan
+    Write-Host "🚀 몇 분 후 배포가 완료되면 지정한 비밀번호로 로그인하세요." -ForegroundColor Cyan
 
 } catch {
     Write-Host "❌ 오류 발생: $($_.Exception.Message)" -ForegroundColor Red
