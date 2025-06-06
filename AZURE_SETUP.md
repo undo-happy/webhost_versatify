@@ -7,7 +7,7 @@ Versatify가 안전하게 작동하려면 Azure Portal에서 다음 환경변수
 ### 📋 설정할 환경변수
 
 ```
-ADMIN_PASSWORD_HASH = 759ed13f2c90f62b475d12cbe0f9900f
+ADMIN_PASSWORD_HASH = <generated_hash>
 ADMIN_SALT = versatify_salt_2025
 ```
 
@@ -21,7 +21,7 @@ ADMIN_SALT = versatify_salt_2025
 
 **첫 번째 설정:**
 - Name: `ADMIN_PASSWORD_HASH`
-- Value: `759ed13f2c90f62b475d12cbe0f9900f`
+- Value: `<generated_hash>`
 - **Add** 클릭
 
 **두 번째 설정:**
@@ -33,17 +33,21 @@ ADMIN_SALT = versatify_salt_2025
 
 ### 🚀 자동 설정 (Azure CLI 사용)
 
-Azure CLI가 설치되어 있다면 다음 스크립트를 실행하세요:
+Azure CLI가 설치되어 있다면 원하는 비밀번호를 환경 변수 `ADMIN_PASSWORD`로 지정하거나
+`-AdminPassword` 매개변수로 전달하여 다음 스크립트를 실행하세요:
 
 ```powershell
-.\azure-setup.ps1 -ResourceGroupName "your-resource-group" -StaticWebAppName "your-app-name"
+# 환경 변수 사용 예시
+$env:ADMIN_PASSWORD = "YourSecurePassword1!"
+./azure-setup.ps1 -ResourceGroupName "your-resource-group" -StaticWebAppName "your-app-name"
+
+# 또는 매개변수 사용 예시
+./azure-setup.ps1 -ResourceGroupName "your-resource-group" -StaticWebAppName "your-app-name" -AdminPassword "YourSecurePassword1!"
 ```
 
 ### 🔑 새 관리자 비밀번호
 
-환경변수 설정 후 다음 비밀번호로 로그인하세요:
-
-**비밀번호: `VersatifyAdmin2025!`**
+스크립트 실행 시 지정한 비밀번호로 로그인할 수 있습니다. 비밀번호는 외부에 노출되지 않도록 주의하세요.
 
 ### ⚠️ 중요 사항
 
@@ -55,7 +59,7 @@ Azure CLI가 설치되어 있다면 다음 스크립트를 실행하세요:
 
 1. Versatify 웹사이트 접속
 2. 관리자 로그인 시도
-3. 새 비밀번호 `VersatifyAdmin2025!` 입력
+3. 스크립트에서 사용한 비밀번호 입력
 4. 성공적으로 로그인되면 설정 완료!
 
 ### 🆘 문제 해결
