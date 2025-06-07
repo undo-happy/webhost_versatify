@@ -75,6 +75,6 @@ cd ../api && npm run build
 
 환경 변수 설정 예시는 `.env.example` 파일을 참고하세요. Cloudflare R2와 관리자 비밀번호 해시 등을 설정해야 합니다.
 
-CleanupStorage 함수가 매일 자동 실행되어 만료된 R2 파일을 정리합니다.
+CleanupStorage 함수는 GitHub Actions 스케줄러를 통해 매일 호출되어 만료된 R2 파일을 정리합니다.
 
 See `docs/PROGRESS.md` for feature checklist and progress.
