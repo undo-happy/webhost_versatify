@@ -580,18 +580,15 @@ document.getElementById('fileInput')?.addEventListener('change', function(e) {
         // 파일명 표시
         document.getElementById('dropZoneText').textContent = `선택된 파일: ${selectedFile.name}`;
         
-        // 파일 타입 감지 및 변환 옵션 업데이트
-        const fileType = getFileType(selectedFile.name);
-        updateTargetFormatOptions(fileType);
-        
         // 파일 정보 표시
         const fileInfo = document.getElementById('fileInfo');
         const fileTypeDisplay = document.querySelector('.file-type-display');
         
         if (fileInfo && fileTypeDisplay) {
+            const currentExt = getCurrentFileExtension(selectedFile.name);
             fileTypeDisplay.innerHTML = `
                 <span class="file-type-tag" style="background: #3498db; color: white; margin-right: 10px;">
-                    ${fileType ? fileType.toUpperCase() : '알 수 없음'}
+                    ${currentExt ? currentExt.toUpperCase() : '알 수 없음'}
                 </span>
                 <span class="file-size" style="color: #7f8c8d;">
                     ${(selectedFile.size / 1024 / 1024).toFixed(2)} MB
@@ -600,12 +597,28 @@ document.getElementById('fileInput')?.addEventListener('change', function(e) {
             fileInfo.style.display = 'block';
         }
         
-        // 다음 단계 버튼 활성화
-        if (document.getElementById('nextStepBtn')) {
-            document.getElementById('nextStepBtn').disabled = false;
+        // 파일 타입 감지 및 변환 옵션 업데이트
+        const fileType = getFileType(selectedFile.name);
+        updateTargetFormatOptions(fileType, selectedFile);
+        
+        // 변환 불가능한 파일에 대한 안내
+        if (!fileType) {
+            const conversionSection = document.querySelector('.conversion-options');
+            if (conversionSection) {
+                conversionSection.innerHTML = `
+                    <div style="text-align: center; padding: 20px; background: #fff3cd; border: 1px solid #ffeaa7; border-radius: 8px; margin: 15px 0;">
+                        <h3 style="color: #856404; margin: 0 0 10px 0;">⚠️ 지원하지 않는 파일 형식</h3>
+                        <p style="color: #856404; margin: 0;">
+                            지원 형식: JPG, PNG, WebP, AVIF, GIF, BMP, TIFF, SVG, HEIC<br>
+                            현재 파일: <strong>${getCurrentFileExtension(selectedFile.name).toUpperCase()}</strong>
+                        </p>
+                    </div>
+                `;
+            }
+            return;
         }
         
-        checkConversionReady();
+        showOptionsStep();
     }
 });
 
@@ -976,15 +989,16 @@ function setupDragAndDrop() {
             document.getElementById('dropZoneText').textContent = `선택된 파일: ${file.name}`;
             
             const fileType = getFileType(file.name);
-            updateTargetFormatOptions(fileType);
+            updateTargetFormatOptions(fileType, file);
             
             const fileInfo = document.getElementById('fileInfo');
             const fileTypeDisplay = document.querySelector('.file-type-display');
             
             if (fileInfo && fileTypeDisplay) {
+                const currentExt = getCurrentFileExtension(file.name);
                 fileTypeDisplay.innerHTML = `
                     <span class="file-type-tag" style="background: #3498db; color: white; margin-right: 10px;">
-                        ${fileType ? fileType.toUpperCase() : '알 수 없음'}
+                        ${currentExt ? currentExt.toUpperCase() : '알 수 없음'}
                     </span>
                     <span class="file-size" style="color: #7f8c8d;">
                         ${(file.size / 1024 / 1024).toFixed(2)} MB
@@ -1004,11 +1018,10 @@ const CONVERSION_FORMATS = {
     'image': {
         extensions: ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'tiff', 'tif', 'webp', 'svg', 'heic', 'avif'],
         targetFormats: [
-            { value: 'jpg', label: 'JPG (JPEG 이미지)' },
-            { value: 'png', label: 'PNG (투명 이미지)' },
-            { value: 'webp', label: 'WebP (웹 최적화)' },
-            { value: 'avif', label: 'AVIF (최신 압축)' },
-            { value: 'gif', label: 'GIF (애니메이션)' }
+            { value: 'jpeg', label: 'JPG (JPEG 이미지)', extensions: ['jpg', 'jpeg'] },
+            { value: 'png', label: 'PNG (투명 이미지)', extensions: ['png'] },
+            { value: 'webp', label: 'WebP (웹 최적화)', extensions: ['webp'] },
+            { value: 'avif', label: 'AVIF (최신 압축)', extensions: ['avif'] }
         ]
     }
 };
@@ -1025,8 +1038,13 @@ function getFileType(filename) {
     return null; // 지원하지 않는 파일 타입
 }
 
+// 현재 파일의 확장자 감지
+function getCurrentFileExtension(filename) {
+    return filename.split('.').pop().toLowerCase();
+}
+
 // 대상 형식 옵션 업데이트
-function updateTargetFormatOptions(fileType) {
+function updateTargetFormatOptions(fileType, currentFile = null) {
     const targetFormatSelect = document.getElementById('targetFormat');
     
     // 기존 옵션 제거
@@ -1040,20 +1058,42 @@ function updateTargetFormatOptions(fileType) {
     
     targetFormatSelect.disabled = false;
     
-    // 새로운 옵션 추가
-    CONVERSION_FORMATS[fileType].targetFormats.forEach(format => {
+    // 현재 파일의 확장자 확인
+    let currentExtension = null;
+    if (currentFile) {
+        currentExtension = getCurrentFileExtension(currentFile.name);
+    }
+    
+    // 새로운 옵션 추가 (현재 확장자는 제외)
+    const availableFormats = CONVERSION_FORMATS[fileType].targetFormats.filter(format => {
+        // 현재 파일의 확장자와 같은 포맷은 제외
+        if (currentExtension) {
+            return !format.extensions.includes(currentExtension);
+        }
+        return true;
+    });
+    
+    if (availableFormats.length === 0) {
+        targetFormatSelect.innerHTML = '<option value="">💡 이미 최적의 형식입니다</option>';
+        targetFormatSelect.disabled = true;
+        return;
+    }
+    
+    availableFormats.forEach(format => {
         const option = document.createElement('option');
         option.value = format.value;
         option.textContent = format.label;
         targetFormatSelect.appendChild(option);
     });
     
-    // 첫 번째 옵션에 도움말 추가
-    const helpOption = document.createElement('option');
-    helpOption.value = '';
-    helpOption.textContent = `💡 ${CONVERSION_FORMATS[fileType].targetFormats.length}개 형식으로 변환 가능`;
-    helpOption.disabled = true;
-    targetFormatSelect.insertBefore(helpOption, targetFormatSelect.children[1]);
+    // 현재 형식 표시와 도움말 추가
+    const currentFormatInfo = document.createElement('option');
+    currentFormatInfo.value = '';
+    currentFormatInfo.textContent = currentExtension 
+        ? `📁 현재: ${currentExtension.toUpperCase()} → ${availableFormats.length}개 형식으로 변환 가능`
+        : `💡 ${availableFormats.length}개 형식으로 변환 가능`;
+    currentFormatInfo.disabled = true;
+    targetFormatSelect.insertBefore(currentFormatInfo, targetFormatSelect.children[1]);
 }
 
 // 페이지 로드 시 초기화
