@@ -1,3 +1,4 @@
+const CONTENT_VERSION = '1.0';
 // 관리자 인증 및 세션 확인
 function checkAdminAuth() {
     const isLoggedIn = sessionStorage.getItem('adminLoggedIn');
@@ -36,8 +37,10 @@ if (!checkAdminAuth()) {
 
 // 콘텐츠 로드
 function loadContent() {
+    const savedVersion = localStorage.getItem('versatifyVersion');
     const savedContent = localStorage.getItem('versatifyContent');
-    if (savedContent) {
+
+    if (savedContent && savedVersion === CONTENT_VERSION) {
         // contenteditable 속성 추가
         const tempDiv = document.createElement('div');
         tempDiv.innerHTML = savedContent;
@@ -63,6 +66,10 @@ function loadContent() {
         
         document.getElementById('toolsGrid').innerHTML = tempDiv.innerHTML;
     } else {
+        if (savedVersion !== CONTENT_VERSION) {
+            localStorage.removeItem('versatifyContent');
+            localStorage.setItem('versatifyVersion', CONTENT_VERSION);
+        }
         loadDefaultContent();
     }
     
@@ -89,6 +96,7 @@ function saveContent() {
     });
     
     localStorage.setItem('versatifyContent', tempDiv.innerHTML);
+    localStorage.setItem('versatifyVersion', CONTENT_VERSION);
     showNotification('변경사항이 저장되었습니다', 'success');
 }
 
@@ -231,4 +239,7 @@ setInterval(saveContent, 5000);
 // 초기화
 window.onload = function() {
     loadContent();
+    if (typeof setupDragAndDrop === 'function') {
+        setupDragAndDrop();
+    }
 };
