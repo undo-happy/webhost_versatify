@@ -26,5 +26,5 @@ This document tracks implemented features from the PRD.
 - [x] `openTool()` 함수를 확장해 모든 도구 모달을 열 수 있게 하여 프런트엔드에서 실제 기능을 바로 사용할 수 있습니다.
 - [x] 관리자 패널의 `generateWebsiteCode()` 기능을 완성하여 편집한 콘텐츠를 정적 HTML로 내보냅니다.
 - [x] Cloudflare R2 저장소 정리 함수(`CleanupStorage`)를 GitHub Actions 스케줄러로 호출하여 자동화했습니다.
-- [ ] 새로 추가되는 모달과 API 연동 로직에 대한 테스트 코드를 작성합니다.
+- [x] 새로 추가되는 모달과 API 연동 로직에 대한 테스트 코드를 작성합니다.
 - [x] README 문서를 최신 기능 설명과 배포 절차에 맞게 업데이트했습니다.
