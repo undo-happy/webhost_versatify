@@ -5,7 +5,82 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Versatify - AI 기반 이미지 처리 플랫폼</title>
     <meta name="description" content="Versatify는 AI 기술을 활용한 최첨단 이미지 처리 플랫폼입니다. 변환, 업스케일, QR 생성 등 모든 이미지 작업을 한 곳에서.">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=2024">
+    <style>
+        /* Critical CSS for immediate rendering */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+            line-height: 1.6; 
+            color: #333; 
+            background: #fff;
+            min-height: 100vh;
+        }
+        .preloader { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: #fff; 
+            z-index: 9999; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            flex-direction: column;
+        }
+        .navbar { 
+            position: fixed; 
+            top: 0; 
+            width: 100%; 
+            z-index: 1000; 
+            background: rgba(255,255,255,0.95); 
+            backdrop-filter: blur(10px); 
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+            padding: 0;
+        }
+        .nav-container { 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            padding: 0 20px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            height: 70px; 
+        }
+        .hero-section { 
+            padding-top: 120px; 
+            min-height: 100vh; 
+            display: flex; 
+            align-items: center; 
+        }
+        .container { 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            padding: 0 20px; 
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .btn-primary {
+            background: #7E212C;
+            color: white;
+        }
+        .btn-outline {
+            background: transparent;
+            color: #7E212C;
+            border: 2px solid #7E212C;
+        }
+    </style>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#7E212C">
     <link rel="icon" type="image/png" href="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4f7.png">
@@ -1109,9 +1184,22 @@
             }
         }
 
-        // 회원가입 모달 (간단히 alert로 대체)
+        // 회원가입 모달
         function showSignupModal() {
-            alert('회원가입 기능을 준비 중입니다!');
+            closeLoginModal(); // 로그인 모달이 열려있다면 닫기
+            const modal = document.getElementById('signupModal');
+            if (modal) {
+                modal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeSignupModal() {
+            const modal = document.getElementById('signupModal');
+            if (modal) {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
         }
 
         // 관리자 모달
@@ -1186,5 +1274,140 @@
 
         console.log('📝 JavaScript 로드 완료! - 프로페셔널 웹사이트');
     </script>
+
+    <!-- Modals -->
+    <!-- Tool Modal -->
+    <div class="modal-overlay" id="toolModal">
+        <div class="modal-container modal-large">
+            <div class="modal-header">
+                <h3 id="toolModalTitle">도구 이름</h3>
+                <button class="modal-close" onclick="closeToolModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-content" id="toolModalContent">
+                <!-- 도구별 콘텐츠가 동적으로 로드됩니다 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div class="modal-overlay" id="loginModal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3>로그인</h3>
+                <button class="modal-close" onclick="closeLoginModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-content">
+                <div class="social-login">
+                    <button class="btn btn-social btn-google">
+                        <i class="fab fa-google"></i>
+                        Google로 계속하기
+                    </button>
+                    <button class="btn btn-social btn-kakao">
+                        <i class="fas fa-comment"></i>
+                        카카오로 계속하기
+                    </button>
+                </div>
+                
+                <div class="divider">
+                    <span>또는</span>
+                </div>
+
+                <form class="login-form">
+                    <div class="form-group">
+                        <label>이메일</label>
+                        <input type="email" class="form-control" placeholder="your@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label>비밀번호</label>
+                        <input type="password" class="form-control" placeholder="••••••••">
+                    </div>
+                    <div class="form-options">
+                        <label class="checkbox">
+                            <input type="checkbox">
+                            <span>로그인 상태 유지</span>
+                        </label>
+                        <a href="#" class="forgot-link">비밀번호 찾기</a>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">로그인</button>
+                </form>
+                
+                <p class="modal-footer-text">
+                    계정이 없으신가요? <a href="#" onclick="showSignupModal()">회원가입</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Signup Modal -->
+    <div class="modal-overlay" id="signupModal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3>회원가입</h3>
+                <button class="modal-close" onclick="closeSignupModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-content">
+                <form class="signup-form">
+                    <div class="form-group">
+                        <label>이름</label>
+                        <input type="text" class="form-control" placeholder="이름을 입력하세요">
+                    </div>
+                    <div class="form-group">
+                        <label>이메일</label>
+                        <input type="email" class="form-control" placeholder="your@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label>비밀번호</label>
+                        <input type="password" class="form-control" placeholder="••••••••">
+                    </div>
+                    <div class="form-group">
+                        <label>비밀번호 확인</label>
+                        <input type="password" class="form-control" placeholder="••••••••">
+                    </div>
+                    <div class="form-options">
+                        <label class="checkbox">
+                            <input type="checkbox" required>
+                            <span><a href="#">이용약관</a> 및 <a href="#">개인정보처리방침</a>에 동의합니다</span>
+                        </label>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">회원가입</button>
+                </form>
+                
+                <p class="modal-footer-text">
+                    이미 계정이 있으신가요? <a href="#" onclick="showLoginModal()">로그인</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Modal -->
+    <div class="modal-overlay" id="adminModal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3>🔐 관리자 로그인</h3>
+                <button class="modal-close" onclick="closeAdminModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-content">
+                <form class="admin-form">
+                    <div class="form-group">
+                        <label>관리자 비밀번호</label>
+                        <input type="password" id="adminPassword" class="form-control" placeholder="••••••••">
+                    </div>
+                    <div class="error-message" id="adminError"></div>
+                    <div class="modal-actions">
+                        <button type="submit" class="btn btn-primary" onclick="checkAdminPassword(event)">로그인</button>
+                        <button type="button" class="btn btn-secondary" onclick="closeAdminModal()">취소</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
