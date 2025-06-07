@@ -3,267 +3,562 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Versatify.me - 올인원 이미지 도구</title>
+    <title>Versatify - 이미지 작업의 새로운 기준</title>
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#7E212C">
     <link rel="icon" type="image/png" href="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4f7.png">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <div class="container">
-        <!-- Header -->
-        <div class="header">
-            <div class="logo">
-                <div class="logo-icon">V</div>
-                <h1 class="brand-name">Versatify</h1>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <span class="logo-icon">V</span>
+                <span class="logo-text">Versatify</span>
             </div>
-            <p class="tagline">모든 이미지 작업을 한 곳에서</p>
-        </div>
-
-        <!-- Main Content -->
-        <main id="content">
-            <!-- JavaScript가 여기에 콘텐츠를 생성합니다 -->
-        </main>
-
-        <!-- Footer -->
-        <div class="footer">
-            <p>&copy; 2025 Versatify.me - 모든 권리 보유</p>
-            <div class="footer-links">
-                <a href="#">개인정보보호정책</a>
-                <a href="#">이용약관</a>
-                <a href="#">고객지원</a>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="#hero" class="nav-link">홈</a></li>
+                <li><a href="#about" class="nav-link">소개</a></li>
+                <li><a href="#tools" class="nav-link">도구</a></li>
+                <li><a href="#features" class="nav-link">특징</a></li>
+                <li><a href="#contact" class="nav-link">문의</a></li>
+            </ul>
+            <div class="nav-toggle" id="navToggle">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
             </div>
         </div>
-    </div>
+    </nav>
 
-    <!-- Admin Login Modal -->
-    <div class="admin-modal" id="adminModal">
-        <div class="modal-content">
-            <div class="modal-header">🔐 관리자 로그인</div>
-            <input type="password" class="password-input" id="adminPassword" placeholder="비밀번호를 입력하세요">
-            <div class="error-message" id="errorMessage">비밀번호가 올바르지 않습니다.</div>
-            <div class="modal-buttons">
-                <button class="modal-btn modal-btn-primary" onclick="checkAdminPassword()">로그인</button>
-                <button class="modal-btn modal-btn-secondary" onclick="closeAdminModal()">취소</button>
+    <!-- Hero Section -->
+    <section id="hero" class="hero-section">
+        <div class="hero-background">
+            <div class="hero-particles"></div>
+            <div class="hero-gradient"></div>
+        </div>
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1 class="hero-title">
+                    <span class="title-line">이미지 작업의</span>
+                    <span class="title-line highlight">새로운 기준</span>
+                </h1>
+                <p class="hero-subtitle">
+                    복잡한 이미지 편집 프로그램은 이제 그만.<br>
+                    웹에서 바로, 간단하게, 전문적으로.
+                </p>
+                <div class="hero-buttons">
+                    <button class="btn btn-primary" onclick="scrollToSection('tools')">
+                        <i class="fas fa-rocket"></i>
+                        지금 시작하기
+                    </button>
+                    <button class="btn btn-secondary" onclick="scrollToSection('about')">
+                        <i class="fas fa-play"></i>
+                        둘러보기
+                    </button>
+                </div>
+            </div>
+            <div class="hero-image">
+                <div class="floating-card card-1">
+                    <i class="fas fa-image"></i>
+                    <span>이미지 변환</span>
+                </div>
+                <div class="floating-card card-2">
+                    <i class="fas fa-expand-arrows-alt"></i>
+                    <span>업스케일</span>
+                </div>
+                <div class="floating-card card-3">
+                    <i class="fas fa-qrcode"></i>
+                    <span>QR 생성</span>
+                </div>
+                <div class="floating-card card-4">
+                    <i class="fas fa-copyright"></i>
+                    <span>워터마크</span>
+                </div>
             </div>
         </div>
-    </div>
+        <div class="scroll-indicator">
+            <div class="scroll-text">스크롤하여 더 알아보기</div>
+            <div class="scroll-arrow">
+                <i class="fas fa-chevron-down"></i>
+            </div>
+        </div>
+    </section>
 
-    <!-- Image Converter Modal -->
-    <div class="converter-modal" id="converterModal">
-        <div class="converter-content">
-            <button class="close-button" onclick="closeConverterModal()">×</button>
-            <h2 class="converter-header">🖼️ 이미지 변환</h2>
+    <!-- About Section -->
+    <section id="about" class="about-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">왜 Versatify인가요?</h2>
+                <p class="section-subtitle">복잡한 설치, 비싼 구독료, 어려운 사용법... 이제 모두 과거의 일입니다.</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3>즉시 사용</h3>
+                    <p>설치나 가입 없이 브라우저에서 바로 시작하세요. 클릭 한 번으로 모든 기능에 접근할 수 있습니다.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>완전 무료</h3>
+                    <p>숨겨진 비용, 구독료, 광고 없음. 모든 기능을 영원히 무료로 사용하세요.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-user-lock"></i>
+                    </div>
+                    <h3>개인정보 보호</h3>
+                    <p>이미지는 서버에 저장되지 않습니다. 작업 완료 후 즉시 삭제되어 완벽한 프라이버시를 보장합니다.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3>모든 기기에서</h3>
+                    <p>PC, 태블릿, 스마트폰 어디서나 완벽하게 작동합니다. 언제 어디서든 필요할 때 바로 사용하세요.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tools Section -->
+    <section id="tools" class="tools-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">강력한 도구들</h2>
+                <p class="section-subtitle">전문가 수준의 이미지 처리를 간단하게</p>
+            </div>
             
-            <div class="converter-section">
-                <label class="converter-label">이미지 선택</label>
-                <div class="file-drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
-                    <div class="upload-icon">📁</div>
-                    <p id="dropZoneText">이미지 파일을 드래그하거나 클릭하여 선택하세요</p>
-                    <div class="file-info" style="margin-top: 10px; display: none;" id="fileInfo">
-                        <div class="file-type-display"></div>
+            <!-- Popular Tools -->
+            <div class="popular-tools">
+                <h3 class="subsection-title">인기 도구</h3>
+                <div class="tools-grid popular">
+                    <div class="tool-card featured" onclick="openTool('converter')">
+                        <div class="tool-icon">
+                            <i class="fas fa-exchange-alt"></i>
+                        </div>
+                        <div class="tool-content">
+                            <h4>이미지 변환</h4>
+                            <p>JPG, PNG, WebP, AVIF 등 다양한 형식으로 변환</p>
+                            <div class="tool-tags">
+                                <span class="tag">빠른 변환</span>
+                                <span class="tag">고품질</span>
+                            </div>
+                        </div>
+                        <div class="tool-arrow">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
                     </div>
-                    <div class="file-type-tags">
-                        <span class="file-type-tag">JPG</span>
-                        <span class="file-type-tag">PNG</span>
-                        <span class="file-type-tag">WebP</span>
-                        <span class="file-type-tag">AVIF</span>
+                    
+                    <div class="tool-card featured" onclick="openTool('upscale')">
+                        <div class="tool-icon">
+                            <i class="fas fa-expand-arrows-alt"></i>
+                        </div>
+                        <div class="tool-content">
+                            <h4>이미지 업스케일</h4>
+                            <p>AI 기술로 이미지를 2x, 4x까지 선명하게 확대</p>
+                            <div class="tool-tags">
+                                <span class="tag">AI 기술</span>
+                                <span class="tag">고해상도</span>
+                            </div>
+                        </div>
+                        <div class="tool-arrow">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="tool-card featured" onclick="openTool('qr')">
+                        <div class="tool-icon">
+                            <i class="fas fa-qrcode"></i>
+                        </div>
+                        <div class="tool-content">
+                            <h4>QR 코드 생성</h4>
+                            <p>텍스트나 URL을 QR 코드로 즉시 변환</p>
+                            <div class="tool-tags">
+                                <span class="tag">즉시 생성</span>
+                                <span class="tag">다운로드</span>
+                            </div>
+                        </div>
+                        <div class="tool-arrow">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
                     </div>
                 </div>
-                <input type="file" id="fileInput" class="file-input" accept="image/*">
             </div>
 
-            <div class="converter-section">
-                <label class="converter-label">변환 형식</label>
-                <select id="targetFormat" class="format-selector">
-                    <option value="">변환할 형식을 선택하세요</option>
-                    <option value="jpg">JPG (일반 이미지)</option>
-                    <option value="png">PNG (투명 배경)</option>
-                    <option value="webp">WebP (웹 최적화)</option>
-                    <option value="avif">AVIF (고압축률)</option>
-                </select>
-            </div>
-
-            <button id="convertButton" class="convert-button" disabled onclick="startConversion()">
-                변환 시작
-            </button>
-
-            <div class="progress-section" id="progressSection">
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progressFill"></div>
+            <!-- All Tools -->
+            <div class="all-tools">
+                <h3 class="subsection-title">전체 도구</h3>
+                <div class="tools-categories">
+                    <div class="category">
+                        <h4 class="category-title">
+                            <i class="fas fa-image"></i>
+                            이미지 처리
+                        </h4>
+                        <div class="tools-grid">
+                            <div class="tool-card" onclick="openTool('converter')">
+                                <div class="tool-icon">
+                                    <i class="fas fa-exchange-alt"></i>
+                                </div>
+                                <div class="tool-content">
+                                    <h5>이미지 변환</h5>
+                                    <p>형식 변환 및 압축</p>
+                                </div>
+                            </div>
+                            
+                            <div class="tool-card" onclick="openTool('upscale')">
+                                <div class="tool-icon">
+                                    <i class="fas fa-expand-arrows-alt"></i>
+                                </div>
+                                <div class="tool-content">
+                                    <h5>업스케일</h5>
+                                    <p>고화질 확대</p>
+                                </div>
+                            </div>
+                            
+                            <div class="tool-card" onclick="openTool('zoom')">
+                                <div class="tool-icon">
+                                    <i class="fas fa-search-plus"></i>
+                                </div>
+                                <div class="tool-content">
+                                    <h5>영역 확대</h5>
+                                    <p>선택 영역 자르기</p>
+                                </div>
+                            </div>
+                            
+                            <div class="tool-card" onclick="openTool('watermark')">
+                                <div class="tool-icon">
+                                    <i class="fas fa-copyright"></i>
+                                </div>
+                                <div class="tool-content">
+                                    <h5>워터마크</h5>
+                                    <p>텍스트 워터마크 추가</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="category">
+                        <h4 class="category-title">
+                            <i class="fas fa-magic"></i>
+                            생성 도구
+                        </h4>
+                        <div class="tools-grid">
+                            <div class="tool-card" onclick="openTool('qr')">
+                                <div class="tool-icon">
+                                    <i class="fas fa-qrcode"></i>
+                                </div>
+                                <div class="tool-content">
+                                    <h5>QR 코드</h5>
+                                    <p>QR 코드 생성</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <p class="status-message" id="statusMessage">준비 중...</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">기술적 우수성</h2>
+                <p class="section-subtitle">최신 웹 기술로 구현된 고성능 이미지 처리</p>
+            </div>
+            
+            <div class="tech-features">
+                <div class="tech-feature">
+                    <div class="tech-icon">
+                        <i class="fas fa-server"></i>
+                    </div>
+                    <h4>Azure 클라우드</h4>
+                    <p>Microsoft Azure의 안정적인 인프라로 언제나 빠르고 안정적인 서비스를 제공합니다.</p>
+                </div>
+                
+                <div class="tech-feature">
+                    <div class="tech-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <h4>최신 웹 기술</h4>
+                    <p>WebAssembly, Service Worker 등 최신 브라우저 API를 활용한 네이티브 앱 수준의 성능.</p>
+                </div>
+                
+                <div class="tech-feature">
+                    <div class="tech-icon">
+                        <i class="fas fa-tachometer-alt"></i>
+                    </div>
+                    <h4>실시간 처리</h4>
+                    <p>클라이언트 사이드 처리로 빠른 응답 속도와 서버 부하 없는 무제한 사용.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact-section">
+        <div class="container">
+            <div class="contact-content">
+                <div class="contact-info">
+                    <h2>함께 만들어가요</h2>
+                    <p>Versatify는 사용자의 피드백으로 성장합니다. 새로운 기능 제안, 버그 신고, 또는 단순한 의견까지 모든 것을 환영합니다.</p>
+                    
+                    <div class="contact-methods">
+                        <div class="contact-method">
+                            <i class="fas fa-envelope"></i>
+                            <span>이메일로 문의하기</span>
+                        </div>
+                        <div class="contact-method">
+                            <i class="fab fa-github"></i>
+                            <span>GitHub에서 개발 참여</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="contact-cta">
+                    <h3>지금 바로 시작해보세요</h3>
+                    <button class="btn btn-primary btn-large" onclick="scrollToSection('tools')">
+                        <i class="fas fa-rocket"></i>
+                        도구 사용하기
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        <span class="logo-icon">V</span>
+                        <span class="logo-text">Versatify</span>
+                    </div>
+                    <p>이미지 작업의 새로운 기준</p>
+                </div>
+                
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>도구</h4>
+                        <ul>
+                            <li><a href="#" onclick="openTool('converter')">이미지 변환</a></li>
+                            <li><a href="#" onclick="openTool('upscale')">업스케일</a></li>
+                            <li><a href="#" onclick="openTool('qr')">QR 생성</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-column">
+                        <h4>정보</h4>
+                        <ul>
+                            <li><a href="#about">서비스 소개</a></li>
+                            <li><a href="#features">기능</a></li>
+                            <li><a href="#contact">문의</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-column">
+                        <h4>정책</h4>
+                        <ul>
+                            <li><a href="#">개인정보처리방침</a></li>
+                            <li><a href="#">이용약관</a></li>
+                            <li><a href="#">오픈소스</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 Versatify. 모든 권리 보유.</p>
+                <div class="admin-link">
+                    <a href="#" onclick="showAdminModal()">🔧</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modals -->
+    <!-- Image Converter Modal -->
+    <div class="modal-overlay" id="converterModal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3>🖼️ 이미지 변환</h3>
+                <button class="modal-close" onclick="closeConverterModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-content">
+                <div class="upload-section">
+                    <div class="upload-area" id="uploadArea" onclick="document.getElementById('fileInput').click()">
+                        <div class="upload-icon">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                        </div>
+                        <h4>이미지를 업로드하세요</h4>
+                        <p>파일을 드래그하거나 클릭하여 선택</p>
+                        <input type="file" id="fileInput" accept="image/*" style="display: none;">
+                    </div>
+                </div>
+                
+                <div class="conversion-options" id="conversionOptions" style="display: none;">
+                    <h4>변환 옵션</h4>
+                    <select id="targetFormat" class="format-select">
+                        <option value="">형식 선택</option>
+                    </select>
+                    <button class="btn btn-primary" onclick="startConversion()">변환 시작</button>
+                </div>
+                
+                <div class="progress-section" id="progressSection" style="display: none;">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <p id="progressText">변환 중...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Modal -->
+    <div class="modal-overlay" id="adminModal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3>🔐 관리자 로그인</h3>
+                <button class="modal-close" onclick="closeAdminModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-content">
+                <input type="password" id="adminPassword" placeholder="관리자 비밀번호" class="admin-input">
+                <div class="error-message" id="adminError"></div>
+                <div class="modal-actions">
+                    <button class="btn btn-primary" onclick="checkAdminPassword()">로그인</button>
+                    <button class="btn btn-secondary" onclick="closeAdminModal()">취소</button>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
-        console.log('🚀 Versatify 시작! - 인라인 버전');
+        console.log('🚀 Versatify - 새로운 디자인 시작!');
 
-        // 페이지 로드 완료 시 실행
+        // DOM 로드 완료 시 실행
         document.addEventListener('DOMContentLoaded', function() {
             console.log('📄 DOM 로드 완료');
-            
-            // 콘텐츠 로드
-            loadMainContent();
+            initializeWebsite();
         });
 
-        // 메인 콘텐츠 로드 함수
-        function loadMainContent() {
-            console.log('🔄 콘텐츠 로딩 시작');
+        // 웹사이트 초기화
+        function initializeWebsite() {
+            console.log('🔄 웹사이트 초기화');
             
-            const contentElement = document.getElementById('content');
-            if (!contentElement) {
-                console.error('❌ content 요소를 찾을 수 없습니다!');
-                return;
-            }
-
-            // HTML 콘텐츠 생성
-            const htmlContent = `
-                <!-- 인기 도구 섹션 -->
-                <section class="popular-tools-section">
-                    <div class="section-header">
-                        <h2><span class="section-icon">🔥</span>인기 도구</h2>
-                        <p class="section-desc">가장 많이 사용되는 도구들을 빠르게 이용하세요</p>
-                    </div>
-                    <div class="popular-tools-grid">
-                        <div class="popular-tool-card" onclick="openTool('fileConverter')">
-                            <div class="tool-icon">📸</div>
-                            <h3>이미지 변환</h3>
-                            <p>JPG, PNG, WebP, AVIF 등 다양한 형식으로 변환</p>
-                            <div class="tool-badge">인기</div>
-                        </div>
-                        <div class="popular-tool-card" onclick="openTool('qr')">
-                            <div class="tool-icon">📱</div>
-                            <h3>QR 코드 생성</h3>
-                            <p>텍스트나 URL을 QR 코드로 빠르게 변환</p>
-                            <div class="tool-badge">빠름</div>
-                        </div>
-                        <div class="popular-tool-card" onclick="openTool('upscale')">
-                            <div class="tool-icon">🔍</div>
-                            <h3>이미지 업스케일</h3>
-                            <p>이미지를 2x, 4x로 확대하여 해상도 향상</p>
-                            <div class="tool-badge">고급</div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- 전체 도구 목록 -->
-                <section class="all-tools-section">
-                    <div class="section-header">
-                        <h2><span class="section-icon">🛠️</span>전체 도구</h2>
-                        <p class="section-desc">다양한 이미지 처리 도구를 이용해보세요</p>
-                    </div>
-                    
-                    <!-- 이미지 처리 도구 -->
-                    <div class="tool-category-section">
-                        <h3 class="category-title">
-                            <span class="category-icon">🖼️</span>
-                            이미지 처리
-                        </h3>
-                        <div class="tools-grid">
-                            <div class="tool-card" onclick="openTool('fileConverter')">
-                                <div class="tool-card-header">
-                                    <div class="tool-card-icon">📸</div>
-                                    <div class="tool-info">
-                                        <h4>이미지 변환</h4>
-                                        <p>형식 변환 및 크기 조정</p>
-                                    </div>
-                                </div>
-                                <div class="tool-features">
-                                    <span class="feature-tag">JPG</span>
-                                    <span class="feature-tag">PNG</span>
-                                    <span class="feature-tag">WebP</span>
-                                    <span class="feature-tag">AVIF</span>
-                                </div>
-                            </div>
-
-                            <div class="tool-card" onclick="openTool('upscale')">
-                                <div class="tool-card-header">
-                                    <div class="tool-card-icon">🔍</div>
-                                    <div class="tool-info">
-                                        <h4>이미지 업스케일</h4>
-                                        <p>해상도 2x, 4x 확대</p>
-                                    </div>
-                                </div>
-                                <div class="tool-features">
-                                    <span class="feature-tag">고화질</span>
-                                    <span class="feature-tag">AI 확대</span>
-                                </div>
-                            </div>
-
-                            <div class="tool-card" onclick="openTool('zoom')">
-                                <div class="tool-card-header">
-                                    <div class="tool-card-icon">🎯</div>
-                                    <div class="tool-info">
-                                        <h4>선택 영역 확대</h4>
-                                        <p>원하는 부분만 잘라서 확대</p>
-                                    </div>
-                                </div>
-                                <div class="tool-features">
-                                    <span class="feature-tag">정확한 선택</span>
-                                    <span class="feature-tag">고품질</span>
-                                </div>
-                            </div>
-
-                            <div class="tool-card" onclick="openTool('watermark')">
-                                <div class="tool-card-header">
-                                    <div class="tool-card-icon">©️</div>
-                                    <div class="tool-info">
-                                        <h4>워터마크 추가</h4>
-                                        <p>이미지에 텍스트 워터마크</p>
-                                    </div>
-                                </div>
-                                <div class="tool-features">
-                                    <span class="feature-tag">저작권 보호</span>
-                                    <span class="feature-tag">투명도 조절</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 생성 도구 -->
-                    <div class="tool-category-section">
-                        <h3 class="category-title">
-                            <span class="category-icon">⚡</span>
-                            생성 도구
-                        </h3>
-                        <div class="tools-grid">
-                            <div class="tool-card" onclick="openTool('qr')">
-                                <div class="tool-card-header">
-                                    <div class="tool-card-icon">📱</div>
-                                    <div class="tool-info">
-                                        <h4>QR 코드 생성</h4>
-                                        <p>텍스트나 URL을 QR로 변환</p>
-                                    </div>
-                                </div>
-                                <div class="tool-features">
-                                    <span class="feature-tag">즉시 생성</span>
-                                    <span class="feature-tag">고해상도</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- 관리자 링크 -->
-                <div class="admin-section">
-                    <a href="#" onclick="showAdminModal()" class="admin-link">
-                        🔧 관리자 도구
-                    </a>
-                </div>
-            `;
-
-            // DOM에 삽입
-            contentElement.innerHTML = htmlContent;
-            console.log('✅ 콘텐츠 로딩 완료!');
+            // 부드러운 스크롤 설정
+            setupSmoothScrolling();
+            
+            // 네비게이션 설정
+            setupNavigation();
+            
+            // 스크롤 애니메이션 설정
+            setupScrollAnimations();
+            
+            // 파티클 효과 시작
+            startParticleEffect();
+            
+            console.log('✅ 웹사이트 초기화 완료!');
         }
 
-        // 도구 열기 함수
+        // 부드러운 스크롤 설정
+        function setupSmoothScrolling() {
+            document.documentElement.style.scrollBehavior = 'smooth';
+        }
+
+        // 섹션으로 스크롤
+        function scrollToSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            if (section) {
+                section.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        // 네비게이션 설정
+        function setupNavigation() {
+            const navbar = document.getElementById('navbar');
+            const navToggle = document.getElementById('navToggle');
+            const navMenu = document.getElementById('navMenu');
+            
+            // 스크롤 시 네비게이션 스타일 변경
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 100) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
+            
+            // 모바일 메뉴 토글
+            if (navToggle) {
+                navToggle.addEventListener('click', function() {
+                    navMenu.classList.toggle('active');
+                });
+            }
+            
+            // 네비게이션 링크 클릭 시 메뉴 닫기
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', function() {
+                    navMenu.classList.remove('active');
+                });
+            });
+        }
+
+        // 스크롤 애니메이션 설정
+        function setupScrollAnimations() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate-in');
+                    }
+                });
+            }, observerOptions);
+            
+            // 애니메이션 대상 요소들 관찰
+            document.querySelectorAll('.feature-card, .tool-card, .tech-feature').forEach(el => {
+                observer.observe(el);
+            });
+        }
+
+        // 파티클 효과
+        function startParticleEffect() {
+            const particlesContainer = document.querySelector('.hero-particles');
+            if (!particlesContainer) return;
+            
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 4 + 's';
+                particle.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // 도구 열기
         function openTool(toolName) {
             console.log('🔧 도구 열기:', toolName);
             
-            if (toolName === 'fileConverter') {
+            if (toolName === 'converter') {
                 showConverterModal();
             } else {
                 alert(`${toolName} 도구를 준비 중입니다! 곧 만나보실 수 있어요. 😊`);
@@ -275,9 +570,8 @@
             console.log('📸 컨버터 모달 열기');
             const modal = document.getElementById('converterModal');
             if (modal) {
-                modal.classList.add('show');
-            } else {
-                console.error('❌ converterModal을 찾을 수 없습니다!');
+                modal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
             }
         }
 
@@ -286,7 +580,8 @@
             console.log('📸 컨버터 모달 닫기');
             const modal = document.getElementById('converterModal');
             if (modal) {
-                modal.classList.remove('show');
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
             }
         }
 
@@ -295,9 +590,8 @@
             console.log('🔐 관리자 모달 열기');
             const modal = document.getElementById('adminModal');
             if (modal) {
-                modal.classList.add('show');
-            } else {
-                console.error('❌ adminModal을 찾을 수 없습니다!');
+                modal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
             }
         }
 
@@ -306,15 +600,16 @@
             console.log('🔐 관리자 모달 닫기');
             const modal = document.getElementById('adminModal');
             if (modal) {
-                modal.classList.remove('show');
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
             }
             
             // 입력값 초기화
             const passwordInput = document.getElementById('adminPassword');
-            const errorMessage = document.getElementById('errorMessage');
+            const errorMessage = document.getElementById('adminError');
             
             if (passwordInput) passwordInput.value = '';
-            if (errorMessage) errorMessage.style.display = 'none';
+            if (errorMessage) errorMessage.textContent = '';
         }
 
         // 관리자 비밀번호 확인
@@ -334,7 +629,7 @@
 
         // 관리자 에러 표시
         function showAdminError(message) {
-            const errorElement = document.getElementById('errorMessage');
+            const errorElement = document.getElementById('adminError');
             if (errorElement) {
                 errorElement.textContent = message;
                 errorElement.style.display = 'block';
@@ -347,7 +642,15 @@
             alert('이미지 변환 기능을 구현 중입니다!');
         }
 
-        console.log('📝 JavaScript 로드 완료! - 인라인 실행');
+        // 모달 외부 클릭 시 닫기
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('modal-overlay')) {
+                e.target.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+        console.log('📝 JavaScript 로드 완료! - 새로운 디자인');
     </script>
 </body>
 </html>
