@@ -3,31 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Versatify - 이미지 작업의 새로운 기준</title>
+    <title>Versatify - AI 기반 이미지 처리 플랫폼</title>
+    <meta name="description" content="Versatify는 AI 기술을 활용한 최첨단 이미지 처리 플랫폼입니다. 변환, 업스케일, QR 생성 등 모든 이미지 작업을 한 곳에서.">
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#7E212C">
     <link rel="icon" type="image/png" href="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4f7.png">
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
+    <!-- Preloader -->
+    <div class="preloader" id="preloader">
+        <div class="preloader-content">
+            <div class="logo-loader">
+                <span class="logo-v">V</span>
+                <div class="loader-dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+            <p class="loading-text">Versatify 로딩 중...</p>
+        </div>
+    </div>
+
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="container">
+            <div class="top-bar-content">
+                <div class="top-bar-left">
+                    <span><i class="fas fa-bolt"></i> 빠른 처리</span>
+                    <span><i class="fas fa-shield-alt"></i> 100% 보안</span>
+                    <span><i class="fas fa-infinity"></i> 무제한 사용</span>
+                </div>
+                <div class="top-bar-right">
+                    <a href="#" class="top-link"><i class="fab fa-github"></i></a>
+                    <a href="#" class="top-link"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="top-link"><i class="fas fa-globe"></i> EN</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Navigation -->
     <nav class="navbar" id="navbar">
         <div class="nav-container">
             <div class="nav-logo">
                 <span class="logo-icon">V</span>
                 <span class="logo-text">Versatify</span>
+                <span class="logo-badge">Pro</span>
             </div>
             <ul class="nav-menu" id="navMenu">
-                <li><a href="#hero" class="nav-link">홈</a></li>
+                <li><a href="#hero" class="nav-link active">홈</a></li>
+                <li class="dropdown">
+                    <a href="#tools" class="nav-link">도구 <i class="fas fa-chevron-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#" onclick="openTool('converter')"><i class="fas fa-exchange-alt"></i> 이미지 변환</a></li>
+                        <li><a href="#" onclick="openTool('upscale')"><i class="fas fa-expand-arrows-alt"></i> AI 업스케일</a></li>
+                        <li><a href="#" onclick="openTool('compress')"><i class="fas fa-compress"></i> 스마트 압축</a></li>
+                        <li><a href="#" onclick="openTool('editor')"><i class="fas fa-edit"></i> 온라인 에디터</a></li>
+                        <li><a href="#" onclick="openTool('qr')"><i class="fas fa-qrcode"></i> QR 생성기</a></li>
+                    </ul>
+                </li>
+                <li><a href="#features" class="nav-link">기능</a></li>
+                <li><a href="#pricing" class="nav-link">요금제</a></li>
                 <li><a href="#about" class="nav-link">소개</a></li>
-                <li><a href="#tools" class="nav-link">도구</a></li>
-                <li><a href="#features" class="nav-link">특징</a></li>
                 <li><a href="#contact" class="nav-link">문의</a></li>
             </ul>
+            <div class="nav-actions">
+                <button class="btn btn-outline" onclick="showLoginModal()">로그인</button>
+                <button class="btn btn-primary" onclick="showSignupModal()">무료 시작</button>
+            </div>
             <div class="nav-toggle" id="navToggle">
                 <span class="bar"></span>
                 <span class="bar"></span>
@@ -39,92 +88,132 @@
     <!-- Hero Section -->
     <section id="hero" class="hero-section">
         <div class="hero-background">
-            <div class="hero-particles"></div>
+            <div class="hero-particles" id="particles"></div>
             <div class="hero-gradient"></div>
+            <div class="hero-pattern"></div>
         </div>
+        
         <div class="hero-content">
             <div class="hero-text">
+                <div class="hero-badge">
+                    <i class="fas fa-star"></i>
+                    <span>2024년 최고의 이미지 처리 플랫폼</span>
+                </div>
                 <h1 class="hero-title">
-                    <span class="title-line">이미지 작업의</span>
-                    <span class="title-line highlight">새로운 기준</span>
+                    <span class="title-line">AI가 만드는</span>
+                    <span class="title-line gradient-text">완벽한 이미지</span>
                 </h1>
                 <p class="hero-subtitle">
-                    복잡한 이미지 편집 프로그램은 이제 그만.<br>
-                    웹에서 바로, 간단하게, 전문적으로.
+                    복잡한 포토샵은 이제 그만. Versatify의 AI 기술로<br>
+                    전문가 수준의 이미지 편집을 단 몇 초 만에 완성하세요.
                 </p>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <h3>1M+</h3>
+                        <p>활성 사용자</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>50M+</h3>
+                        <p>처리된 이미지</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>99.9%</h3>
+                        <p>만족도</p>
+                    </div>
+                </div>
                 <div class="hero-buttons">
-                    <button class="btn btn-primary" onclick="scrollToSection('tools')">
+                    <button class="btn btn-primary btn-large" onclick="scrollToSection('tools')">
                         <i class="fas fa-rocket"></i>
-                        지금 시작하기
+                        무료로 시작하기
                     </button>
-                    <button class="btn btn-secondary" onclick="scrollToSection('about')">
-                        <i class="fas fa-play"></i>
-                        둘러보기
+                    <button class="btn btn-glass btn-large" onclick="playDemo()">
+                        <i class="fas fa-play-circle"></i>
+                        데모 보기
                     </button>
+                </div>
+                <div class="hero-trust">
+                    <p>신뢰하는 기업들</p>
+                    <div class="trust-logos">
+                        <img src="https://via.placeholder.com/100x40/f8f9fa/6c757d?text=Samsung" alt="Samsung">
+                        <img src="https://via.placeholder.com/100x40/f8f9fa/6c757d?text=LG" alt="LG">
+                        <img src="https://via.placeholder.com/100x40/f8f9fa/6c757d?text=Naver" alt="Naver">
+                        <img src="https://via.placeholder.com/100x40/f8f9fa/6c757d?text=Kakao" alt="Kakao">
+                    </div>
                 </div>
             </div>
-            <div class="hero-image">
-                <div class="floating-card card-1">
-                    <i class="fas fa-image"></i>
-                    <span>이미지 변환</span>
-                </div>
-                <div class="floating-card card-2">
-                    <i class="fas fa-expand-arrows-alt"></i>
-                    <span>업스케일</span>
-                </div>
-                <div class="floating-card card-3">
-                    <i class="fas fa-qrcode"></i>
-                    <span>QR 생성</span>
-                </div>
-                <div class="floating-card card-4">
-                    <i class="fas fa-copyright"></i>
-                    <span>워터마크</span>
+            
+            <div class="hero-visual">
+                <div class="hero-mockup">
+                    <div class="mockup-browser">
+                        <div class="browser-header">
+                            <div class="browser-dots">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                            <div class="browser-url">versatify.me/editor</div>
+                        </div>
+                        <div class="browser-content">
+                            <img src="https://via.placeholder.com/600x400/7E212C/ffffff?text=Image+Editor" alt="Editor Preview">
+                        </div>
+                    </div>
+                    <div class="floating-features">
+                        <div class="feature-bubble bubble-1">
+                            <i class="fas fa-magic"></i>
+                            <span>AI 자동 보정</span>
+                        </div>
+                        <div class="feature-bubble bubble-2">
+                            <i class="fas fa-palette"></i>
+                            <span>스마트 필터</span>
+                        </div>
+                        <div class="feature-bubble bubble-3">
+                            <i class="fas fa-layer-group"></i>
+                            <span>레이어 편집</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+        
         <div class="scroll-indicator">
-            <div class="scroll-text">스크롤하여 더 알아보기</div>
-            <div class="scroll-arrow">
-                <i class="fas fa-chevron-down"></i>
+            <div class="mouse">
+                <div class="wheel"></div>
             </div>
+            <p>스크롤하여 더 알아보기</p>
         </div>
     </section>
 
-    <!-- About Section -->
-    <section id="about" class="about-section">
+    <!-- Features Showcase -->
+    <section id="showcase" class="showcase-section">
         <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">왜 Versatify인가요?</h2>
-                <p class="section-subtitle">복잡한 설치, 비싼 구독료, 어려운 사용법... 이제 모두 과거의 일입니다.</p>
-            </div>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">
+            <div class="showcase-grid">
+                <div class="showcase-item">
+                    <div class="showcase-icon">
                         <i class="fas fa-bolt"></i>
                     </div>
-                    <h3>즉시 사용</h3>
-                    <p>설치나 가입 없이 브라우저에서 바로 시작하세요. 클릭 한 번으로 모든 기능에 접근할 수 있습니다.</p>
+                    <h3>초고속 처리</h3>
+                    <p>GPU 가속 기술로 대용량 이미지도 순식간에</p>
                 </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-shield-alt"></i>
+                <div class="showcase-item">
+                    <div class="showcase-icon">
+                        <i class="fas fa-brain"></i>
                     </div>
-                    <h3>완전 무료</h3>
-                    <p>숨겨진 비용, 구독료, 광고 없음. 모든 기능을 영원히 무료로 사용하세요.</p>
+                    <h3>AI 기반 최적화</h3>
+                    <p>딥러닝으로 최상의 결과물 자동 생성</p>
                 </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-user-lock"></i>
+                <div class="showcase-item">
+                    <div class="showcase-icon">
+                        <i class="fas fa-cloud"></i>
                     </div>
-                    <h3>개인정보 보호</h3>
-                    <p>이미지는 서버에 저장되지 않습니다. 작업 완료 후 즉시 삭제되어 완벽한 프라이버시를 보장합니다.</p>
+                    <h3>클라우드 동기화</h3>
+                    <p>모든 기기에서 작업 이어가기</p>
                 </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-mobile-alt"></i>
+                <div class="showcase-item">
+                    <div class="showcase-icon">
+                        <i class="fas fa-lock"></i>
                     </div>
-                    <h3>모든 기기에서</h3>
-                    <p>PC, 태블릿, 스마트폰 어디서나 완벽하게 작동합니다. 언제 어디서든 필요할 때 바로 사용하세요.</p>
+                    <h3>엔터프라이즈 보안</h3>
+                    <p>256비트 암호화로 완벽한 보호</p>
                 </div>
             </div>
         </div>
@@ -134,203 +223,372 @@
     <section id="tools" class="tools-section">
         <div class="container">
             <div class="section-header">
-                <h2 class="section-title">강력한 도구들</h2>
-                <p class="section-subtitle">전문가 수준의 이미지 처리를 간단하게</p>
+                <span class="section-label">TOOLS</span>
+                <h2 class="section-title">모든 이미지 작업을 한 곳에서</h2>
+                <p class="section-subtitle">
+                    전문가들이 사용하는 강력한 도구들을 누구나 쉽게 사용할 수 있도록 만들었습니다.
+                </p>
             </div>
             
-            <!-- Popular Tools -->
-            <div class="popular-tools">
-                <h3 class="subsection-title">인기 도구</h3>
-                <div class="tools-grid popular">
-                    <div class="tool-card featured" onclick="openTool('converter')">
+            <div class="tools-tabs">
+                <button class="tab-btn active" data-tab="all">전체</button>
+                <button class="tab-btn" data-tab="convert">변환</button>
+                <button class="tab-btn" data-tab="edit">편집</button>
+                <button class="tab-btn" data-tab="ai">AI 도구</button>
+                <button class="tab-btn" data-tab="generate">생성</button>
+            </div>
+            
+            <div class="tools-container">
+                <div class="tool-card premium" data-category="convert ai">
+                    <div class="tool-header">
                         <div class="tool-icon">
                             <i class="fas fa-exchange-alt"></i>
                         </div>
-                        <div class="tool-content">
-                            <h4>이미지 변환</h4>
-                            <p>JPG, PNG, WebP, AVIF 등 다양한 형식으로 변환</p>
-                            <div class="tool-tags">
-                                <span class="tag">빠른 변환</span>
-                                <span class="tag">고품질</span>
-                            </div>
-                        </div>
-                        <div class="tool-arrow">
-                            <i class="fas fa-arrow-right"></i>
-                        </div>
+                        <span class="tool-badge">인기</span>
                     </div>
-                    
-                    <div class="tool-card featured" onclick="openTool('upscale')">
+                    <h3>스마트 포맷 변환</h3>
+                    <p>JPG, PNG, WebP, AVIF 등 50+ 형식 지원. AI가 최적의 설정을 자동으로 적용합니다.</p>
+                    <ul class="tool-features">
+                        <li><i class="fas fa-check"></i> 일괄 변환 지원</li>
+                        <li><i class="fas fa-check"></i> 메타데이터 보존</li>
+                        <li><i class="fas fa-check"></i> 자동 품질 최적화</li>
+                    </ul>
+                    <button class="btn btn-primary btn-block" onclick="openTool('converter')">
+                        변환 시작하기
+                    </button>
+                </div>
+                
+                <div class="tool-card premium" data-category="ai edit">
+                    <div class="tool-header">
                         <div class="tool-icon">
                             <i class="fas fa-expand-arrows-alt"></i>
                         </div>
-                        <div class="tool-content">
-                            <h4>이미지 업스케일</h4>
-                            <p>AI 기술로 이미지를 2x, 4x까지 선명하게 확대</p>
-                            <div class="tool-tags">
-                                <span class="tag">AI 기술</span>
-                                <span class="tag">고해상도</span>
-                            </div>
-                        </div>
-                        <div class="tool-arrow">
-                            <i class="fas fa-arrow-right"></i>
+                        <span class="tool-badge">AI</span>
+                    </div>
+                    <h3>AI 업스케일링</h3>
+                    <p>최신 AI 모델로 이미지를 4K, 8K까지 확대. 디테일을 살리면서 노이즈는 제거합니다.</p>
+                    <ul class="tool-features">
+                        <li><i class="fas fa-check"></i> 최대 8배 확대</li>
+                        <li><i class="fas fa-check"></i> 얼굴 인식 최적화</li>
+                        <li><i class="fas fa-check"></i> 실시간 미리보기</li>
+                    </ul>
+                    <button class="btn btn-primary btn-block" onclick="openTool('upscale')">
+                        업스케일 시작
+                    </button>
+                </div>
+                
+                <div class="tool-card" data-category="edit">
+                    <div class="tool-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-compress"></i>
                         </div>
                     </div>
-                    
-                    <div class="tool-card featured" onclick="openTool('qr')">
+                    <h3>스마트 압축</h3>
+                    <p>품질 손실 없이 파일 크기를 최대 90% 줄입니다. 웹 최적화에 완벽합니다.</p>
+                    <ul class="tool-features">
+                        <li><i class="fas fa-check"></i> 무손실 압축</li>
+                        <li><i class="fas fa-check"></i> 일괄 처리</li>
+                        <li><i class="fas fa-check"></i> 자동 포맷 선택</li>
+                    </ul>
+                    <button class="btn btn-outline btn-block" onclick="openTool('compress')">
+                        압축하기
+                    </button>
+                </div>
+                
+                <div class="tool-card" data-category="edit ai">
+                    <div class="tool-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-magic"></i>
+                        </div>
+                    </div>
+                    <h3>AI 배경 제거</h3>
+                    <p>한 번의 클릭으로 완벽한 배경 제거. 머리카락까지 정밀하게 처리합니다.</p>
+                    <ul class="tool-features">
+                        <li><i class="fas fa-check"></i> 1초 처리</li>
+                        <li><i class="fas fa-check"></i> 투명 PNG 출력</li>
+                        <li><i class="fas fa-check"></i> 엣지 다듬기</li>
+                    </ul>
+                    <button class="btn btn-outline btn-block" onclick="openTool('background')">
+                        배경 제거
+                    </button>
+                </div>
+                
+                <div class="tool-card" data-category="generate">
+                    <div class="tool-header">
                         <div class="tool-icon">
                             <i class="fas fa-qrcode"></i>
                         </div>
-                        <div class="tool-content">
-                            <h4>QR 코드 생성</h4>
-                            <p>텍스트나 URL을 QR 코드로 즉시 변환</p>
-                            <div class="tool-tags">
-                                <span class="tag">즉시 생성</span>
-                                <span class="tag">다운로드</span>
-                            </div>
-                        </div>
-                        <div class="tool-arrow">
-                            <i class="fas fa-arrow-right"></i>
-                        </div>
                     </div>
+                    <h3>디자인 QR 코드</h3>
+                    <p>브랜드에 맞는 커스텀 QR 코드 생성. 로고 삽입과 색상 커스터마이징 지원.</p>
+                    <ul class="tool-features">
+                        <li><i class="fas fa-check"></i> 로고 삽입</li>
+                        <li><i class="fas fa-check"></i> 커스텀 디자인</li>
+                        <li><i class="fas fa-check"></i> 벡터 출력</li>
+                    </ul>
+                    <button class="btn btn-outline btn-block" onclick="openTool('qr')">
+                        QR 생성
+                    </button>
                 </div>
-            </div>
-
-            <!-- All Tools -->
-            <div class="all-tools">
-                <h3 class="subsection-title">전체 도구</h3>
-                <div class="tools-categories">
-                    <div class="category">
-                        <h4 class="category-title">
-                            <i class="fas fa-image"></i>
-                            이미지 처리
-                        </h4>
-                        <div class="tools-grid">
-                            <div class="tool-card" onclick="openTool('converter')">
-                                <div class="tool-icon">
-                                    <i class="fas fa-exchange-alt"></i>
-                                </div>
-                                <div class="tool-content">
-                                    <h5>이미지 변환</h5>
-                                    <p>형식 변환 및 압축</p>
-                                </div>
-                            </div>
-                            
-                            <div class="tool-card" onclick="openTool('upscale')">
-                                <div class="tool-icon">
-                                    <i class="fas fa-expand-arrows-alt"></i>
-                                </div>
-                                <div class="tool-content">
-                                    <h5>업스케일</h5>
-                                    <p>고화질 확대</p>
-                                </div>
-                            </div>
-                            
-                            <div class="tool-card" onclick="openTool('zoom')">
-                                <div class="tool-icon">
-                                    <i class="fas fa-search-plus"></i>
-                                </div>
-                                <div class="tool-content">
-                                    <h5>영역 확대</h5>
-                                    <p>선택 영역 자르기</p>
-                                </div>
-                            </div>
-                            
-                            <div class="tool-card" onclick="openTool('watermark')">
-                                <div class="tool-icon">
-                                    <i class="fas fa-copyright"></i>
-                                </div>
-                                <div class="tool-content">
-                                    <h5>워터마크</h5>
-                                    <p>텍스트 워터마크 추가</p>
-                                </div>
-                            </div>
+                
+                <div class="tool-card" data-category="edit">
+                    <div class="tool-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-crop"></i>
                         </div>
                     </div>
-                    
-                    <div class="category">
-                        <h4 class="category-title">
-                            <i class="fas fa-magic"></i>
-                            생성 도구
-                        </h4>
-                        <div class="tools-grid">
-                            <div class="tool-card" onclick="openTool('qr')">
-                                <div class="tool-icon">
-                                    <i class="fas fa-qrcode"></i>
-                                </div>
-                                <div class="tool-content">
-                                    <h5>QR 코드</h5>
-                                    <p>QR 코드 생성</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <h3>스마트 크롭</h3>
+                    <p>AI가 최적의 구도를 찾아 자동으로 크롭. SNS별 맞춤 사이즈 제공.</p>
+                    <ul class="tool-features">
+                        <li><i class="fas fa-check"></i> 얼굴 인식</li>
+                        <li><i class="fas fa-check"></i> 황금비율</li>
+                        <li><i class="fas fa-check"></i> SNS 프리셋</li>
+                    </ul>
+                    <button class="btn btn-outline btn-block" onclick="openTool('crop')">
+                        크롭하기
+                    </button>
                 </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Features Section -->
-    <section id="features" class="features-section">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">기술적 우수성</h2>
-                <p class="section-subtitle">최신 웹 기술로 구현된 고성능 이미지 처리</p>
             </div>
             
-            <div class="tech-features">
-                <div class="tech-feature">
-                    <div class="tech-icon">
-                        <i class="fas fa-server"></i>
+            <div class="tools-cta">
+                <h3>더 많은 도구를 원하시나요?</h3>
+                <p>매주 새로운 기능이 추가됩니다. 지금 가입하고 모든 도구를 무료로 사용하세요.</p>
+                <button class="btn btn-primary btn-large">
+                    <i class="fas fa-unlock"></i>
+                    전체 도구 잠금 해제
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section id="how-it-works" class="how-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">HOW IT WORKS</span>
+                <h2 class="section-title">단 3단계로 완성</h2>
+                <p class="section-subtitle">복잡한 과정 없이 누구나 쉽게 사용할 수 있습니다.</p>
+            </div>
+            
+            <div class="steps-container">
+                <div class="step-card">
+                    <div class="step-number">01</div>
+                    <div class="step-icon">
+                        <i class="fas fa-upload"></i>
                     </div>
-                    <h4>Azure 클라우드</h4>
-                    <p>Microsoft Azure의 안정적인 인프라로 언제나 빠르고 안정적인 서비스를 제공합니다.</p>
+                    <h3>이미지 업로드</h3>
+                    <p>드래그 앤 드롭으로 간편하게 업로드. 클라우드 연동도 지원합니다.</p>
                 </div>
                 
-                <div class="tech-feature">
-                    <div class="tech-icon">
-                        <i class="fas fa-code"></i>
+                <div class="step-connector"></div>
+                
+                <div class="step-card">
+                    <div class="step-number">02</div>
+                    <div class="step-icon">
+                        <i class="fas fa-sliders-h"></i>
                     </div>
-                    <h4>최신 웹 기술</h4>
-                    <p>WebAssembly, Service Worker 등 최신 브라우저 API를 활용한 네이티브 앱 수준의 성능.</p>
+                    <h3>도구 선택 & 편집</h3>
+                    <p>원하는 도구를 선택하고 실시간으로 결과를 확인하며 편집하세요.</p>
                 </div>
                 
-                <div class="tech-feature">
-                    <div class="tech-icon">
-                        <i class="fas fa-tachometer-alt"></i>
+                <div class="step-connector"></div>
+                
+                <div class="step-card">
+                    <div class="step-number">03</div>
+                    <div class="step-icon">
+                        <i class="fas fa-download"></i>
                     </div>
-                    <h4>실시간 처리</h4>
-                    <p>클라이언트 사이드 처리로 빠른 응답 속도와 서버 부하 없는 무제한 사용.</p>
+                    <h3>다운로드 & 공유</h3>
+                    <p>원하는 형식으로 다운로드하거나 클라우드에 저장. SNS 공유도 한 번에.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Contact Section -->
-    <section id="contact" class="contact-section">
+    <!-- Pricing Section -->
+    <section id="pricing" class="pricing-section">
         <div class="container">
-            <div class="contact-content">
-                <div class="contact-info">
-                    <h2>함께 만들어가요</h2>
-                    <p>Versatify는 사용자의 피드백으로 성장합니다. 새로운 기능 제안, 버그 신고, 또는 단순한 의견까지 모든 것을 환영합니다.</p>
-                    
-                    <div class="contact-methods">
-                        <div class="contact-method">
-                            <i class="fas fa-envelope"></i>
-                            <span>이메일로 문의하기</span>
-                        </div>
-                        <div class="contact-method">
-                            <i class="fab fa-github"></i>
-                            <span>GitHub에서 개발 참여</span>
+            <div class="section-header">
+                <span class="section-label">PRICING</span>
+                <h2 class="section-title">합리적인 가격, 강력한 기능</h2>
+                <p class="section-subtitle">개인부터 기업까지, 모든 규모에 맞는 플랜을 제공합니다.</p>
+            </div>
+            
+            <div class="pricing-toggle">
+                <span class="toggle-label active">월간 결제</span>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="billingToggle">
+                    <span class="toggle-slider"></span>
+                </label>
+                <span class="toggle-label">연간 결제 <span class="discount-badge">20% 할인</span></span>
+            </div>
+            
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <div class="pricing-header">
+                        <h3>Free</h3>
+                        <p class="price">
+                            <span class="currency">₩</span>
+                            <span class="amount">0</span>
+                            <span class="period">/월</span>
+                        </p>
+                        <p class="description">개인 사용자를 위한 무료 플랜</p>
+                    </div>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check"></i> 월 100회 이미지 처리</li>
+                        <li><i class="fas fa-check"></i> 기본 도구 사용</li>
+                        <li><i class="fas fa-check"></i> 최대 5MB 파일</li>
+                        <li><i class="fas fa-check"></i> 워터마크 포함</li>
+                        <li class="disabled"><i class="fas fa-times"></i> AI 고급 기능</li>
+                        <li class="disabled"><i class="fas fa-times"></i> 우선 처리</li>
+                    </ul>
+                    <button class="btn btn-outline btn-block">현재 플랜</button>
+                </div>
+                
+                <div class="pricing-card featured">
+                    <div class="pricing-badge">인기</div>
+                    <div class="pricing-header">
+                        <h3>Pro</h3>
+                        <p class="price">
+                            <span class="currency">₩</span>
+                            <span class="amount">19,900</span>
+                            <span class="period">/월</span>
+                        </p>
+                        <p class="description">전문가와 프리랜서를 위한 플랜</p>
+                    </div>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check"></i> <strong>무제한</strong> 이미지 처리</li>
+                        <li><i class="fas fa-check"></i> 모든 도구 사용</li>
+                        <li><i class="fas fa-check"></i> 최대 50MB 파일</li>
+                        <li><i class="fas fa-check"></i> 워터마크 제거</li>
+                        <li><i class="fas fa-check"></i> AI 고급 기능</li>
+                        <li><i class="fas fa-check"></i> 우선 처리</li>
+                        <li><i class="fas fa-check"></i> 클라우드 저장소 100GB</li>
+                    </ul>
+                    <button class="btn btn-primary btn-block">Pro 시작하기</button>
+                </div>
+                
+                <div class="pricing-card">
+                    <div class="pricing-header">
+                        <h3>Business</h3>
+                        <p class="price">
+                            <span class="currency">₩</span>
+                            <span class="amount">99,900</span>
+                            <span class="period">/월</span>
+                        </p>
+                        <p class="description">팀과 기업을 위한 플랜</p>
+                    </div>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check"></i> Pro의 모든 기능</li>
+                        <li><i class="fas fa-check"></i> 팀 협업 도구</li>
+                        <li><i class="fas fa-check"></i> API 액세스</li>
+                        <li><i class="fas fa-check"></i> 맞춤형 워크플로우</li>
+                        <li><i class="fas fa-check"></i> 전담 지원</li>
+                        <li><i class="fas fa-check"></i> SLA 보장</li>
+                        <li><i class="fas fa-check"></i> 무제한 저장소</li>
+                    </ul>
+                    <button class="btn btn-outline btn-block">영업팀 문의</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section id="testimonials" class="testimonials-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">TESTIMONIALS</span>
+                <h2 class="section-title">사용자들의 생생한 후기</h2>
+                <p class="section-subtitle">전 세계 100만 명이 Versatify를 선택한 이유</p>
+            </div>
+            
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="testimonial-text">
+                        "포토샵 구독료를 아끼고 더 빠르게 작업할 수 있게 되었어요. 
+                        특히 AI 업스케일 기능은 정말 놀랍습니다!"
+                    </p>
+                    <div class="testimonial-author">
+                        <img src="https://via.placeholder.com/50x50/7E212C/ffffff?text=KJ" alt="김지은">
+                        <div>
+                            <h4>김지은</h4>
+                            <p>프리랜서 디자이너</p>
                         </div>
                     </div>
                 </div>
                 
-                <div class="contact-cta">
-                    <h3>지금 바로 시작해보세요</h3>
-                    <button class="btn btn-primary btn-large" onclick="scrollToSection('tools')">
+                <div class="testimonial-card">
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="testimonial-text">
+                        "쇼핑몰 운영에 필수 도구가 되었습니다. 상품 이미지 편집이 
+                        이렇게 쉬울 줄 몰랐어요. 매출이 30% 증가했습니다."
+                    </p>
+                    <div class="testimonial-author">
+                        <img src="https://via.placeholder.com/50x50/7E212C/ffffff?text=PS" alt="박성민">
+                        <div>
+                            <h4>박성민</h4>
+                            <p>온라인 쇼핑몰 대표</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card">
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="testimonial-text">
+                        "마케팅팀 전체가 사용하고 있습니다. 협업 기능과 클라우드 
+                        동기화 덕분에 업무 효율이 크게 향상되었어요."
+                    </p>
+                    <div class="testimonial-author">
+                        <img src="https://via.placeholder.com/50x50/7E212C/ffffff?text=LH" alt="이현우">
+                        <div>
+                            <h4>이현우</h4>
+                            <p>마케팅 팀장, 테크 스타트업</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2>지금 바로 시작하세요</h2>
+                <p>신용카드 없이 무료로 시작할 수 있습니다. 언제든지 업그레이드하세요.</p>
+                <div class="cta-buttons">
+                    <button class="btn btn-white btn-large">
                         <i class="fas fa-rocket"></i>
-                        도구 사용하기
+                        무료 체험 시작
                     </button>
+                    <button class="btn btn-glass btn-large">
+                        <i class="fas fa-calendar"></i>
+                        데모 예약
+                    </button>
+                </div>
+                <div class="cta-features">
+                    <span><i class="fas fa-check"></i> 신용카드 불필요</span>
+                    <span><i class="fas fa-check"></i> 즉시 시작</span>
+                    <span><i class="fas fa-check"></i> 언제든 취소</span>
                 </div>
             </div>
         </div>
@@ -339,47 +597,78 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
-            <div class="footer-content">
+            <div class="footer-top">
                 <div class="footer-brand">
                     <div class="footer-logo">
                         <span class="logo-icon">V</span>
                         <span class="logo-text">Versatify</span>
                     </div>
-                    <p>이미지 작업의 새로운 기준</p>
+                    <p>AI 기반 이미지 처리의 새로운 기준</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
                 </div>
                 
                 <div class="footer-links">
                     <div class="footer-column">
-                        <h4>도구</h4>
+                        <h4>제품</h4>
                         <ul>
-                            <li><a href="#" onclick="openTool('converter')">이미지 변환</a></li>
-                            <li><a href="#" onclick="openTool('upscale')">업스케일</a></li>
-                            <li><a href="#" onclick="openTool('qr')">QR 생성</a></li>
+                            <li><a href="#">이미지 변환</a></li>
+                            <li><a href="#">AI 업스케일</a></li>
+                            <li><a href="#">배경 제거</a></li>
+                            <li><a href="#">스마트 압축</a></li>
+                            <li><a href="#">온라인 에디터</a></li>
+                            <li><a href="#">API</a></li>
                         </ul>
                     </div>
                     
                     <div class="footer-column">
-                        <h4>정보</h4>
+                        <h4>회사</h4>
                         <ul>
-                            <li><a href="#about">서비스 소개</a></li>
-                            <li><a href="#features">기능</a></li>
-                            <li><a href="#contact">문의</a></li>
+                            <li><a href="#">소개</a></li>
+                            <li><a href="#">채용</a></li>
+                            <li><a href="#">블로그</a></li>
+                            <li><a href="#">보도자료</a></li>
+                            <li><a href="#">파트너</a></li>
                         </ul>
                     </div>
                     
                     <div class="footer-column">
-                        <h4>정책</h4>
+                        <h4>지원</h4>
                         <ul>
-                            <li><a href="#">개인정보처리방침</a></li>
+                            <li><a href="#">도움말 센터</a></li>
+                            <li><a href="#">문의하기</a></li>
+                            <li><a href="#">시스템 상태</a></li>
+                            <li><a href="#">개발자 문서</a></li>
+                            <li><a href="#">커뮤니티</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-column">
+                        <h4>법적 고지</h4>
+                        <ul>
                             <li><a href="#">이용약관</a></li>
-                            <li><a href="#">오픈소스</a></li>
+                            <li><a href="#">개인정보처리방침</a></li>
+                            <li><a href="#">쿠키 정책</a></li>
+                            <li><a href="#">라이선스</a></li>
+                            <li><a href="#">보안</a></li>
                         </ul>
                     </div>
                 </div>
             </div>
             
             <div class="footer-bottom">
-                <p>&copy; 2025 Versatify. 모든 권리 보유.</p>
+                <p>&copy; 2025 Versatify. All rights reserved.</p>
+                <div class="footer-bottom-links">
+                    <a href="#">한국어</a>
+                    <a href="#">English</a>
+                    <a href="#">日本語</a>
+                    <a href="#">中文</a>
+                </div>
                 <div class="admin-link">
                     <a href="#" onclick="showAdminModal()">🔧</a>
                 </div>
@@ -388,41 +677,68 @@
     </footer>
 
     <!-- Modals -->
-    <!-- Image Converter Modal -->
-    <div class="modal-overlay" id="converterModal">
+    <!-- Tool Modal -->
+    <div class="modal-overlay" id="toolModal">
+        <div class="modal-container modal-large">
+            <div class="modal-header">
+                <h3 id="toolModalTitle">도구 이름</h3>
+                <button class="modal-close" onclick="closeToolModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-content" id="toolModalContent">
+                <!-- 도구별 콘텐츠가 동적으로 로드됩니다 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div class="modal-overlay" id="loginModal">
         <div class="modal-container">
             <div class="modal-header">
-                <h3>🖼️ 이미지 변환</h3>
-                <button class="modal-close" onclick="closeConverterModal()">
+                <h3>로그인</h3>
+                <button class="modal-close" onclick="closeLoginModal()">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
             <div class="modal-content">
-                <div class="upload-section">
-                    <div class="upload-area" id="uploadArea" onclick="document.getElementById('fileInput').click()">
-                        <div class="upload-icon">
-                            <i class="fas fa-cloud-upload-alt"></i>
-                        </div>
-                        <h4>이미지를 업로드하세요</h4>
-                        <p>파일을 드래그하거나 클릭하여 선택</p>
-                        <input type="file" id="fileInput" accept="image/*" style="display: none;">
-                    </div>
+                <div class="social-login">
+                    <button class="btn btn-social btn-google">
+                        <i class="fab fa-google"></i>
+                        Google로 계속하기
+                    </button>
+                    <button class="btn btn-social btn-kakao">
+                        <i class="fas fa-comment"></i>
+                        카카오로 계속하기
+                    </button>
                 </div>
                 
-                <div class="conversion-options" id="conversionOptions" style="display: none;">
-                    <h4>변환 옵션</h4>
-                    <select id="targetFormat" class="format-select">
-                        <option value="">형식 선택</option>
-                    </select>
-                    <button class="btn btn-primary" onclick="startConversion()">변환 시작</button>
+                <div class="divider">
+                    <span>또는</span>
                 </div>
                 
-                <div class="progress-section" id="progressSection" style="display: none;">
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="progressFill"></div>
+                <form class="login-form">
+                    <div class="form-group">
+                        <label>이메일</label>
+                        <input type="email" class="form-control" placeholder="your@email.com">
                     </div>
-                    <p id="progressText">변환 중...</p>
-                </div>
+                    <div class="form-group">
+                        <label>비밀번호</label>
+                        <input type="password" class="form-control" placeholder="••••••••">
+                    </div>
+                    <div class="form-options">
+                        <label class="checkbox">
+                            <input type="checkbox">
+                            <span>로그인 상태 유지</span>
+                        </label>
+                        <a href="#" class="forgot-link">비밀번호 찾기</a>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">로그인</button>
+                </form>
+                
+                <p class="modal-footer-text">
+                    계정이 없으신가요? <a href="#" onclick="showSignupModal()">회원가입</a>
+                </p>
             </div>
         </div>
     </div>
@@ -437,18 +753,23 @@
                 </button>
             </div>
             <div class="modal-content">
-                <input type="password" id="adminPassword" placeholder="관리자 비밀번호" class="admin-input">
-                <div class="error-message" id="adminError"></div>
-                <div class="modal-actions">
-                    <button class="btn btn-primary" onclick="checkAdminPassword()">로그인</button>
-                    <button class="btn btn-secondary" onclick="closeAdminModal()">취소</button>
-                </div>
+                <form class="admin-form">
+                    <div class="form-group">
+                        <label>관리자 비밀번호</label>
+                        <input type="password" id="adminPassword" class="form-control" placeholder="••••••••">
+                    </div>
+                    <div class="error-message" id="adminError"></div>
+                    <div class="modal-actions">
+                        <button type="submit" class="btn btn-primary" onclick="checkAdminPassword(event)">로그인</button>
+                        <button type="button" class="btn btn-secondary" onclick="closeAdminModal()">취소</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 
     <script>
-        console.log('🚀 Versatify - 새로운 디자인 시작!');
+        console.log('🚀 Versatify Pro - 프로페셔널 웹사이트 시작!');
 
         // DOM 로드 완료 시 실행
         document.addEventListener('DOMContentLoaded', function() {
@@ -460,24 +781,224 @@
         function initializeWebsite() {
             console.log('🔄 웹사이트 초기화');
             
-            // 부드러운 스크롤 설정
-            setupSmoothScrolling();
+            // 프리로더 제거
+            setTimeout(() => {
+                const preloader = document.getElementById('preloader');
+                if (preloader) {
+                    preloader.style.opacity = '0';
+                    setTimeout(() => {
+                        preloader.style.display = 'none';
+                    }, 500);
+                }
+            }, 1500);
             
             // 네비게이션 설정
             setupNavigation();
             
-            // 스크롤 애니메이션 설정
+            // 스크롤 애니메이션
             setupScrollAnimations();
             
-            // 파티클 효과 시작
-            startParticleEffect();
+            // 파티클 효과
+            initParticles();
+            
+            // 도구 필터링
+            setupToolFilters();
+            
+            // 가격 토글
+            setupPricingToggle();
             
             console.log('✅ 웹사이트 초기화 완료!');
         }
 
-        // 부드러운 스크롤 설정
-        function setupSmoothScrolling() {
-            document.documentElement.style.scrollBehavior = 'smooth';
+        // 네비게이션 설정
+        function setupNavigation() {
+            const navbar = document.getElementById('navbar');
+            const navToggle = document.getElementById('navToggle');
+            const navMenu = document.getElementById('navMenu');
+            const navLinks = document.querySelectorAll('.nav-link');
+            
+            // 스크롤 시 네비게이션 스타일 변경
+            let lastScroll = 0;
+            window.addEventListener('scroll', function() {
+                const currentScroll = window.pageYOffset;
+                
+                if (currentScroll > 100) {
+                    navbar.classList.add('scrolled');
+                    
+                    if (currentScroll > lastScroll) {
+                        navbar.classList.add('hidden');
+                    } else {
+                        navbar.classList.remove('hidden');
+                    }
+                } else {
+                    navbar.classList.remove('scrolled', 'hidden');
+                }
+                
+                lastScroll = currentScroll;
+                
+                // 활성 섹션 하이라이트
+                updateActiveSection();
+            });
+            
+            // 모바일 메뉴 토글
+            if (navToggle) {
+                navToggle.addEventListener('click', function() {
+                    navMenu.classList.toggle('active');
+                    navToggle.classList.toggle('active');
+                });
+            }
+            
+            // 드롭다운 메뉴
+            const dropdowns = document.querySelectorAll('.dropdown');
+            dropdowns.forEach(dropdown => {
+                dropdown.addEventListener('mouseenter', function() {
+                    this.classList.add('active');
+                });
+                dropdown.addEventListener('mouseleave', function() {
+                    this.classList.remove('active');
+                });
+            });
+        }
+
+        // 활성 섹션 업데이트
+        function updateActiveSection() {
+            const sections = document.querySelectorAll('section[id]');
+            const navLinks = document.querySelectorAll('.nav-link');
+            
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+            
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        // 스크롤 애니메이션
+        function setupScrollAnimations() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -100px 0px'
+            };
+            
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate-in');
+                        
+                        // 숫자 카운트 애니메이션
+                        if (entry.target.classList.contains('stat-item')) {
+                            animateNumber(entry.target.querySelector('h3'));
+                        }
+                    }
+                });
+            }, observerOptions);
+            
+            // 애니메이션 대상 요소들
+            const animatedElements = document.querySelectorAll(
+                '.showcase-item, .tool-card, .step-card, .pricing-card, ' +
+                '.testimonial-card, .stat-item, .feature-bubble'
+            );
+            
+            animatedElements.forEach(el => {
+                observer.observe(el);
+            });
+        }
+
+        // 숫자 애니메이션
+        function animateNumber(element) {
+            if (!element || element.dataset.animated) return;
+            
+            const text = element.textContent;
+            const number = parseInt(text.replace(/[^0-9]/g, ''));
+            const suffix = text.replace(/[0-9]/g, '');
+            const duration = 2000;
+            const start = 0;
+            const increment = number / (duration / 16);
+            
+            let current = start;
+            element.dataset.animated = 'true';
+            
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= number) {
+                    current = number;
+                    clearInterval(timer);
+                }
+                element.textContent = Math.floor(current).toLocaleString() + suffix;
+            }, 16);
+        }
+
+        // 파티클 효과
+        function initParticles() {
+            const particlesContainer = document.getElementById('particles');
+            if (!particlesContainer) return;
+            
+            for (let i = 0; i < 100; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 20 + 's';
+                particle.style.animationDuration = (Math.random() * 20 + 10) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // 도구 필터링
+        function setupToolFilters() {
+            const tabs = document.querySelectorAll('.tab-btn');
+            const tools = document.querySelectorAll('.tool-card');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const category = this.dataset.tab;
+                    
+                    // 탭 활성화
+                    tabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // 도구 필터링
+                    tools.forEach(tool => {
+                        if (category === 'all' || tool.dataset.category.includes(category)) {
+                            tool.style.display = 'block';
+                            setTimeout(() => tool.classList.add('show'), 10);
+                        } else {
+                            tool.classList.remove('show');
+                            setTimeout(() => tool.style.display = 'none', 300);
+                        }
+                    });
+                });
+            });
+        }
+
+        // 가격 토글
+        function setupPricingToggle() {
+            const toggle = document.getElementById('billingToggle');
+            const prices = document.querySelectorAll('.amount');
+            
+            if (toggle) {
+                toggle.addEventListener('change', function() {
+                    prices.forEach(price => {
+                        const monthly = parseInt(price.textContent.replace(/,/g, ''));
+                        const yearly = Math.floor(monthly * 12 * 0.8);
+                        
+                        if (this.checked) {
+                            price.textContent = yearly.toLocaleString();
+                        } else {
+                            price.textContent = monthly.toLocaleString();
+                        }
+                    });
+                });
+            }
         }
 
         // 섹션으로 스크롤
@@ -488,106 +1009,113 @@
             }
         }
 
-        // 네비게이션 설정
-        function setupNavigation() {
-            const navbar = document.getElementById('navbar');
-            const navToggle = document.getElementById('navToggle');
-            const navMenu = document.getElementById('navMenu');
-            
-            // 스크롤 시 네비게이션 스타일 변경
-            window.addEventListener('scroll', function() {
-                if (window.scrollY > 100) {
-                    navbar.classList.add('scrolled');
-                } else {
-                    navbar.classList.remove('scrolled');
-                }
-            });
-            
-            // 모바일 메뉴 토글
-            if (navToggle) {
-                navToggle.addEventListener('click', function() {
-                    navMenu.classList.toggle('active');
-                });
-            }
-            
-            // 네비게이션 링크 클릭 시 메뉴 닫기
-            document.querySelectorAll('.nav-link').forEach(link => {
-                link.addEventListener('click', function() {
-                    navMenu.classList.remove('active');
-                });
-            });
-        }
-
-        // 스크롤 애니메이션 설정
-        function setupScrollAnimations() {
-            const observerOptions = {
-                threshold: 0.1,
-                rootMargin: '0px 0px -50px 0px'
-            };
-            
-            const observer = new IntersectionObserver(function(entries) {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('animate-in');
-                    }
-                });
-            }, observerOptions);
-            
-            // 애니메이션 대상 요소들 관찰
-            document.querySelectorAll('.feature-card, .tool-card, .tech-feature').forEach(el => {
-                observer.observe(el);
-            });
-        }
-
-        // 파티클 효과
-        function startParticleEffect() {
-            const particlesContainer = document.querySelector('.hero-particles');
-            if (!particlesContainer) return;
-            
-            for (let i = 0; i < 50; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.animationDelay = Math.random() * 4 + 's';
-                particle.style.animationDuration = (Math.random() * 3 + 2) + 's';
-                particlesContainer.appendChild(particle);
-            }
-        }
-
         // 도구 열기
         function openTool(toolName) {
             console.log('🔧 도구 열기:', toolName);
+            const modal = document.getElementById('toolModal');
+            const title = document.getElementById('toolModalTitle');
+            const content = document.getElementById('toolModalContent');
             
-            if (toolName === 'converter') {
-                showConverterModal();
-            } else {
-                alert(`${toolName} 도구를 준비 중입니다! 곧 만나보실 수 있어요. 😊`);
-            }
-        }
-
-        // 컨버터 모달 표시
-        function showConverterModal() {
-            console.log('📸 컨버터 모달 열기');
-            const modal = document.getElementById('converterModal');
+            // 도구별 콘텐츠 설정
+            const toolContents = {
+                converter: {
+                    title: '🖼️ 스마트 이미지 변환',
+                    content: `
+                        <div class="tool-interface">
+                            <div class="upload-zone">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <h4>이미지를 드래그하거나 클릭하여 업로드</h4>
+                                <p>최대 50MB, JPG/PNG/WebP/AVIF 지원</p>
+                            </div>
+                            <div class="tool-options">
+                                <h4>변환 설정</h4>
+                                <select class="form-control">
+                                    <option>WebP (추천)</option>
+                                    <option>AVIF</option>
+                                    <option>JPG</option>
+                                    <option>PNG</option>
+                                </select>
+                                <label>품질: <span id="qualityValue">85</span>%</label>
+                                <input type="range" min="1" max="100" value="85" class="quality-slider">
+                            </div>
+                        </div>
+                    `
+                },
+                upscale: {
+                    title: '🔍 AI 업스케일링',
+                    content: `
+                        <div class="tool-interface">
+                            <div class="upload-zone">
+                                <i class="fas fa-expand-arrows-alt"></i>
+                                <h4>업스케일할 이미지 업로드</h4>
+                                <p>AI가 디테일을 살려 확대합니다</p>
+                            </div>
+                            <div class="tool-options">
+                                <h4>확대 옵션</h4>
+                                <div class="scale-options">
+                                    <button class="scale-btn active">2x</button>
+                                    <button class="scale-btn">4x</button>
+                                    <button class="scale-btn">8x</button>
+                                </div>
+                                <label>
+                                    <input type="checkbox" checked> 노이즈 제거
+                                </label>
+                                <label>
+                                    <input type="checkbox" checked> 얼굴 향상
+                                </label>
+                            </div>
+                        </div>
+                    `
+                }
+            };
+            
+            const toolData = toolContents[toolName] || {
+                title: '도구',
+                content: '<p>이 도구는 준비 중입니다.</p>'
+            };
+            
+            title.textContent = toolData.title;
+            content.innerHTML = toolData.content;
+            
             if (modal) {
                 modal.style.display = 'flex';
                 document.body.style.overflow = 'hidden';
             }
         }
 
-        // 컨버터 모달 닫기
-        function closeConverterModal() {
-            console.log('📸 컨버터 모달 닫기');
-            const modal = document.getElementById('converterModal');
+        // 도구 모달 닫기
+        function closeToolModal() {
+            const modal = document.getElementById('toolModal');
             if (modal) {
                 modal.style.display = 'none';
                 document.body.style.overflow = 'auto';
             }
         }
 
-        // 관리자 모달 표시
+        // 로그인 모달
+        function showLoginModal() {
+            const modal = document.getElementById('loginModal');
+            if (modal) {
+                modal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeLoginModal() {
+            const modal = document.getElementById('loginModal');
+            if (modal) {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        // 회원가입 모달 (간단히 alert로 대체)
+        function showSignupModal() {
+            alert('회원가입 기능을 준비 중입니다!');
+        }
+
+        // 관리자 모달
         function showAdminModal() {
-            console.log('🔐 관리자 모달 열기');
             const modal = document.getElementById('adminModal');
             if (modal) {
                 modal.style.display = 'flex';
@@ -595,9 +1123,7 @@
             }
         }
 
-        // 관리자 모달 닫기
         function closeAdminModal() {
-            console.log('🔐 관리자 모달 닫기');
             const modal = document.getElementById('adminModal');
             if (modal) {
                 modal.style.display = 'none';
@@ -612,8 +1138,8 @@
             if (errorMessage) errorMessage.textContent = '';
         }
 
-        // 관리자 비밀번호 확인
-        function checkAdminPassword() {
+        function checkAdminPassword(event) {
+            event.preventDefault();
             console.log('🔍 관리자 인증 확인');
             const passwordInput = document.getElementById('adminPassword');
             const password = passwordInput ? passwordInput.value : '';
@@ -627,7 +1153,6 @@
             alert('관리자 인증 기능을 구현 중입니다!');
         }
 
-        // 관리자 에러 표시
         function showAdminError(message) {
             const errorElement = document.getElementById('adminError');
             if (errorElement) {
@@ -636,10 +1161,9 @@
             }
         }
 
-        // 변환 시작
-        function startConversion() {
-            console.log('🚀 변환 시작');
-            alert('이미지 변환 기능을 구현 중입니다!');
+        // 데모 재생
+        function playDemo() {
+            alert('데모 영상을 준비 중입니다!');
         }
 
         // 모달 외부 클릭 시 닫기
@@ -650,7 +1174,17 @@
             }
         });
 
-        console.log('📝 JavaScript 로드 완료! - 새로운 디자인');
+        // ESC 키로 모달 닫기
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.modal-overlay').forEach(modal => {
+                    modal.style.display = 'none';
+                });
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+        console.log('📝 JavaScript 로드 완료! - 프로페셔널 웹사이트');
     </script>
 </body>
 </html>
