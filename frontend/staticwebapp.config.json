@@ -1,6 +1,16 @@
 {
   "routes": [
     {
+      "route": "/*.{css,js,png,jpg,jpeg,gif,svg,ico,woff,woff2,ttf,eot}",
+      "headers": {
+        "cache-control": "public, max-age=31536000, immutable"
+      }
+    },
+    {
+      "route": "/api/*",
+      "allowedRoles": ["anonymous"]
+    },
+    {
       "route": "/*",
       "serve": "/index.html",
       "statusCode": 200
