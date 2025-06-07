@@ -18,6 +18,10 @@ const s3Client = new S3Client({
     }
 });
 
+// 간단한 동시성 카운터
+let currentProcessing = 0;
+const MAX_CONCURRENT = 8; // 업스케일링은 더 무거우므로 낮게 설정
+
 module.exports = async function (context, req) {
     context.log('UpscaleImage function processed a request.');
 
@@ -39,7 +43,23 @@ module.exports = async function (context, req) {
         context.res.status = 200;
         context.res.body = {
             message: 'Image Upscale API',
-            supportedScale: [2, 4]
+            supportedScale: [2, 4],
+            serverStatus: {
+                currentProcessing,
+                maxConcurrent: MAX_CONCURRENT
+            }
+        };
+        return;
+    }
+
+    // 동시 처리 제한 확인
+    if (currentProcessing >= MAX_CONCURRENT) {
+        context.res.status = 503;
+        context.res.body = { 
+            error: 'Upscale service busy. Please try again in a moment.',
+            currentLoad: currentProcessing,
+            maxCapacity: MAX_CONCURRENT,
+            retryAfter: '3-8 seconds'
         };
         return;
     }
@@ -49,6 +69,9 @@ module.exports = async function (context, req) {
         context.res.body = { error: 'Method not allowed' };
         return;
     }
+
+    currentProcessing++;
+    context.log(`Upscale processing started. Current load: ${currentProcessing}/${MAX_CONCURRENT}`);
 
     try {
         const contentType = req.headers['content-type'];
@@ -126,5 +149,8 @@ module.exports = async function (context, req) {
         context.log('Upscale error:', err);
         context.res.status = 500;
         context.res.body = { error: 'Upscale failed', message: err.message };
+    } finally {
+        currentProcessing--;
+        context.log(`Upscale processing completed. Current load: ${currentProcessing}/${MAX_CONCURRENT}`);
     }
 };

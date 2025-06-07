@@ -18,6 +18,10 @@ const s3Client = new S3Client({
     }
 });
 
+// 간단한 동시성 카운터
+let currentProcessing = 0;
+const MAX_CONCURRENT = 10; // 워터마킹은 중간 정도 무게
+
 module.exports = async function (context, req) {
     context.log('WatermarkImage function processed a request.');
 
@@ -39,7 +43,22 @@ module.exports = async function (context, req) {
         context.res.status = 200;
         context.res.body = {
             message: 'Image Watermark API',
-            parameters: ['file', 'text', 'opacity', 'position']
+            serverStatus: {
+                currentProcessing,
+                maxConcurrent: MAX_CONCURRENT
+            }
+        };
+        return;
+    }
+
+    // 동시 처리 제한 확인
+    if (currentProcessing >= MAX_CONCURRENT) {
+        context.res.status = 503;
+        context.res.body = { 
+            error: 'Watermark service busy. Please try again in a moment.',
+            currentLoad: currentProcessing,
+            maxCapacity: MAX_CONCURRENT,
+            retryAfter: '2-6 seconds'
         };
         return;
     }
@@ -49,6 +68,9 @@ module.exports = async function (context, req) {
         context.res.body = { error: 'Method not allowed' };
         return;
     }
+
+    currentProcessing++;
+    context.log(`Watermark processing started. Current load: ${currentProcessing}/${MAX_CONCURRENT}`);
 
     try {
         const contentType = req.headers['content-type'];
@@ -152,5 +174,8 @@ module.exports = async function (context, req) {
         context.log.error('Watermark error:', err);
         context.res.status = 500;
         context.res.body = { error: 'Watermark failed', message: err.message };
+    } finally {
+        currentProcessing--;
+        context.log(`Watermark processing completed. Current load: ${currentProcessing}/${MAX_CONCURRENT}`);
     }
 };

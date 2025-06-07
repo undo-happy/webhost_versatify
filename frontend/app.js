@@ -376,7 +376,7 @@ async function startZoom() {
     document.getElementById('zoomStatus').textContent = '서버에 업로드 중...';
 
     try {
-        const response = await fetch(`${API_BASE}/api/zoom`, {
+        const response = await fetchWithRetry(`${API_BASE}/api/zoom`, {
             method: 'POST',
             body: formData
         });
@@ -439,7 +439,7 @@ async function startWatermark() {
     formData.append('opacity', opacity);
 
     try {
-        const response = await fetch(`${API_BASE}/api/watermark`, {
+        const response = await fetchWithRetry(`${API_BASE}/api/watermark`, {
             method: 'POST',
             body: formData
         });
@@ -462,7 +462,7 @@ async function generateQr() {
     }
 
     try {
-        const response = await fetch(`${API_BASE}/api/generate?text=${encodeURIComponent(text)}`);
+        const response = await fetchWithRetry(`${API_BASE}/api/generate?text=${encodeURIComponent(text)}`);
         if (!response.ok) throw new Error(await response.text());
 
         const blob = await response.blob();
@@ -521,12 +521,12 @@ async function checkAdminPassword() {
     
     try {
         // 백엔드 API로 인증 요청
-        const response = await fetch(`${API_BASE}/api/admin-auth`, {
+        const response = await fetchWithRetry(`${API_BASE}/api/admin-auth`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
+                'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ password: password })
+            body: JSON.stringify({ password })
         });
         
         const result = await response.json();
@@ -844,43 +844,90 @@ async function checkApiConnection() {
     try {
         console.log('API 연결 상태 확인 중...');
         
-        // 먼저 convert API 확인
-        const convertResponse = await fetchWithRetry(`${API_BASE}/api/convert`, {
-            method: 'OPTIONS'
-        });
-        console.log('Convert API 상태:', convertResponse.status, convertResponse.statusText);
+        const services = [
+            { name: 'Convert', endpoint: '/api/convert' },
+            { name: 'Upscale', endpoint: '/api/upscale' },
+            { name: 'Zoom', endpoint: '/api/zoom' },
+            { name: 'QR Generation', endpoint: '/api/qr' },
+            { name: 'Watermark', endpoint: '/api/watermark' },
+            { name: 'Admin Auth', endpoint: '/api/admin-auth' }
+        ];
+
+        const serviceStatus = {};
         
-        // Admin Auth API 확인
-        const authResponse = await fetchWithRetry(`${API_BASE}/api/admin-auth`, {
-            method: 'OPTIONS'
+        // 모든 서비스 상태를 병렬로 확인
+        const statusPromises = services.map(async (service) => {
+            try {
+                const response = await fetchWithRetry(`${API_BASE}${service.endpoint}`, {
+                    method: 'GET'
+                }, 1, 500); // 1회만 시도, 빠른 타임아웃
+                
+                const data = await response.json();
+                serviceStatus[service.name] = {
+                    status: response.ok ? 'online' : 'error',
+                    serverStatus: data.serverStatus || null,
+                    message: data.message || 'Unknown'
+                };
+                
+                console.log(`${service.name} API:`, response.ok ? '✅' : '❌', data.serverStatus);
+            } catch (error) {
+                serviceStatus[service.name] = {
+                    status: 'offline',
+                    error: error.message
+                };
+                console.log(`${service.name} API: ❌ Offline -`, error.message);
+            }
         });
-        console.log('Admin Auth API 상태:', authResponse.status, authResponse.statusText);
+
+        await Promise.all(statusPromises);
         
-        return {
-            convert: convertResponse.ok,
-            auth: authResponse.ok
-        };
+        // 전체 서비스 상태 업데이트
+        updateServiceStatusDisplay(serviceStatus);
+        
+        return serviceStatus;
         
     } catch (error) {
-        console.error('API 연결 확인 실패:', error);
-        return {
-            convert: false,
-            auth: false,
-            error: error.message
-        };
+        console.error('API 상태 확인 중 오류:', error);
+        return null;
     }
 }
 
-// 페이지 로드 시 API 상태 확인
-document.addEventListener('DOMContentLoaded', async () => {
-    console.log('페이지 로드됨 - API 연결 상태 확인');
-    const apiStatus = await checkApiConnection();
-    console.log('API 연결 상태:', apiStatus);
+// 서비스 상태 표시 업데이트
+function updateServiceStatusDisplay(serviceStatus) {
+    const statusElement = document.getElementById('request-status');
+    if (!statusElement) return;
     
-    if (!apiStatus.convert || !apiStatus.auth) {
-        console.warn('일부 API가 연결되지 않았습니다:', apiStatus);
+    const onlineServices = Object.values(serviceStatus).filter(s => s.status === 'online').length;
+    const totalServices = Object.keys(serviceStatus).length;
+    
+    let totalProcessing = 0;
+    let statusText = `서비스 상태: ${onlineServices}/${totalServices} 온라인`;
+    
+    // 각 서비스의 현재 처리량 합계
+    Object.values(serviceStatus).forEach(service => {
+        if (service.serverStatus && service.serverStatus.currentProcessing) {
+            totalProcessing += service.serverStatus.currentProcessing;
+        }
+    });
+    
+    if (totalProcessing > 0) {
+        statusText += ` | 전체 처리 중: ${totalProcessing}개`;
     }
-});
+    
+    statusElement.textContent = statusText;
+    
+    // 상태에 따른 색상 변경
+    if (onlineServices === totalServices) {
+        statusElement.style.color = '#27ae60'; // 모든 서비스 온라인
+    } else if (onlineServices > totalServices / 2) {
+        statusElement.style.color = '#f39c12'; // 일부 서비스 오프라인
+    } else {
+        statusElement.style.color = '#e74c3c'; // 대부분 서비스 오프라인
+    }
+}
+
+// 주기적 상태 확인 (30초마다)
+setInterval(checkApiConnection, 30000);
 
 // 드래그 앤 드롭 기능 개선
 function setupDragAndDrop() {
@@ -1009,11 +1056,33 @@ function updateTargetFormatOptions(fileType) {
     targetFormatSelect.insertBefore(helpOption, targetFormatSelect.children[1]);
 }
 
-// 초기화
-window.onload = function() {
+// 페이지 로드 시 초기화
+document.addEventListener('DOMContentLoaded', async () => {
+    console.log('🚀 Versatify 시작됨');
+    
+    // 기본 콘텐츠 로드
     loadContent();
     setupDragAndDrop();
-};
+    
+    // 초기 API 상태 확인
+    console.log('📡 모든 서비스 연결 상태 확인 중...');
+    const apiStatus = await checkApiConnection();
+    
+    if (apiStatus) {
+        const onlineServices = Object.values(apiStatus).filter(s => s.status === 'online').length;
+        const totalServices = Object.keys(apiStatus).length;
+        
+        console.log(`✅ ${onlineServices}/${totalServices} 서비스 온라인`);
+        
+        if (onlineServices < totalServices) {
+            console.warn('⚠️ 일부 서비스가 오프라인 상태입니다:', apiStatus);
+        }
+    } else {
+        console.error('❌ API 상태 확인에 실패했습니다');
+    }
+    
+    console.log('🎉 Versatify 준비 완료!');
+});
 
 // Inline 이벤트 핸들러에서 사용할 수 있도록 함수들을 전역 객체에 노출
 window.showTab = showTab;

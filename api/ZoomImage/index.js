@@ -18,6 +18,10 @@ const s3Client = new S3Client({
     }
 });
 
+// 간단한 동시성 카운터
+let currentProcessing = 0;
+const MAX_CONCURRENT = 12; // 줌 기능은 상대적으로 가벼움
+
 module.exports = async function (context, req) {
     context.log('ZoomImage function processed a request.');
 
@@ -39,7 +43,23 @@ module.exports = async function (context, req) {
         context.res.status = 200;
         context.res.body = {
             message: 'Image Zoom API',
-            supportedScale: [2, 4]
+            supportedScale: [2, 4],
+            serverStatus: {
+                currentProcessing,
+                maxConcurrent: MAX_CONCURRENT
+            }
+        };
+        return;
+    }
+
+    // 동시 처리 제한 확인
+    if (currentProcessing >= MAX_CONCURRENT) {
+        context.res.status = 503;
+        context.res.body = { 
+            error: 'Zoom service busy. Please try again in a moment.',
+            currentLoad: currentProcessing,
+            maxCapacity: MAX_CONCURRENT,
+            retryAfter: '2-5 seconds'
         };
         return;
     }
@@ -49,6 +69,9 @@ module.exports = async function (context, req) {
         context.res.body = { error: 'Method not allowed' };
         return;
     }
+
+    currentProcessing++;
+    context.log(`Zoom processing started. Current load: ${currentProcessing}/${MAX_CONCURRENT}`);
 
     try {
         const contentType = req.headers['content-type'];
@@ -135,5 +158,8 @@ module.exports = async function (context, req) {
         context.log('Zoom error:', err);
         context.res.status = 500;
         context.res.body = { error: 'Zoom failed', message: err.message };
+    } finally {
+        currentProcessing--;
+        context.log(`Zoom processing completed. Current load: ${currentProcessing}/${MAX_CONCURRENT}`);
     }
 };
