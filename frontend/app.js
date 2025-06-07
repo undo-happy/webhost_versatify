@@ -87,7 +87,7 @@ function loadContent() {
     const savedContent = localStorage.getItem('versatifyContent');
 
     if (savedContent && savedVersion === CONTENT_VERSION) {
-        document.getElementById('toolsContent').innerHTML = savedContent;
+        document.getElementById('content').innerHTML = savedContent;
     } else {
         if (savedVersion !== CONTENT_VERSION) {
             localStorage.removeItem('versatifyContent');
@@ -855,30 +855,16 @@ function updateTargetFormatOptions(fileType, currentFile = null) {
 
 // 페이지 로드 시 초기화
 document.addEventListener('DOMContentLoaded', async () => {
-    console.log('🚀 Versatify 시작됨');
+    console.log('페이지 로딩 중...');
     
-    // 기본 콘텐츠 로드
-    loadContent();
+    // 콘텐츠 로드
+    loadDefaultContent();
+    
+    // 드래그 앤 드롭 설정
     setupDragAndDrop();
     
-    // 초기 API 상태 확인
-    console.log('📡 모든 서비스 연결 상태 확인 중...');
-    const apiStatus = await checkApiConnection();
-    
-    if (apiStatus) {
-        const onlineServices = Object.values(apiStatus).filter(s => s.status === 'online').length;
-        const totalServices = Object.keys(apiStatus).length;
-        
-        console.log(`✅ ${onlineServices}/${totalServices} 서비스 온라인`);
-        
-        if (onlineServices < totalServices) {
-            console.warn('⚠️ 일부 서비스가 오프라인 상태입니다:', apiStatus);
-        }
-    } else {
-        console.error('❌ API 상태 확인에 실패했습니다');
-    }
-    
-    console.log('🎉 Versatify 준비 완료!');
+    // API 연결 상태 확인
+    await checkApiConnection();
 });
 
 // Window exports (필요한 것만)
