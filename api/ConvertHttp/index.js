@@ -20,6 +20,10 @@ const s3Client = new S3Client({
     }
 });
 
+// 간단한 동시성 카운터
+let currentProcessing = 0;
+const MAX_CONCURRENT = 10; // Azure Functions 제한에 맞춘 동시 처리 수
+
 module.exports = async function (context, req) {
     context.log('HTTP trigger function processed a request.');
     
@@ -43,7 +47,7 @@ module.exports = async function (context, req) {
         return;
     }
 
-    // GET 요청 처리 (테스트용)
+    // GET 요청 처리 (서버 상태 확인)
     if (req.method === 'GET') {
         context.res.status = 200;
         context.res.body = { 
@@ -52,7 +56,23 @@ module.exports = async function (context, req) {
             supportedFormats: ['jpeg', 'png', 'webp', 'avif'],
             endpoint: '/api/convert',
             storage: 'Cloudflare R2',
-            library: '@napi-rs/image'
+            library: '@napi-rs/image',
+            serverStatus: {
+                currentProcessing,
+                maxConcurrent: MAX_CONCURRENT
+            }
+        };
+        return;
+    }
+
+    // 동시 처리 제한 확인
+    if (currentProcessing >= MAX_CONCURRENT) {
+        context.res.status = 503;
+        context.res.body = { 
+            error: 'Server busy. Please try again in a moment.',
+            currentLoad: currentProcessing,
+            maxCapacity: MAX_CONCURRENT,
+            retryAfter: '2-5 seconds'
         };
         return;
     }
@@ -66,6 +86,9 @@ module.exports = async function (context, req) {
         };
         return;
     }
+
+    currentProcessing++;
+    context.log(`Processing started. Current load: ${currentProcessing}/${MAX_CONCURRENT}`);
 
     try {
         // Content-Type 확인
@@ -229,5 +252,8 @@ module.exports = async function (context, req) {
             error: 'Internal server error', 
             message: error.message 
         };
+    } finally {
+        currentProcessing--;
+        context.log(`Processing completed. Current load: ${currentProcessing}/${MAX_CONCURRENT}`);
     }
 };

@@ -1,6 +1,86 @@
 const API_BASE = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_API_BASE) || '';
 const CONTENT_VERSION = '1.0';
 
+// 전역 요청 관리
+let activeRequests = 0;
+const MAX_CONCURRENT_REQUESTS = 3;
+const requestQueue = [];
+
+// 요청 큐 관리 함수
+async function queuedFetch(url, options) {
+    return new Promise((resolve, reject) => {
+        const queueItem = { url, options, resolve, reject };
+        
+        if (activeRequests < MAX_CONCURRENT_REQUESTS) {
+            executeRequest(queueItem);
+        } else {
+            requestQueue.push(queueItem);
+            showQueueStatus();
+        }
+    });
+}
+
+async function executeRequest(queueItem) {
+    activeRequests++;
+    updateRequestStatus();
+    
+    try {
+        const response = await fetch(queueItem.url, queueItem.options);
+        queueItem.resolve(response);
+    } catch (error) {
+        queueItem.reject(error);
+    } finally {
+        activeRequests--;
+        
+        // 큐에서 다음 요청 처리
+        if (requestQueue.length > 0) {
+            const nextItem = requestQueue.shift();
+            executeRequest(nextItem);
+        }
+        updateRequestStatus();
+    }
+}
+
+function showQueueStatus() {
+    if (requestQueue.length > 0) {
+        showNotification(`대기열: ${requestQueue.length}개 요청`, 'info');
+    }
+}
+
+function updateRequestStatus() {
+    const statusElement = document.getElementById('request-status');
+    if (statusElement) {
+        statusElement.textContent = `처리 중: ${activeRequests}개, 대기: ${requestQueue.length}개`;
+    }
+}
+
+// 재시도 로직이 포함된 fetch 함수
+async function fetchWithRetry(url, options, maxRetries = 3, delay = 1000) {
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+        try {
+            const response = await queuedFetch(url, options);
+            
+            if (response.status === 503) {
+                // 서버 과부하 시 대기 후 재시도
+                const waitTime = delay * attempt;
+                showNotification(`서버 과부하. ${waitTime/1000}초 후 재시도... (${attempt}/${maxRetries})`, 'warning');
+                await new Promise(resolve => setTimeout(resolve, waitTime));
+                continue;
+            }
+            
+            return response;
+        } catch (error) {
+            if (attempt === maxRetries) {
+                throw error;
+            }
+            
+            const waitTime = delay * attempt;
+            showNotification(`연결 실패. ${waitTime/1000}초 후 재시도... (${attempt}/${maxRetries})`, 'warning');
+            await new Promise(resolve => setTimeout(resolve, waitTime));
+        }
+    }
+}
+
 // 기본 콘텐츠 로드
 function loadContent() {
     const savedVersion = localStorage.getItem('versatifyVersion');
@@ -580,7 +660,7 @@ async function startConversion() {
         progressUpdate('변환 중... 서버로 이미지 전송 완료');
         
         // API 호출
-        const response = await fetch(`${API_BASE}/api/convert`, {
+        const response = await fetchWithRetry(`${API_BASE}/api/convert`, {
             method: 'POST',
             body: formData
         });
@@ -687,7 +767,7 @@ async function startUpscale() {
     document.getElementById('upscaleStatus').textContent = '서버에 업로드 중...';
 
     try {
-        const response = await fetch(`${API_BASE}/api/upscale`, {
+        const response = await fetchWithRetry(`${API_BASE}/api/upscale`, {
             method: 'POST',
             body: formData
         });
@@ -739,7 +819,7 @@ async function startResize() {
     document.getElementById('resizeStatus').textContent = '서버에 업로드 중...';
 
     try {
-        const response = await fetch(`${API_BASE}/api/convert`, {
+        const response = await fetchWithRetry(`${API_BASE}/api/convert`, {
             method: 'POST',
             body: formData
         });
@@ -765,13 +845,13 @@ async function checkApiConnection() {
         console.log('API 연결 상태 확인 중...');
         
         // 먼저 convert API 확인
-        const convertResponse = await fetch(`${API_BASE}/api/convert`, {
+        const convertResponse = await fetchWithRetry(`${API_BASE}/api/convert`, {
             method: 'OPTIONS'
         });
         console.log('Convert API 상태:', convertResponse.status, convertResponse.statusText);
         
         // Admin Auth API 확인
-        const authResponse = await fetch(`${API_BASE}/api/admin-auth`, {
+        const authResponse = await fetchWithRetry(`${API_BASE}/api/admin-auth`, {
             method: 'OPTIONS'
         });
         console.log('Admin Auth API 상태:', authResponse.status, authResponse.statusText);
