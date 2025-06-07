@@ -575,12 +575,7 @@ async function startConversion() {
         formData.append('file', selectedFile);
         formData.append('targetFormat', targetFormat);
         
-        // 이미지 변환에 필요한 옵션 추가
-        const width = document.getElementById('imageWidth')?.value || '';
-        const height = document.getElementById('imageHeight')?.value || '';
-        
-        if (width) formData.append('width', width);
-        if (height) formData.append('height', height);
+        // 기본 이미지 변환 (크기 조정 제거)
         
         progressUpdate('변환 중... 서버로 이미지 전송 완료');
         

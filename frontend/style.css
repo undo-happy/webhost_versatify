@@ -9,6 +9,22 @@ body {
     background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 50%, #dee2e6 100%);
     min-height: 100vh;
     color: #2d3436;
+    overflow-x: hidden;
+}
+
+/* 스크롤바 숨기기 */
+::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: transparent;
+}
+
+html {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
 }
 
 .container {
@@ -253,19 +269,47 @@ body {
 
 /* File Drop Zone Styling */
 .file-drop-zone {
-    border: 2px dashed #7E212C; /* Using a theme color from .tab-button */
-    padding: 20px;
+    border: 2px dashed #7E212C;
+    padding: 2rem;
     text-align: center;
     cursor: pointer;
-    background-color: rgba(254, 213, 217, 0.1); /* Light accent background, similar to .tool-item:hover */
-    border-radius: 10px; /* Consistent with other rounded elements like .category-icon */
-    margin-bottom: 1rem; /* Add some space below it */
+    background-color: rgba(254, 213, 217, 0.1);
+    border-radius: 15px;
+    margin-bottom: 1rem;
     transition: all 0.3s ease;
+    position: relative;
+    min-height: 120px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.file-drop-zone:hover {
+    border-color: #a63d47;
+    background-color: rgba(254, 213, 217, 0.2);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(126, 33, 44, 0.15);
+}
+
+.file-drop-zone.dragover {
+    border-color: #a63d47;
+    background-color: rgba(254, 213, 217, 0.3);
+    transform: scale(1.02);
 }
 
 .file-drop-zone p {
-    margin: 0; /* Reset paragraph margin if needed */
-    color: #636e72; /* Consistent with .tagline color */
+    margin: 0;
+    color: #636e72;
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+.file-drop-zone .upload-icon {
+    font-size: 2.5rem;
+    color: #7E212C;
+    margin-bottom: 0.5rem;
+    opacity: 0.7;
 }
 
 .file-type-tags {
@@ -480,24 +524,49 @@ body {
 
 .convert-button {
     width: 100%;
-    padding: 12px;
-    background-color: #7E212C;
+    padding: 1rem 2rem;
+    background: linear-gradient(135deg, #7E212C, #a63d47);
     color: white;
     border: none;
-    border-radius: 10px;
-    font-size: 1rem;
+    border-radius: 12px;
+    font-size: 1.1rem;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(126, 33, 44, 0.2);
+}
+
+.convert-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+}
+
+.convert-button:hover::before {
+    left: 100%;
 }
 
 .convert-button:hover {
-    background-color: #6a1c26;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(126, 33, 44, 0.3);
 }
 
 .convert-button:disabled {
-    background-color: #ccc;
+    background: #ccc;
     cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.convert-button:disabled::before {
+    display: none;
 }
 
 /* Remove old styles that are no longer needed */
