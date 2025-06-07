@@ -1,5 +1,5 @@
 const multipart = require('parse-multipart-data');
-const Image = require('@napi-rs/image');
+const { Transformer } = require('@napi-rs/image');
 const { v4: uuidv4 } = require('uuid');
 const { S3Client, PutObjectCommand, GetObjectCommand } = require('@aws-sdk/client-s3');
 const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
@@ -133,48 +133,47 @@ module.exports = async function (context, req) {
         
         // 이미지 처리 (@napi-rs/image 사용)
         // Buffer에서 이미지 로드
-        let image = await Image.load(fileBuffer);
+        const transformer = new Transformer(fileBuffer);
+        
+        // 메타데이터 가져오기
+        const metadata = await transformer.metadata();
+        let currentTransformer = transformer;
         
         // 크기 조정 요청이 있으면 적용
         const width = widthPart ? parseInt(widthPart.data.toString()) : null;
         const height = heightPart ? parseInt(heightPart.data.toString()) : null;
         
         if (width && height) {
-            image = image.resize({
-                width,
-                height
-            });
+            currentTransformer = currentTransformer.resize(width, height);
         } else if (width) {
             // 너비만 지정된 경우 비율 유지
-            image = image.resize({
-                width,
-                height: Math.round(image.height * (width / image.width))
-            });
+            const aspectRatio = metadata.height / metadata.width;
+            const newHeight = Math.round(width * aspectRatio);
+            currentTransformer = currentTransformer.resize(width, newHeight);
         } else if (height) {
             // 높이만 지정된 경우 비율 유지
-            image = image.resize({
-                width: Math.round(image.width * (height / image.height)),
-                height
-            });
+            const aspectRatio = metadata.width / metadata.height;
+            const newWidth = Math.round(height * aspectRatio);
+            currentTransformer = currentTransformer.resize(newWidth, height);
         }
         
         // 형식 변환 적용 및 인코딩
         let outputBuffer;
         switch (targetFormat) {
             case 'jpeg':
-                outputBuffer = await image.encodeJpeg({ quality: 90 });
+                outputBuffer = await currentTransformer.jpeg(90);
                 break;
             case 'png':
-                outputBuffer = await image.encodePng();
+                outputBuffer = await currentTransformer.png();
                 break;
             case 'webp':
-                outputBuffer = await image.encodeWebp({ quality: 90 });
+                outputBuffer = await currentTransformer.webp(90);
                 break;
             case 'avif':
-                outputBuffer = await image.encodeAvif({ quality: 85 });
+                outputBuffer = await currentTransformer.avif({ quality: 85 });
                 break;
             default:
-                outputBuffer = await image.encodeWebp({ quality: 90 });
+                outputBuffer = await currentTransformer.webp(90);
         }
         
         // 고유 파일 이름 생성
@@ -217,8 +216,8 @@ module.exports = async function (context, req) {
             downloadUrl: signedUrl,
             storage: 'Cloudflare R2',
             dimensions: {
-                width: image.width,
-                height: image.height
+                width: metadata.width,
+                height: metadata.height
             }
         };
 

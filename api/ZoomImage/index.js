@@ -1,5 +1,5 @@
 const multipart = require('parse-multipart-data');
-const Image = require('@napi-rs/image');
+const { Transformer } = require('@napi-rs/image');
 const { v4: uuidv4 } = require('uuid');
 const { S3Client, PutObjectCommand, GetObjectCommand } = require('@aws-sdk/client-s3');
 const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
@@ -100,10 +100,15 @@ module.exports = async function (context, req) {
             return;
         }
 
-        let image = await Image.load(filePart.data);
-        image = image.crop(x, y, width, height);
-        image = image.resize({ width: width * scale, height: height * scale });
-        const outputBuffer = await image.encodePng();
+        const transformer = new Transformer(filePart.data);
+        
+        const metadata = await transformer.metadata();
+        
+        const croppedTransformer = transformer.crop(x, y, width, height);
+        
+        const zoomedTransformer = croppedTransformer.resize(width * scale, height * scale);
+        
+        const outputBuffer = await zoomedTransformer.png();
 
         const fileName = `${uuidv4()}.png`;
         const uploadParams = {

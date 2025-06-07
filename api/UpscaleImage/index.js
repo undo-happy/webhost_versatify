@@ -1,5 +1,5 @@
 const multipart = require('parse-multipart-data');
-const Image = require('@napi-rs/image');
+const { Transformer } = require('@napi-rs/image');
 const { v4: uuidv4 } = require('uuid');
 const { S3Client, PutObjectCommand, GetObjectCommand } = require('@aws-sdk/client-s3');
 const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
@@ -85,9 +85,21 @@ module.exports = async function (context, req) {
             return;
         }
 
-        let image = await Image.load(filePart.data);
-        image = image.resize({ width: image.width * scale, height: image.height * scale });
-        const outputBuffer = await image.encodePng();
+        // 이미지 처리 시작
+        const transformer = new Transformer(filePart.data);
+        
+        // 메타데이터 가져오기
+        const metadata = await transformer.metadata();
+        
+        // 업스케일링 팩터 적용
+        const newWidth = metadata.width * scale;
+        const newHeight = metadata.height * scale;
+        
+        // 이미지 리사이즈 (업스케일링)
+        const upscaledTransformer = transformer.resize(newWidth, newHeight);
+        
+        // 결과 이미지 인코딩 (PNG로 고품질 유지)
+        const outputBuffer = await upscaledTransformer.png();
 
         const fileName = `${uuidv4()}.png`;
         const uploadParams = {
@@ -107,8 +119,8 @@ module.exports = async function (context, req) {
             success: true,
             scale,
             downloadUrl: signedUrl,
-            width: image.width,
-            height: image.height
+            width: metadata.width,
+            height: metadata.height
         };
     } catch (err) {
         context.log('Upscale error:', err);
