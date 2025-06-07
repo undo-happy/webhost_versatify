@@ -1,5 +1,5 @@
 const multipart = require('parse-multipart-data');
-const { Image } = require('@napi-rs/image');
+const Image = require('@napi-rs/image');
 const { v4: uuidv4 } = require('uuid');
 const { S3Client, PutObjectCommand, GetObjectCommand } = require('@aws-sdk/client-s3');
 const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
