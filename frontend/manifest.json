@@ -1,0 +1,21 @@
+{
+  "name": "Versatify - AI 이미지 처리 플랫폼",
+  "short_name": "Versatify",
+  "description": "AI 기반 이미지 변환, 업스케일, 압축 등 모든 이미지 작업을 한 곳에서",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#7E212C",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎨</text></svg>",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎨</text></svg>",
+      "sizes": "512x512", 
+      "type": "image/svg+xml"
+    }
+  ]
+} 
