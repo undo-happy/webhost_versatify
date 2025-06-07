@@ -7,7 +7,7 @@
     }
   ],
   "mimeTypes": {
-    ".js": "text/javascript",
+    ".js": "application/javascript",
     ".css": "text/css",
     ".json": "application/json",
     ".png": "image/png",
