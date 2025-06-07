@@ -1,11 +1,18 @@
 const API_BASE = import.meta.env.VITE_API_BASE || '';
+const CONTENT_VERSION = '1.0';
 
 // 기본 콘텐츠 로드
 function loadContent() {
+    const savedVersion = localStorage.getItem('versatifyVersion');
     const savedContent = localStorage.getItem('versatifyContent');
-    if (savedContent) {
+
+    if (savedContent && savedVersion === CONTENT_VERSION) {
         document.getElementById('toolsContent').innerHTML = savedContent;
     } else {
+        if (savedVersion !== CONTENT_VERSION) {
+            localStorage.removeItem('versatifyContent');
+            localStorage.setItem('versatifyVersion', CONTENT_VERSION);
+        }
         loadDefaultContent();
     }
 }
@@ -21,7 +28,7 @@ function loadDefaultContent() {
                 </div>
             </div>
             <div class="tool-list">
-                <div class="tool-item" onclick="showFileConverter()">
+                <div class="tool-item" onclick="openTool('file-convert')">
                     <div class="tool-name">이미지 변환</div>
                     <div class="tool-desc">JPG, PNG, WebP, AVIF 등</div>
                 </div>
@@ -29,19 +36,19 @@ function loadDefaultContent() {
                     <div class="tool-name">이미지 크기 조정</div>
                     <div class="tool-desc">비율에 맞게 크기 변경</div>
                 </div>
-                <div class="tool-item" onclick="showUpscaleModal()">
+                <div class="tool-item" onclick="openTool('image-upscale')">
                     <div class="tool-name">이미지 업스케일</div>
                     <div class="tool-desc">2배 또는 4배 확대</div>
                 </div>
-                <div class="tool-item" onclick="showZoomModal()">
+                <div class="tool-item" onclick="openTool('image-zoom')">
                     <div class="tool-name">부분 확대</div>
                     <div class="tool-desc">영역 지정 확대</div>
                 </div>
-                <div class="tool-item" onclick="showWatermarkModal()">
+                <div class="tool-item" onclick="openTool('watermark')">
                     <div class="tool-name">이미지 워터마크</div>
                     <div class="tool-desc">텍스트 삽입</div>
                 </div>
-                <div class="tool-item" onclick="showQrModal()">
+                <div class="tool-item" onclick="openTool('qr-code')">
                     <div class="tool-name">QR 코드 생성</div>
                     <div class="tool-desc">텍스트로 QR 이미지 만들기</div>
                 </div>
@@ -65,10 +72,27 @@ function showTab(tabName) {
 
 // 도구 열기
 function openTool(toolName) {
-    if (toolName === 'image-resize') {
-        showResizeModal();
-    } else {
-        alert(`${toolName} 도구를 준비 중입니다!`);
+    switch (toolName) {
+        case 'file-convert':
+            showFileConverter();
+            break;
+        case 'image-resize':
+            showResizeModal();
+            break;
+        case 'image-upscale':
+            showUpscaleModal();
+            break;
+        case 'image-zoom':
+            showZoomModal();
+            break;
+        case 'watermark':
+            showWatermarkModal();
+            break;
+        case 'qr-code':
+            showQrModal();
+            break;
+        default:
+            alert(`${toolName} 도구를 준비 중입니다!`);
     }
 }
 
@@ -637,15 +661,14 @@ function progressUpdate(message, progress = null) {
 // 파일 다운로드 함수
 function downloadConvertedFile(downloadUrl) {
     if (!downloadUrl || downloadUrl === '#') {
-        // 임시로 데모 다운로드 (실제로는 백엔드에서 제공해야 함)
-        alert('다운로드 URL이 제공되지 않았습니다. 백엔드 구현이 필요합니다.');
+        alert('다운로드 URL이 제공되지 않았습니다.');
         return;
     }
-    
-    // 실제 파일 다운로드
+
     const link = document.createElement('a');
     link.href = downloadUrl;
-    link.download = ''; // 서버에서 파일명 지정
+    link.target = '_blank';
+    link.rel = 'noopener';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);

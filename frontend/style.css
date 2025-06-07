@@ -190,6 +190,8 @@ body {
     box-shadow: 0 20px 40px rgba(0,0,0,0.2);
     max-width: 600px;
     width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
     position: relative;
 }
 
@@ -378,6 +380,8 @@ body {
     box-shadow: 0 20px 40px rgba(0,0,0,0.2);
     max-width: 600px;
     width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
     position: relative;
 }
 
@@ -647,6 +651,8 @@ body {
 .converter-content {
     max-width: 600px;
     width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
     margin: 0 auto;
     padding: 30px;
     background: white;

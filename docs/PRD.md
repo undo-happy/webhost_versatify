@@ -119,7 +119,7 @@ Repository reference: [https://github.com/undo-happy/webhost_versatify](https://
    - `generateWebsiteCode()`는 미구현 상태입니다. 편집된 카드 정보를 기반으로 정적 HTML을 생성하고 다운로드할 수 있게 합니다. 또한 업스케일, 부분 확대 등 숨겨진 기능에 대한 편집 옵션을 추가합니다.
 
 5. **자동 스토리지 정리**
-   - `CleanupStorage` 함수는 수동 호출 방식입니다. Timer Trigger를 추가해 하루 한 번 자동 실행하도록 배포 설정을 수정합니다.
+   - `CleanupStorage` 함수는 GitHub Actions 스케줄러가 매일 호출하도록 설정합니다.
 
 6. **테스트 보강**
    - 프런트엔드 모달 렌더링 테스트와 각 API 성공 케이스 테스트를 추가해 품질을 유지합니다.

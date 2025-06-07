@@ -1,0 +1,16 @@
+name: Daily Cleanup
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  run-cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Invoke Cleanup API
+        run: |
+          curl -fsSL -X POST "$CLEANUP_FUNCTION_URL"
+        env:
+          CLEANUP_FUNCTION_URL: ${{ secrets.CLEANUP_FUNCTION_URL }}
