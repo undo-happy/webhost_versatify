@@ -3,8 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Versatify - 이미지 변환 도구</title>
+    <title>Versatify.me - 올인원 이미지 도구</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#7E212C">
+    <link rel="icon" type="image/png" href="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4f7.png">
 </head>
 <body>
     <div class="container">
@@ -14,55 +17,13 @@
                 <div class="logo-icon">V</div>
                 <h1 class="brand-name">Versatify</h1>
             </div>
-            <p class="tagline">간편한 이미지 변환 - 최고의 품질로</p>
-            <div id="request-status" style="font-size: 12px; color: #666; margin-top: 5px;">
-                처리 중: 0개, 대기: 0개
-            </div>
+            <p class="tagline">모든 이미지 작업을 한 곳에서</p>
         </div>
 
-        <!-- Navigation -->
-        <div class="nav-tabs">
-            <button class="tab-button active" onclick="showTab('all')">이미지 도구</button>
-            <button class="tab-button" onclick="showTab('popular')">인기 기능</button>
-            <button class="tab-button" onclick="showTab('new')">사용 방법</button>
-            <button class="tab-button" onclick="showTab('favorites')">즐겨찾기</button>
-        </div>
-
-        <!-- All Tools Tab -->
-        <div id="all" class="tab-content active">
-            <div class="tools-grid" id="toolsContent">
-                <!-- 동적 콘텐츠 로드 -->
-            </div>
-        </div>
-
-        <!-- Popular Tab -->
-        <div id="popular" class="tab-content">
-            <div class="tools-grid">
-                <div class="tool-category core-tools-card">
-                    <div class="category-header">
-                        <div class="category-icon image-icon">🔥</div>
-                        <div>
-                            <div class="category-title">인기 이미지 기능</div>
-                            <div class="category-desc">가장 많이 사용되는 변환 옵션</div>
-                        </div>
-                    </div>
-                    <div class="tool-list">
-                        <div class="tool-item" onclick="showFileConverter()">
-                            <div class="tool-name">JPG → WebP</div>
-                            <div class="tool-desc">#1 웹 최적화</div>
-                        </div>
-                        <div class="tool-item" onclick="showFileConverter()">
-                            <div class="tool-name">PNG → JPG</div>
-                            <div class="tool-desc">#2 크기 최적화</div>
-                        </div>
-                        <div class="tool-item" onclick="showFileConverter()">
-                            <div class="tool-name">이미지 압축</div>
-                            <div class="tool-desc">#3 용량 축소</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <!-- Main Content -->
+        <main id="content">
+            <!-- 내용은 JavaScript로 동적 생성 -->
+        </main>
 
         <!-- Footer -->
         <div class="footer">
@@ -71,7 +32,6 @@
                 <a href="#">개인정보보호정책</a>
                 <a href="#">이용약관</a>
                 <a href="#">고객지원</a>
-                <a href="#" class="admin-link" onclick="showAdminModal()">관리자 모드</a>
             </div>
         </div>
     </div>
@@ -107,7 +67,6 @@
                         <span class="file-type-tag">JPG</span>
                         <span class="file-type-tag">PNG</span>
                         <span class="file-type-tag">WebP</span>
-                        <span class="file-type-tag">GIF</span>
                         <span class="file-type-tag">AVIF</span>
                     </div>
                 </div>
@@ -122,11 +81,8 @@
                     <option value="png">PNG (투명 배경)</option>
                     <option value="webp">WebP (웹 최적화)</option>
                     <option value="avif">AVIF (고압축률)</option>
-                    <option value="gif">GIF (애니메이션)</option>
                 </select>
             </div>
-            
-
 
             <button id="convertButton" class="convert-button" disabled onclick="startConversion()">
                 변환 시작
@@ -139,196 +95,8 @@
                 <p class="status-message" id="statusMessage">준비 중...</p>
             </div>
         </div>
-</div>
-
-    <!-- Image Resize Modal -->
-    <div class="converter-modal" id="resizeModal">
-        <div class="converter-content">
-            <button class="close-button" onclick="closeResizeModal()">×</button>
-            <h2 class="converter-header">📐 이미지 크기 조정</h2>
-
-            <div class="converter-section">
-                <label class="converter-label">이미지 선택</label>
-                <div class="file-drop-zone" onclick="document.getElementById('resizeFile').click()">
-                    <div class="upload-icon">📁</div>
-                    <p>이미지 파일을 클릭하여 선택하세요</p>
-                </div>
-                <input type="file" id="resizeFile" class="file-input" accept="image/*">
-            </div>
-
-            <div class="converter-section">
-                <label class="converter-label">새 크기</label>
-                <div class="size-inputs">
-                    <div class="size-input-group">
-                        <label>너비:</label>
-                        <input type="number" id="resizeWidth" class="size-input" placeholder="px">
-                    </div>
-                    <div class="size-input-group">
-                        <label>높이:</label>
-                        <input type="number" id="resizeHeight" class="size-input" placeholder="px">
-                    </div>
-                </div>
-                <p class="size-hint">한쪽만 입력하면 비율을 유지합니다</p>
-            </div>
-
-            <button id="resizeButton" class="convert-button" onclick="startResize()">크기 조정</button>
-
-            <div class="progress-section" id="resizeProgress" style="display:none;">
-                <div class="progress-bar">
-                    <div class="progress-fill" id="resizeFill"></div>
-                </div>
-                <p class="status-message" id="resizeStatus">준비 중...</p>
-            </div>
-        </div>
     </div>
 
-    <!-- Image Upscale Modal -->
-    <div class="converter-modal" id="upscaleModal">
-        <div class="converter-content">
-            <button class="close-button" onclick="closeUpscaleModal()">×</button>
-            <h2 class="converter-header">🔍 이미지 업스케일</h2>
-
-            <div class="converter-section">
-                <label class="converter-label">이미지 선택</label>
-                <div class="file-drop-zone" onclick="document.getElementById('upscaleFile').click()">
-                    <div class="upload-icon">📁</div>
-                    <p>이미지 파일을 클릭하여 선택하세요</p>
-                </div>
-                <input type="file" id="upscaleFile" class="file-input" accept="image/*">
-            </div>
-
-            <div class="converter-section">
-                <label class="converter-label">배율 선택</label>
-                <select id="upscaleScale" class="format-selector">
-                    <option value="2">2배 확대</option>
-                    <option value="4">4배 확대</option>
-                </select>
-            </div>
-
-            <button id="upscaleButton" class="convert-button" onclick="startUpscale()">업스케일 시작</button>
-
-            <div class="progress-section" id="upscaleProgress" style="display:none;">
-                <div class="progress-bar">
-                    <div class="progress-fill" id="upscaleFill"></div>
-                </div>
-                <p class="status-message" id="upscaleStatus">준비 중...</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Image Zoom Modal -->
-    <div class="converter-modal" id="zoomModal">
-        <div class="converter-content">
-            <button class="close-button" onclick="closeZoomModal()">×</button>
-            <h2 class="converter-header">🔎 부분 확대</h2>
-
-            <div class="converter-section">
-                <label class="converter-label">이미지 선택</label>
-                <input type="file" id="zoomFile" class="file-input" accept="image/*">
-            </div>
-
-            <div class="converter-section">
-                <label class="converter-label">좌표 및 크기</label>
-                <div class="size-inputs">
-                    <div class="size-input-group">
-                        <label>X:</label>
-                        <input type="number" id="zoomX" class="size-input">
-                    </div>
-                    <div class="size-input-group">
-                        <label>Y:</label>
-                        <input type="number" id="zoomY" class="size-input">
-                    </div>
-                    <div class="size-input-group">
-                        <label>너비:</label>
-                        <input type="number" id="zoomWidth" class="size-input">
-                    </div>
-                    <div class="size-input-group">
-                        <label>높이:</label>
-                        <input type="number" id="zoomHeight" class="size-input">
-                    </div>
-                </div>
-            </div>
-
-            <div class="converter-section">
-                <label class="converter-label">배율 선택</label>
-                <select id="zoomScale" class="format-selector">
-                    <option value="2">2배 확대</option>
-                    <option value="4">4배 확대</option>
-                </select>
-            </div>
-
-            <button id="zoomButton" class="convert-button" onclick="startZoom()">확대 시작</button>
-
-            <div class="progress-section" id="zoomProgress" style="display:none;">
-                <div class="progress-bar">
-                    <div class="progress-fill" id="zoomFill"></div>
-                </div>
-                <p class="status-message" id="zoomStatus">준비 중...</p>
-            </div>
-        </div>
-    </div>
-
-
-
-    <!-- QR Code Modal -->
-    <div class="converter-modal" id="qrModal">
-        <div class="converter-content">
-            <button class="close-button" onclick="closeQrModal()">×</button>
-            <h2 class="converter-header">🔗 QR 코드 생성</h2>
-
-            <div class="converter-section">
-                <label class="converter-label">텍스트 입력</label>
-                <input type="text" id="qrText" class="file-input" placeholder="https://example.com">
-            </div>
-
-            <button id="qrButton" class="convert-button" onclick="generateQr()">QR 생성</button>
-
-            <div class="progress-section" id="qrResult" style="display:none;">
-                <img id="qrImage" alt="QR Code" style="max-width:200px; display:block; margin:10px auto;">
-                <a id="qrDownload" href="#" download="qr.png" class="convert-button" style="margin-top:10px;">다운로드</a>
-            </div>
-        </div>
-    </div>
-
-    <!-- Watermark Modal -->
-    <div class="converter-modal" id="watermarkModal">
-        <div class="converter-content">
-            <button class="close-button" onclick="closeWatermarkModal()">×</button>
-            <h2 class="converter-header">💧 워터마크</h2>
-
-            <div class="converter-section">
-                <label class="converter-label">이미지 선택</label>
-                <input type="file" id="watermarkFile" class="file-input" accept="image/*">
-            </div>
-
-            <div class="converter-section">
-                <label class="converter-label">텍스트</label>
-                <input type="text" id="watermarkText" class="file-input" placeholder="Sample">
-            </div>
-
-            <div class="converter-section">
-                <label class="converter-label">위치</label>
-                <select id="watermarkPosition" class="format-selector">
-                    <option value="bottom-right">오른쪽 하단</option>
-                    <option value="bottom-left">왼쪽 하단</option>
-                    <option value="top-right">오른쪽 상단</option>
-                    <option value="top-left">왼쪽 상단</option>
-                    <option value="center">중앙</option>
-                </select>
-            </div>
-
-            <div class="converter-section">
-                <label class="converter-label">투명도</label>
-                <input type="number" id="watermarkOpacity" class="size-input" min="0" max="1" step="0.1" value="0.5">
-            </div>
-
-            <button id="watermarkButton" class="convert-button" onclick="startWatermark()">워터마크 적용</button>
-
-            <div class="progress-section" id="watermarkResult" style="display:none;">
-                <a id="watermarkDownload" href="#" target="_blank" class="convert-button" style="margin-top:10px;">다운로드</a>
-            </div>
-        </div>
-    </div>
-    <script type="module" src="app.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>

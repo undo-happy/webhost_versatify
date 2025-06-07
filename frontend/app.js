@@ -98,44 +98,141 @@ function loadContent() {
 }
 
 function loadDefaultContent() {
-    const defaultContent = `
-        <div class="tool-category">
-            <div class="category-header">
-                <div class="category-icon image-icon">🖼️</div>
-                <div>
-                    <div class="category-title">이미지 변환</div>
-                    <div class="category-desc">모든 이미지 형식 지원</div>
+    const content = document.getElementById('content');
+    content.innerHTML = `
+        <!-- 인기 도구 섹션 -->
+        <section class="popular-tools-section">
+            <div class="section-header">
+                <h2><span class="section-icon">🔥</span>인기 도구</h2>
+                <p class="section-desc">가장 많이 사용되는 도구들을 빠르게 이용하세요</p>
+            </div>
+            <div class="popular-tools-grid">
+                <div class="popular-tool-card" onclick="openTool('fileConverter')">
+                    <div class="tool-icon">📸</div>
+                    <h3>이미지 변환</h3>
+                    <p>JPG, PNG, WebP, AVIF 등 다양한 형식으로 변환</p>
+                    <div class="tool-badge">인기</div>
+                </div>
+                <div class="popular-tool-card" onclick="openTool('qr')">
+                    <div class="tool-icon">📱</div>
+                    <h3>QR 코드 생성</h3>
+                    <p>텍스트나 URL을 QR 코드로 빠르게 변환</p>
+                    <div class="tool-badge">빠름</div>
+                </div>
+                <div class="popular-tool-card" onclick="openTool('upscale')">
+                    <div class="tool-icon">🔍</div>
+                    <h3>이미지 업스케일</h3>
+                    <p>이미지를 2x, 4x로 확대하여 해상도 향상</p>
+                    <div class="tool-badge">고급</div>
                 </div>
             </div>
-            <div class="tool-list">
-                <div class="tool-item" onclick="openTool('file-convert')">
-                    <div class="tool-name">이미지 변환</div>
-                    <div class="tool-desc">JPG, PNG, WebP, AVIF 등</div>
-                </div>
-                <div class="tool-item" onclick="openTool('image-resize')">
-                    <div class="tool-name">이미지 크기 조정</div>
-                    <div class="tool-desc">비율에 맞게 크기 변경</div>
-                </div>
-                <div class="tool-item" onclick="openTool('image-upscale')">
-                    <div class="tool-name">이미지 업스케일</div>
-                    <div class="tool-desc">2배 또는 4배 확대</div>
-                </div>
-                <div class="tool-item" onclick="openTool('image-zoom')">
-                    <div class="tool-name">부분 확대</div>
-                    <div class="tool-desc">영역 지정 확대</div>
-                </div>
-                <div class="tool-item" onclick="openTool('watermark')">
-                    <div class="tool-name">이미지 워터마크</div>
-                    <div class="tool-desc">텍스트 삽입</div>
-                </div>
-                <div class="tool-item" onclick="openTool('qr-code')">
-                    <div class="tool-name">QR 코드 생성</div>
-                    <div class="tool-desc">텍스트로 QR 이미지 만들기</div>
+        </section>
+
+        <!-- 전체 도구 목록 -->
+        <section class="all-tools-section">
+            <div class="section-header">
+                <h2><span class="section-icon">🛠️</span>전체 도구</h2>
+                <p class="section-desc">다양한 이미지 처리 도구를 이용해보세요</p>
+            </div>
+            
+            <!-- 이미지 처리 도구 -->
+            <div class="tool-category-section">
+                <h3 class="category-title">
+                    <span class="category-icon">🖼️</span>
+                    이미지 처리
+                </h3>
+                <div class="tools-grid">
+                    <div class="tool-card" onclick="openTool('fileConverter')">
+                        <div class="tool-card-header">
+                            <div class="tool-card-icon">📸</div>
+                            <div class="tool-info">
+                                <h4>이미지 변환</h4>
+                                <p>형식 변환 및 크기 조정</p>
+                            </div>
+                        </div>
+                        <div class="tool-features">
+                            <span class="feature-tag">JPG</span>
+                            <span class="feature-tag">PNG</span>
+                            <span class="feature-tag">WebP</span>
+                            <span class="feature-tag">AVIF</span>
+                        </div>
+                    </div>
+
+                    <div class="tool-card" onclick="openTool('upscale')">
+                        <div class="tool-card-header">
+                            <div class="tool-card-icon">🔍</div>
+                            <div class="tool-info">
+                                <h4>이미지 업스케일</h4>
+                                <p>해상도 2x, 4x 확대</p>
+                            </div>
+                        </div>
+                        <div class="tool-features">
+                            <span class="feature-tag">고화질</span>
+                            <span class="feature-tag">AI 확대</span>
+                        </div>
+                    </div>
+
+                    <div class="tool-card" onclick="openTool('zoom')">
+                        <div class="tool-card-header">
+                            <div class="tool-card-icon">🎯</div>
+                            <div class="tool-info">
+                                <h4>선택 영역 확대</h4>
+                                <p>원하는 부분만 잘라서 확대</p>
+                            </div>
+                        </div>
+                        <div class="tool-features">
+                            <span class="feature-tag">정확한 선택</span>
+                            <span class="feature-tag">고품질</span>
+                        </div>
+                    </div>
+
+                    <div class="tool-card" onclick="openTool('watermark')">
+                        <div class="tool-card-header">
+                            <div class="tool-card-icon">©️</div>
+                            <div class="tool-info">
+                                <h4>워터마크 추가</h4>
+                                <p>이미지에 텍스트 워터마크</p>
+                            </div>
+                        </div>
+                        <div class="tool-features">
+                            <span class="feature-tag">저작권 보호</span>
+                            <span class="feature-tag">투명도 조절</span>
+                        </div>
+                    </div>
                 </div>
             </div>
+
+            <!-- 생성 도구 -->
+            <div class="tool-category-section">
+                <h3 class="category-title">
+                    <span class="category-icon">⚡</span>
+                    생성 도구
+                </h3>
+                <div class="tools-grid">
+                    <div class="tool-card" onclick="openTool('qr')">
+                        <div class="tool-card-header">
+                            <div class="tool-card-icon">📱</div>
+                            <div class="tool-info">
+                                <h4>QR 코드 생성</h4>
+                                <p>텍스트나 URL을 QR로 변환</p>
+                            </div>
+                        </div>
+                        <div class="tool-features">
+                            <span class="feature-tag">즉시 생성</span>
+                            <span class="feature-tag">고해상도</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관리자 링크 -->
+        <div class="admin-section">
+            <a href="#" onclick="showAdminModal()" class="admin-link">
+                🔧 관리자 도구
+            </a>
         </div>
     `;
-    document.getElementById('toolsContent').innerHTML = defaultContent;
 }
 
 // Tab 전환
@@ -152,38 +249,36 @@ function showTab(tabName) {
 
 // 도구 열기
 function openTool(toolName) {
-    switch (toolName) {
-        case 'file-convert':
-            showFileConverter();
+    switch(toolName) {
+        case 'fileConverter':
+            showConverterModal();
             break;
-        case 'image-resize':
-            showResizeModal();
-            break;
-        case 'image-upscale':
+        case 'upscale':
             showUpscaleModal();
             break;
-        case 'image-zoom':
+        case 'zoom':
             showZoomModal();
             break;
         case 'watermark':
             showWatermarkModal();
             break;
-        case 'qr-code':
+        case 'qr':
             showQrModal();
             break;
         default:
-            alert(`${toolName} 도구를 준비 중입니다!`);
+            console.log('도구를 찾을 수 없습니다:', toolName);
     }
 }
 
-// 파일 변환 모달
-function showFileConverter() {
+// 파일 변환 모달 표시
+function showConverterModal() {
     document.getElementById('converterModal').classList.add('show');
-    // 드래그 앤 드롭 기능 초기화
-    setupDragAndDrop();
-    
-    // 파일 선택 단계 표시
-    showFileSelectionStep();
+}
+
+// 컨버터 모달 닫기
+function closeConverterModal() {
+    document.getElementById('converterModal').classList.remove('show');
+    resetConverter();
 }
 
 // 파일 선택 단계 표시
@@ -298,182 +393,24 @@ function showCompletionStep() {
     document.getElementById('step3-desc').classList.add('active');
 }
 
-function showResizeModal() {
-    document.getElementById('resizeModal').classList.add('show');
-}
-
-function closeResizeModal() {
-    document.getElementById('resizeModal').classList.remove('show');
-    const file = document.getElementById('resizeFile');
-    if (file) file.value = '';
-    const width = document.getElementById('resizeWidth');
-    if (width) width.value = '';
-    const height = document.getElementById('resizeHeight');
-    if (height) height.value = '';
-    const result = document.getElementById('resizeResult');
-    if (result) result.style.display = 'none';
-    const progress = document.getElementById('resizeProgress');
-    if (progress) progress.style.display = 'none';
-    const fill = document.getElementById('resizeFill');
-    if (fill) fill.style.width = '0%';
-}
-
+// 업스케일 모달 표시  
 function showUpscaleModal() {
-    document.getElementById('upscaleModal').classList.add('show');
+    alert('이미지 업스케일 도구를 준비 중입니다!');
 }
 
-function closeUpscaleModal() {
-    document.getElementById('upscaleModal').classList.remove('show');
-    document.getElementById('upscaleFile').value = '';
-    document.getElementById('upscaleProgress').style.display = 'none';
-    document.getElementById('upscaleFill').style.width = '0%';
-}
-
-
+// 줌 모달 표시
 function showZoomModal() {
-    document.getElementById('zoomModal').classList.add('show');
+    alert('선택 영역 확대 도구를 준비 중입니다!');
 }
 
-function closeZoomModal() {
-    document.getElementById('zoomModal').classList.remove('show');
-    document.getElementById('zoomFile').value = '';
-    document.getElementById('zoomProgress').style.display = 'none';
-    document.getElementById('zoomFill').style.width = '0%';
-}
-
-function closeConverterModal() {
-    document.getElementById('converterModal').classList.remove('show');
-}
-
-
-async function startZoom() {
-    const fileInput = document.getElementById('zoomFile');
-    const scale = document.getElementById('zoomScale').value;
-    const x = document.getElementById('zoomX').value;
-    const y = document.getElementById('zoomY').value;
-    const width = document.getElementById('zoomWidth').value;
-    const height = document.getElementById('zoomHeight').value;
-
-    if (!fileInput.files[0]) {
-        alert('이미지를 선택하세요.');
-        return;
-    }
-    if (!width || !height) {
-        alert('잘라낼 영역의 크기를 입력하세요.');
-        return;
-    }
-
-    const formData = new FormData();
-    formData.append('file', fileInput.files[0]);
-    formData.append('scale', scale);
-    formData.append('x', x);
-    formData.append('y', y);
-    formData.append('width', width);
-    formData.append('height', height);
-
-    document.getElementById('zoomProgress').style.display = 'block';
-    document.getElementById('zoomFill').style.width = '0%';
-    document.getElementById('zoomStatus').textContent = '서버에 업로드 중...';
-
-    try {
-        const response = await fetchWithRetry(`${API_BASE}/api/zoom`, {
-            method: 'POST',
-            body: formData
-        });
-
-        if (!response.ok) {
-            const text = await response.text();
-            throw new Error(text);
-        }
-
-        document.getElementById('zoomFill').style.width = '50%';
-        document.getElementById('zoomStatus').textContent = '처리 중...';
-
-        const result = await response.json();
-
-        document.getElementById('zoomFill').style.width = '100%';
-        document.getElementById('zoomStatus').innerHTML =
-            `<a href="${result.downloadUrl}" target="_blank">확대된 이미지 다운로드</a>`;
-
-    } catch (err) {
-        document.getElementById('zoomStatus').textContent = `오류: ${err.message}`;
-    }
-}
-
-function showQrModal() {
-    document.getElementById('qrModal').classList.add('show');
-}
-
-function closeQrModal() {
-    document.getElementById('qrModal').classList.remove('show');
-    document.getElementById('qrText').value = '';
-    document.getElementById('qrResult').style.display = 'none';
-}
-
+// 워터마크 모달 표시
 function showWatermarkModal() {
-    document.getElementById('watermarkModal').classList.add('show');
+    alert('워터마크 추가 도구를 준비 중입니다!');
 }
 
-function closeWatermarkModal() {
-    document.getElementById('watermarkModal').classList.remove('show');
-    document.getElementById('watermarkFile').value = '';
-    document.getElementById('watermarkText').value = '';
-    document.getElementById('watermarkResult').style.display = 'none';
-}
-
-async function startWatermark() {
-    const fileInput = document.getElementById('watermarkFile');
-    const text = document.getElementById('watermarkText').value.trim();
-    const position = document.getElementById('watermarkPosition').value;
-    const opacity = document.getElementById('watermarkOpacity').value;
-
-    if (!fileInput.files[0] || !text) {
-        alert('이미지와 텍스트를 입력하세요.');
-        return;
-    }
-
-    const formData = new FormData();
-    formData.append('file', fileInput.files[0]);
-    formData.append('text', text);
-    formData.append('position', position);
-    formData.append('opacity', opacity);
-
-    try {
-        const response = await fetchWithRetry(`${API_BASE}/api/watermark`, {
-            method: 'POST',
-            body: formData
-        });
-        if (!response.ok) throw new Error(await response.text());
-
-        const result = await response.json();
-        document.getElementById('watermarkDownload').href = result.downloadUrl;
-        document.getElementById('watermarkResult').style.display = 'block';
-    } catch (err) {
-        alert('워터마크 실패: ' + err.message);
-    }
-}
-
-
-async function generateQr() {
-    const text = document.getElementById('qrText').value.trim();
-    if (!text) {
-        alert('텍스트를 입력하세요.');
-        return;
-    }
-
-    try {
-        const response = await fetchWithRetry(`${API_BASE}/api/generate?text=${encodeURIComponent(text)}`);
-        if (!response.ok) throw new Error(await response.text());
-
-        const blob = await response.blob();
-        const url = URL.createObjectURL(blob);
-
-        document.getElementById('qrImage').src = url;
-        document.getElementById('qrDownload').href = url;
-        document.getElementById('qrResult').style.display = 'block';
-    } catch (err) {
-        alert('QR 코드 생성 실패: ' + err.message);
-    }
+// QR 코드 모달 표시
+function showQrModal() {
+    alert('QR 코드 생성 도구를 준비 중입니다!');
 }
 
 // 관리자 모달
@@ -762,186 +699,6 @@ function downloadConvertedFile(downloadUrl) {
     document.body.removeChild(link);
 }
 
-async function startUpscale() {
-    const fileInput = document.getElementById('upscaleFile');
-    const scale = document.getElementById('upscaleScale').value;
-
-    if (!fileInput.files[0]) {
-        alert('이미지를 선택하세요.');
-        return;
-    }
-
-    const formData = new FormData();
-    formData.append('file', fileInput.files[0]);
-    formData.append('scale', scale);
-
-    document.getElementById('upscaleProgress').style.display = 'block';
-    document.getElementById('upscaleFill').style.width = '0%';
-    document.getElementById('upscaleStatus').textContent = '서버에 업로드 중...';
-
-    try {
-        const response = await fetchWithRetry(`${API_BASE}/api/upscale`, {
-            method: 'POST',
-            body: formData
-        });
-
-        if (!response.ok) {
-            const text = await response.text();
-            throw new Error(text);
-        }
-
-        document.getElementById('upscaleFill').style.width = '50%';
-        document.getElementById('upscaleStatus').textContent = '처리 중...';
-
-        const result = await response.json();
-
-        document.getElementById('upscaleFill').style.width = '100%';
-        document.getElementById('upscaleStatus').innerHTML =
-            `<a href="${result.downloadUrl}" target="_blank">업스케일된 이미지 다운로드</a>`;
-
-    } catch (err) {
-        document.getElementById('upscaleStatus').textContent = `오류: ${err.message}`;
-    }
-}
-
-async function startResize() {
-    const fileInput = document.getElementById('resizeFile');
-    const width = document.getElementById('resizeWidth').value;
-    const height = document.getElementById('resizeHeight').value;
-
-    if (!fileInput.files[0]) {
-        alert('이미지를 선택하세요.');
-        return;
-    }
-    if (!width && !height) {
-        alert('너비나 높이를 입력하세요.');
-        return;
-    }
-
-    const file = fileInput.files[0];
-    const ext = (file.name.split('.').pop() || 'png').toLowerCase();
-
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('targetFormat', ext);
-    if (width) formData.append('width', width);
-    if (height) formData.append('height', height);
-
-    document.getElementById('resizeProgress').style.display = 'block';
-    document.getElementById('resizeFill').style.width = '0%';
-    document.getElementById('resizeStatus').textContent = '서버에 업로드 중...';
-
-    try {
-        const response = await fetchWithRetry(`${API_BASE}/api/convert`, {
-            method: 'POST',
-            body: formData
-        });
-        if (!response.ok) throw new Error(await response.text());
-
-        document.getElementById('resizeFill').style.width = '50%';
-        document.getElementById('resizeStatus').textContent = '처리 중...';
-
-        const result = await response.json();
-
-        document.getElementById('resizeFill').style.width = '100%';
-        document.getElementById('resizeStatus').innerHTML =
-            `<a href="${result.downloadUrl}" target="_blank">변환된 이미지 다운로드</a>`;
-
-    } catch (err) {
-        document.getElementById('resizeStatus').textContent = `오류: ${err.message}`;
-    }
-}
-
-// API 연결 상태 확인 함수
-async function checkApiConnection() {
-    try {
-        console.log('API 연결 상태 확인 중...');
-        
-        const services = [
-            { name: 'Convert', endpoint: '/api/convert' },
-            { name: 'Upscale', endpoint: '/api/upscale' },
-            { name: 'Zoom', endpoint: '/api/zoom' },
-            { name: 'QR Generation', endpoint: '/api/qr' },
-            { name: 'Watermark', endpoint: '/api/watermark' },
-            { name: 'Admin Auth', endpoint: '/api/admin-auth' }
-        ];
-
-        const serviceStatus = {};
-        
-        // 모든 서비스 상태를 병렬로 확인
-        const statusPromises = services.map(async (service) => {
-            try {
-                const response = await fetchWithRetry(`${API_BASE}${service.endpoint}`, {
-                    method: 'GET'
-                }, 1, 500); // 1회만 시도, 빠른 타임아웃
-                
-                const data = await response.json();
-                serviceStatus[service.name] = {
-                    status: response.ok ? 'online' : 'error',
-                    serverStatus: data.serverStatus || null,
-                    message: data.message || 'Unknown'
-                };
-                
-                console.log(`${service.name} API:`, response.ok ? '✅' : '❌', data.serverStatus);
-            } catch (error) {
-                serviceStatus[service.name] = {
-                    status: 'offline',
-                    error: error.message
-                };
-                console.log(`${service.name} API: ❌ Offline -`, error.message);
-            }
-        });
-
-        await Promise.all(statusPromises);
-        
-        // 전체 서비스 상태 업데이트
-        updateServiceStatusDisplay(serviceStatus);
-        
-        return serviceStatus;
-        
-    } catch (error) {
-        console.error('API 상태 확인 중 오류:', error);
-        return null;
-    }
-}
-
-// 서비스 상태 표시 업데이트
-function updateServiceStatusDisplay(serviceStatus) {
-    const statusElement = document.getElementById('request-status');
-    if (!statusElement) return;
-    
-    const onlineServices = Object.values(serviceStatus).filter(s => s.status === 'online').length;
-    const totalServices = Object.keys(serviceStatus).length;
-    
-    let totalProcessing = 0;
-    let statusText = `서비스 상태: ${onlineServices}/${totalServices} 온라인`;
-    
-    // 각 서비스의 현재 처리량 합계
-    Object.values(serviceStatus).forEach(service => {
-        if (service.serverStatus && service.serverStatus.currentProcessing) {
-            totalProcessing += service.serverStatus.currentProcessing;
-        }
-    });
-    
-    if (totalProcessing > 0) {
-        statusText += ` | 전체 처리 중: ${totalProcessing}개`;
-    }
-    
-    statusElement.textContent = statusText;
-    
-    // 상태에 따른 색상 변경
-    if (onlineServices === totalServices) {
-        statusElement.style.color = '#27ae60'; // 모든 서비스 온라인
-    } else if (onlineServices > totalServices / 2) {
-        statusElement.style.color = '#f39c12'; // 일부 서비스 오프라인
-    } else {
-        statusElement.style.color = '#e74c3c'; // 대부분 서비스 오프라인
-    }
-}
-
-// 주기적 상태 확인 (30초마다)
-setInterval(checkApiConnection, 30000);
-
 // 드래그 앤 드롭 기능 개선
 function setupDragAndDrop() {
     const dropZone = document.getElementById('dropZone');
@@ -1124,27 +881,101 @@ document.addEventListener('DOMContentLoaded', async () => {
     console.log('🎉 Versatify 준비 완료!');
 });
 
-// Inline 이벤트 핸들러에서 사용할 수 있도록 함수들을 전역 객체에 노출
-window.showTab = showTab;
-window.openTool = openTool;
-window.showFileConverter = showFileConverter;
-window.closeConverterModal = closeConverterModal;
-window.showResizeModal = showResizeModal;
-window.closeResizeModal = closeResizeModal;
-window.showUpscaleModal = showUpscaleModal;
-window.closeUpscaleModal = closeUpscaleModal;
-window.showZoomModal = showZoomModal;
-window.closeZoomModal = closeZoomModal;
-window.startConversion = startConversion;
-window.startResize = startResize;
-window.startUpscale = startUpscale;
-window.startZoom = startZoom;
+// Window exports (필요한 것만)
 window.showAdminModal = showAdminModal;
 window.closeAdminModal = closeAdminModal;
 window.checkAdminPassword = checkAdminPassword;
-window.showQrModal = showQrModal;
-window.closeQrModal = closeQrModal;
-window.generateQr = generateQr;
-window.showWatermarkModal = showWatermarkModal;
-window.closeWatermarkModal = closeWatermarkModal;
-window.startWatermark = startWatermark;
+window.openTool = openTool;
+window.showConverterModal = showConverterModal;
+window.closeConverterModal = closeConverterModal;
+window.startConversion = startConversion;
+window.resetConverter = resetConverter;
+
+async function checkApiConnection() {
+    try {
+        console.log('API 연결 상태 확인 중...');
+        
+        const services = [
+            { name: 'Convert', endpoint: '/api/convert' },
+            { name: 'Upscale', endpoint: '/api/upscale' },
+            { name: 'Zoom', endpoint: '/api/zoom' },
+            { name: 'QR Generation', endpoint: '/api/qr' },
+            { name: 'Watermark', endpoint: '/api/watermark' },
+            { name: 'Admin Auth', endpoint: '/api/admin-auth' }
+        ];
+
+        const serviceStatus = {};
+        
+        // 모든 서비스 상태를 병렬로 확인
+        const statusPromises = services.map(async (service) => {
+            try {
+                const response = await fetchWithRetry(`${API_BASE}${service.endpoint}`, {
+                    method: 'GET'
+                }, 1, 500); // 1회만 시도, 빠른 타임아웃
+                
+                const data = await response.json();
+                serviceStatus[service.name] = {
+                    status: response.ok ? 'online' : 'error',
+                    serverStatus: data.serverStatus || null,
+                    message: data.message || 'Unknown'
+                };
+                
+                console.log(`${service.name} API:`, response.ok ? '✅' : '❌', data.serverStatus);
+            } catch (error) {
+                serviceStatus[service.name] = {
+                    status: 'offline',
+                    error: error.message
+                };
+                console.log(`${service.name} API: ❌ Offline -`, error.message);
+            }
+        });
+
+        await Promise.all(statusPromises);
+        
+        // 전체 서비스 상태 업데이트
+        updateServiceStatusDisplay(serviceStatus);
+        
+        return serviceStatus;
+        
+    } catch (error) {
+        console.error('API 상태 확인 중 오류:', error);
+        return null;
+    }
+}
+
+// 서비스 상태 표시 업데이트
+function updateServiceStatusDisplay(serviceStatus) {
+    const statusElement = document.getElementById('request-status');
+    if (!statusElement) return;
+    
+    const onlineServices = Object.values(serviceStatus).filter(s => s.status === 'online').length;
+    const totalServices = Object.keys(serviceStatus).length;
+    
+    let totalProcessing = 0;
+    let statusText = `서비스 상태: ${onlineServices}/${totalServices} 온라인`;
+    
+    // 각 서비스의 현재 처리량 합계
+    Object.values(serviceStatus).forEach(service => {
+        if (service.serverStatus && service.serverStatus.currentProcessing) {
+            totalProcessing += service.serverStatus.currentProcessing;
+        }
+    });
+    
+    if (totalProcessing > 0) {
+        statusText += ` | 전체 처리 중: ${totalProcessing}개`;
+    }
+    
+    statusElement.textContent = statusText;
+    
+    // 상태에 따른 색상 변경
+    if (onlineServices === totalServices) {
+        statusElement.style.color = '#27ae60'; // 모든 서비스 온라인
+    } else if (onlineServices > totalServices / 2) {
+        statusElement.style.color = '#f39c12'; // 일부 서비스 오프라인
+    } else {
+        statusElement.style.color = '#e74c3c'; // 대부분 서비스 오프라인
+    }
+}
+
+// 주기적 상태 확인 (30초마다)
+setInterval(checkApiConnection, 30000);
