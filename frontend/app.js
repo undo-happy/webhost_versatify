@@ -1,4 +1,17 @@
-const API_BASE = import.meta.env?.VITE_API_BASE || (typeof window !== 'undefined' && window.location.origin) || '';
+// API 기본 URL 설정 - 개발/프로덕션 환경 자동 감지
+const API_BASE = (function() {
+    // 개발 환경 감지
+    if (typeof window !== 'undefined') {
+        const hostname = window.location.hostname;
+        if (hostname === 'localhost' || hostname === '127.0.0.1') {
+            return 'http://localhost:7071'; // 로컬 Azure Functions 포트
+        }
+        return window.location.origin; // 프로덕션에서는 현재 도메인 사용
+    }
+    return '';
+})();
+
+console.log('API_BASE:', API_BASE);
 
 // 전역 변수들
 let selectedFile = null;
