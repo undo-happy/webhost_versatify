@@ -861,16 +861,18 @@
 
         // Initialize Stagewise Toolbar in development mode only
         if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-            try {
-                const { initToolbar } = await import('@stagewise/toolbar');
-                const stagewiseConfig = {
-                    plugins: []
-                };
-                initToolbar(stagewiseConfig);
-                console.log('✅ Stagewise toolbar initialized');
-            } catch (err) {
-                console.log('Stagewise toolbar not available in production');
-            }
+            (async () => {
+                try {
+                    const { initToolbar } = await import('@stagewise/toolbar');
+                    const stagewiseConfig = {
+                        plugins: []
+                    };
+                    initToolbar(stagewiseConfig);
+                    console.log('✅ Stagewise toolbar initialized');
+                } catch (err) {
+                    console.log('Stagewise toolbar not available in production');
+                }
+            })();
         }
 
         // showTab을 글로벌로 노출
