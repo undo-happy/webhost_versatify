@@ -1282,6 +1282,50 @@
     <!-- Include existing app.js functionality -->
     <script type="module" src="app.js"></script>
 
+    <!-- Stagewise 툴바 (개발 환경에서만) -->
+    <script type="module">
+        // 개발 환경에서만 Stagewise 툴바 로드
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+            try {
+                const { StagewiseToolbar } = await import('@stagewise/toolbar');
+                
+                // Stagewise 설정
+                const stagewiseConfig = {
+                    position: 'bottom-right',
+                    theme: 'dark',
+                    plugins: [],
+                    // AI 편집 기능 활성화
+                    enableElementSelection: true,
+                    enableComments: true,
+                    enableCodeGeneration: true,
+                    // 프로젝트 정보
+                    projectInfo: {
+                        name: 'Versatify',
+                        framework: 'vanilla-js',
+                        type: 'web-app'
+                    }
+                };
+                
+                // 툴바 초기화
+                const toolbar = new StagewiseToolbar(stagewiseConfig);
+                await toolbar.mount();
+                
+                // 개발자 도구 콘솔에 알림
+                console.log('✅ Stagewise AI 개발 툴바가 활성화되었습니다!');
+                console.log('💡 웹페이지 요소를 선택하고 AI 에이전트에게 수정 요청을 할 수 있습니다.');
+                
+                // 전역 스타일로 툴바 확인 가능하도록
+                window.stagewise = toolbar;
+                
+            } catch (error) {
+                console.log('⚠️ Stagewise 툴바 로드 실패:', error);
+                console.log('💡 개발 모드에서만 사용 가능합니다.');
+            }
+        } else {
+            console.log('🚫 Stagewise는 개발 환경에서만 실행됩니다.');
+        }
+    </script>
+
     <script>
         // Enhanced scroll animation
         const observerOptions = {
