@@ -11,15 +11,19 @@ describe('Modal UI', () => {
     eval(appJs); // load patched script
   });
 
-  test('openTool opens upscale modal', () => {
-    window.openTool('image-upscale');
-    const modal = document.getElementById('upscaleModal');
-    expect(modal.classList.contains('show')).toBe(true);
+  test('openTool displays the selected tool modal', () => {
+    window.openTool('upscale');
+    const modal = document.getElementById('toolModal');
+    const title = document.getElementById('toolModalTitle');
+    expect(modal.style.display).toBe('flex');
+    expect(title.textContent).toContain('업스케일');
   });
 
-  test('openTool opens zoom modal', () => {
-    window.openTool('image-zoom');
-    const modal = document.getElementById('zoomModal');
-    expect(modal.classList.contains('show')).toBe(true);
+  test('openTool switches modal content', () => {
+    window.openTool('converter');
+    const modal = document.getElementById('toolModal');
+    const title = document.getElementById('toolModalTitle');
+    expect(modal.style.display).toBe('flex');
+    expect(title.textContent).toContain('변환');
   });
 });
