@@ -1424,7 +1424,7 @@
     </div>
 
     <!-- Include existing app.js functionality -->
-    <script src="app.js"></script>
+    <script type="module" src="app.js"></script>
 
     <script>
         // Enhanced scroll animation
@@ -1455,22 +1455,6 @@
                 el.style.transition = 'all 0.6s ease';
                 observer.observe(el);
             });
-
-            // Initialize Stagewise Toolbar in development mode only
-            if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-                (async () => {
-                    try {
-                        const { initToolbar } = await import('@stagewise/toolbar');
-                        const stagewiseConfig = {
-                            plugins: []
-                        };
-                        initToolbar(stagewiseConfig);
-                        console.log('✅ Stagewise toolbar initialized');
-                    } catch (err) {
-                        console.log('Stagewise toolbar not available in production');
-                    }
-                })();
-            }
             
             console.log('모든 함수 확인:', {
                 showFileConverter: typeof window.showFileConverter,

@@ -12,7 +12,5 @@
     "jest-environment-jsdom": "^29.6.0",
     "vite": "^5.0.0"
   },
-  "dependencies": {
-    "@stagewise/toolbar": "^0.4.4"
-  }
+  "dependencies": {}
 }

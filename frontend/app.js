@@ -1,6 +1,5 @@
 // API 기본 URL 설정 - 개발/프로덕션 환경 자동 감지
-const API_BASE = (function() {
-    // 개발 환경 감지
+const API_BASE = import.meta.env?.VITE_API_BASE || (function() {
     if (typeof window !== 'undefined') {
         const hostname = window.location.hostname;
         if (hostname === 'localhost' || hostname === '127.0.0.1') {
