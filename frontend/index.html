@@ -3,351 +3,878 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Versatify.me - 올인원 이미지 도구</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#7E212C">
-    <link rel="icon" type="image/png" href="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4f7.png">
+    <title>Versatify - 모든 도구가 하나로</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 50%, #dee2e6 100%);
+            min-height: 100vh;
+            color: #2d3436;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .header-top {
+            position: absolute;
+            top: 0;
+            right: 0;
+            z-index: 10;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .auth-btn {
+            background: rgba(255,255,255,0.9);
+            border: 1px solid rgba(126, 33, 44, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 15px;
+            color: #7E212C;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            text-decoration: none;
+        }
+
+        .auth-btn:hover {
+            background: linear-gradient(135deg, #7E212C, #a63d47);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(126, 33, 44, 0.2);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        /* ===========================================
+           로고 아이콘 - 최종 확정 (수정 금지)
+           =========================================== */
+        .logo-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #8b5a5a;
+            font-size: 2rem;
+            font-weight: 700;
+            box-shadow: 0 8px 32px rgba(255, 154, 158, 0.3);
+        }
+        /* ===========================================
+           로고 아이콘 끝 - 위 스타일 수정 금지
+           =========================================== */
+
+        .brand-name {
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #7E212C, #321E17, #CCD3D9);
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 3s ease-in-out infinite;
+        }
+
+        .tagline {
+            font-size: 1.2rem;
+            color: #636e72;
+            margin-top: 0.5rem;
+            font-weight: 300;
+        }
+
+        /* Navigation */
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .tab-button {
+            background: rgba(255,255,255,0.9);
+            border: 1px solid rgba(126, 33, 44, 0.1);
+            padding: 0.8rem 2rem;
+            border-radius: 25px;
+            color: #7E212C;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .tab-button:hover, .tab-button.active {
+            background: linear-gradient(135deg, #7E212C, #a63d47);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(126, 33, 44, 0.2);
+        }
+
+        /* PC에서만 적용되는 고정 레이아웃 */
+        @media (min-width: 1024px) {
+            .tools-grid {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                grid-template-rows: repeat(2, 1fr);
+                gap: 1.5rem;
+                margin-bottom: 3rem;
+                width: 100%;
+                max-width: 1200px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            /* 이미지 변환 - 첫 번째 카드 */
+            .image-tools-card {
+                grid-column: 1;
+                grid-row: 1;
+            }
+
+            /* QR 생성 - 두 번째 카드 */
+            .qr-card {
+                grid-column: 2;
+                grid-row: 1;
+            }
+
+            /* 워터마크 - 세 번째 카드 */
+            .watermark-card {
+                grid-column: 3;
+                grid-row: 1;
+            }
+
+            /* 업스케일 - 네 번째 카드 */
+            .upscale-card {
+                grid-column: 1;
+                grid-row: 2;
+            }
+
+            /* 줌 확대 - 다섯 번째 카드 */
+            .zoom-card {
+                grid-column: 2;
+                grid-row: 2;
+            }
+
+            /* 추가 도구 - 여섯 번째 카드 */
+            .additional-tools-card {
+                grid-column: 3;
+                grid-row: 2;
+            }
+        }
+
+        /* 태블릿에서는 기존 반응형 유지 */
+        @media (min-width: 768px) and (max-width: 1023px) {
+            .tools-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+                gap: 1.5rem;
+                margin-bottom: 3rem;
+            }
+        }
+
+        /* 모바일에서는 기존 반응형 유지 */
+        @media (max-width: 767px) {
+            .tools-grid {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 1rem;
+                margin-bottom: 3rem;
+            }
+        }
+
+        .tool-category {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 2rem;
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(126, 33, 44, 0.05);
+            transition: all 0.3s ease;
+            animation: fadeInUp 0.8s ease;
+            box-shadow: 0 8px 32px rgba(126, 33, 44, 0.08);
+            position: relative;
+        }
+
+        .tool-category:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(126, 33, 44, 0.12);
+            background: rgba(255,255,255,1);
+        }
+
+        .category-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .category-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: white;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        .image-icon { background: linear-gradient(135deg, #7E212C, #a63d47); }
+        .qr-icon { background: linear-gradient(135deg, #CCD3D9, #a8b5c0); }
+        .watermark-icon { background: linear-gradient(135deg, #FED5D9, #f8a5aa); }
+        .upscale-icon { background: linear-gradient(135deg, #321E17, #5d3a2a); }
+        .zoom-icon { background: linear-gradient(135deg, #7E212C, #CCD3D9); }
+        .tools-icon { background: linear-gradient(135deg, #FED5D9, #CCD3D9); }
+
+        .category-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+            color: #2d3436;
+        }
+
+        .category-desc {
+            font-size: 0.9rem;
+            color: #636e72;
+        }
+
+        .tool-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 0.8rem;
+        }
+
+        .tool-item {
+            background: rgba(255,255,255,0.7);
+            padding: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            border: 1px solid rgba(126, 33, 44, 0.1);
+        }
+
+        .tool-item:hover {
+            background: rgba(255,255,255,0.9);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(126, 33, 44, 0.15);
+        }
+
+        .tool-name {
+            font-weight: 500;
+            margin-bottom: 0.3rem;
+            color: #2d3436;
+        }
+
+        .tool-desc {
+            font-size: 0.8rem;
+            color: #636e72;
+        }
+
+        /* Special styling */
+        .image-tools-card {
+            background: linear-gradient(135deg, rgba(126, 33, 44, 0.05), rgba(254, 213, 217, 0.1));
+        }
+
+        .qr-card {
+            background: linear-gradient(135deg, rgba(204, 211, 217, 0.1), rgba(255,255,255,0.95));
+        }
+
+        .additional-tools-card {
+            background: linear-gradient(135deg, rgba(254, 213, 217, 0.3), rgba(204, 211, 217, 0.3));
+        }
+
+        .category-sub {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 2rem 0;
+            border-top: 1px solid rgba(126, 33, 44, 0.1);
+            margin-top: 4rem;
+            color: #636e72;
+        }
+
+        .admin-icon {
+            margin-left: 0.5rem;
+            cursor: pointer;
+            color: #636e72;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            opacity: 1;
+        }
+
+        .admin-icon:hover {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        /* Hidden sections for tab functionality */
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Special styling for badges */
+        .feature-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: linear-gradient(135deg, #7E212C, #a63d47);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+
+        /* 모바일 반응형 설정 */
+        @media (max-width: 768px) {
+            .container { padding: 1rem; }
+            .brand-name { font-size: 2rem; }
+            .nav-tabs { flex-direction: column; align-items: center; }
+            .category-sub {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Modal styles for existing functionality */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .pricing-section {
+            margin-top: 4rem;
+            padding: 2rem;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(126, 33, 44, 0.1);
+            box-shadow: 0 8px 32px rgba(126, 33, 44, 0.1);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .promo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .promo-card {
+            background: rgba(255,255,255,0.7);
+            backdrop-filter: blur(10px);
+            border: none;
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 32px rgba(126, 33, 44, 0.08);
+            position: relative;
+            overflow: hidden;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .promo-card:hover {
+            background: rgba(255,255,255,0.8);
+            transform: translateY(-5px);
+        }
+
+        .promo-badge {
+            position: absolute;
+            top: 10px;
+            left: -10px;
+            background: #E74C3C;
+            color: white;
+            padding: 5px 25px;
+            font-size: 12px;
+            font-weight: 600;
+            transform: rotate(-45deg);
+            box-shadow: 0 2px 8px rgba(231, 76, 60, 0.3);
+            z-index: 5;
+        }
+
+        .promo-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .promo-card h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .price {
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .old-price {
+            text-decoration: line-through;
+            margin-right: 0.5rem;
+        }
+
+        .new-price {
+            font-weight: 600;
+        }
+
+        .features {
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+        }
+
+        .feature {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .cta-button {
+            background: linear-gradient(135deg, #7E212C, #a63d47);
+            color: white;
+            padding: 0.8rem 2rem;
+            border-radius: 15px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .cta-button:hover {
+            background: linear-gradient(135deg, #a63d47, #7E212C);
+        }
+    </style>
 </head>
 <body>
     <div class="container">
         <!-- Header -->
         <div class="header">
+            <div class="header-top">
+                <div class="auth-buttons">
+                    <button class="auth-btn" onclick="alert('로그인 기능 준비중입니다')">로그인/회원가입</button>
+                </div>
+            </div>
+            
             <div class="logo">
                 <div class="logo-icon">V</div>
                 <h1 class="brand-name">Versatify</h1>
             </div>
-            <p class="tagline">모든 이미지 작업을 한 곳에서</p>
+            <p class="tagline">모든 이미지 작업이 하나로 - 당신의 생산성을 극대화하세요</p>
         </div>
 
-        <!-- Main Content -->
-        <main id="content">
-            <!-- JavaScript가 여기에 콘텐츠를 생성합니다 -->
-        </main>
+        <!-- Navigation -->
+        <div class="nav-tabs">
+            <button class="tab-button active" onclick="showTab('all')">전체 도구</button>
+            <button class="tab-button" onclick="showTab('popular')">인기 도구</button>
+            <button class="tab-button" onclick="showTab('new')">최신 기능</button>
+        </div>
+
+        <!-- All Tools Tab -->
+        <div id="all" class="tab-content active">
+            <div class="tools-grid">
+                <!-- 이미지 변환 - Main featured card -->
+                <div class="tool-category image-tools-card">
+                    <div class="feature-badge">인기</div>
+                    <div class="category-header">
+                        <div class="category-icon image-icon">🖼️</div>
+                        <div>
+                            <div class="category-title">이미지 변환</div>
+                            <div class="category-desc">모든 이미지 형식 지원</div>
+                        </div>
+                    </div>
+                    <div class="tool-list">
+                        <div class="tool-item" onclick="showFileConverter()">
+                            <div class="tool-name">형식 변환</div>
+                            <div class="tool-desc">JPG, PNG, WebP, AVIF</div>
+                        </div>
+                        <div class="tool-item" onclick="showResizeModal()">
+                            <div class="tool-name">크기 조정 & 확대</div>
+                            <div class="tool-desc">리사이즈 & 영역 확대</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- QR 코드 생성 -->
+                <div class="tool-category qr-card">
+                    <div class="category-header">
+                        <div class="category-icon qr-icon">📱</div>
+                        <div>
+                            <div class="category-title">QR 코드</div>
+                            <div class="category-desc">텍스트/URL을 QR로</div>
+                        </div>
+                    </div>
+                    <div class="tool-list">
+                        <div class="tool-item" onclick="showQrModal()">
+                            <div class="tool-name">QR 생성</div>
+                            <div class="tool-desc">텍스트를 QR로</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 워터마크 -->
+                <div class="tool-category watermark-card">
+                    <div class="category-header">
+                        <div class="category-icon watermark-icon">🏷️</div>
+                        <div>
+                            <div class="category-title">워터마크</div>
+                            <div class="category-desc">텍스트 삽입</div>
+                        </div>
+                    </div>
+                    <div class="tool-list">
+                        <div class="tool-item" onclick="showWatermarkModal()">
+                            <div class="tool-name">숨겨진 워터마크 추가</div>
+                            <div class="tool-desc">투명도 조절</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 업스케일 -->
+                <div class="tool-category upscale-card">
+                    <div class="category-header">
+                        <div class="category-icon upscale-icon">🔍</div>
+                        <div>
+                            <div class="category-title">업스케일</div>
+                            <div class="category-desc">해상도 향상</div>
+                        </div>
+                    </div>
+                    <div class="tool-list">
+                        <div class="tool-item" onclick="showUpscaleModal()">
+                            <div class="tool-name">고해상도 확대</div>
+                            <div class="tool-desc">2x, 4x 업스케일</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 줌 확대 -->
+                <div class="tool-category zoom-card">
+                    <div class="category-header">
+                        <div class="category-icon zoom-icon">🎯</div>
+                        <div>
+                            <div class="category-title">선택 확대</div>
+                            <div class="category-desc">영역별 줌</div>
+                        </div>
+                    </div>
+                    <div class="tool-list">
+                        <div class="tool-item" onclick="showZoomModal()">
+                            <div class="tool-name">영역 선택</div>
+                            <div class="tool-desc">원하는 부분만</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 추가 도구들 -->
+                <div class="tool-category additional-tools-card">
+                    <div class="category-header">
+                        <div class="category-icon tools-icon">🛠️</div>
+                        <div>
+                            <div class="category-title">관리 도구</div>
+                            <div class="category-desc">시스템 관리 및 설정</div>
+                        </div>
+                    </div>
+                    <div class="category-sub">
+                        <div>
+                            <h4 style="margin-bottom: 1rem; color: #7E212C;">🔧 시스템</h4>
+                            <div class="tool-list">
+                                <div class="tool-item" onclick="checkApiConnection()">
+                                    <div class="tool-name">API 상태</div>
+                                    <div class="tool-desc">서버 연결 확인</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 style="margin-bottom: 1rem; color: #7E212C;">📊 정보</h4>
+                            <div class="tool-list">
+                                <div class="tool-item" onclick="alert('사용 통계를 준비 중입니다.')">
+                                    <div class="tool-name">사용 통계</div>
+                                    <div class="tool-desc">이용 현황</div>
+                                </div>
+                                <div class="tool-item" onclick="alert('도움말을 준비 중입니다.')">
+                                    <div class="tool-name">도움말</div>
+                                    <div class="tool-desc">사용 가이드</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Popular Tools Tab -->
+        <div id="popular" class="tab-content">
+            <div class="tools-grid">
+                <div class="tool-category">
+                    <div class="category-header">
+                        <div class="category-icon image-icon">🔥</div>
+                        <div>
+                            <div class="category-title">인기 도구 TOP 5</div>
+                            <div class="category-desc">가장 많이 사용되는 도구들</div>
+                        </div>
+                    </div>
+                    <div class="tool-list">
+                        <div class="tool-item" onclick="showFileConverter()">
+                            <div class="tool-name">이미지 변환</div>
+                            <div class="tool-desc">#1 인기 도구</div>
+                        </div>
+                        <div class="tool-item" onclick="showQrModal()">
+                            <div class="tool-name">QR 코드 생성</div>
+                            <div class="tool-desc">#2 빠른 생성</div>
+                        </div>
+                        <div class="tool-item" onclick="showWatermarkModal()">
+                            <div class="tool-name">워터마크</div>
+                            <div class="tool-desc">#3 텍스트 삽입</div>
+                        </div>
+                        <div class="tool-item" onclick="showUpscaleModal()">
+                            <div class="tool-name">업스케일</div>
+                            <div class="tool-desc">#4 해상도 향상</div>
+                        </div>
+                        <div class="tool-item" onclick="showZoomModal()">
+                            <div class="tool-name">부분 확대</div>
+                            <div class="tool-desc">#5 영역 줌</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- New Features Tab -->
+        <div id="new" class="tab-content">
+            <div class="tools-grid">
+                <div class="tool-category">
+                    <div class="feature-badge">NEW</div>
+                    <div class="category-header">
+                        <div class="category-icon upscale-icon">✨</div>
+                        <div>
+                            <div class="category-title">최신 기능</div>
+                            <div class="category-desc">새롭게 추가된 기능들</div>
+                        </div>
+                    </div>
+                    <div class="tool-list">
+                        <div class="tool-item" onclick="showUpscaleModal()">
+                            <div class="tool-name">4x 업스케일</div>
+                            <div class="tool-desc">초고화질 확대</div>
+                        </div>
+                        <div class="tool-item" onclick="showWatermarkModal()">
+                            <div class="tool-name">워터마크 위치 설정</div>
+                            <div class="tool-desc">자유로운 배치</div>
+                        </div>
+                        <div class="tool-item" onclick="showFileConverter()">
+                            <div class="tool-name">AVIF 지원</div>
+                            <div class="tool-desc">최신 형식 변환</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pricing & Promotions Section -->
+        <div class="pricing-section">
+            <div class="section-header">
+                <h2>🎯 특별 프로모션</h2>
+                <p>지금 바로 시작하세요 - 모든 기능이 완전 무료!</p>
+            </div>
+            
+            <div class="promo-grid">
+                <div class="promo-card">
+                    <div class="promo-icon">⚡</div>
+                    <h3>Free</h3>
+                    <div class="price">
+                        <span class="new-price">무료</span>
+                    </div>
+                    <div class="features">
+                        <div class="feature">✅ 기본 이미지 변환</div>
+                        <div class="feature">✅ 3MB 이하 파일</div>
+                        <div class="feature">✅ 월 10회 제한</div>
+                    </div>
+                    <button class="cta-button">Start Free</button>
+                </div>
+
+                <div class="promo-card">
+                    <div class="promo-icon">🛡️</div>
+                    <h3>Hobby</h3>
+                    <div class="price">
+                        <span class="new-price">₩9,900/월</span>
+                    </div>
+                    <div class="features">
+                        <div class="feature">✅ 모든 변환 기능</div>
+                        <div class="feature">✅ 10MB 이하 파일</div>
+                        <div class="feature">✅ 월 100회 제한</div>
+                        <div class="feature">✅ 워터마크 추가</div>
+                        <div class="feature">✅ QR 코드 생성</div>
+                    </div>
+                    <button class="cta-button">Start Hobby</button>
+                </div>
+
+                <div class="promo-card featured">
+                    <div class="promo-badge">HOT</div>
+                    <div class="promo-icon">💎</div>
+                    <h3>Premium</h3>
+                    <div class="price">
+                        <span class="old-price">₩29,000</span>
+                        <span class="new-price">₩19,900/월</span>
+                    </div>
+                    <div class="features">
+                        <div class="feature">✅ 모든 고급 기능</div>
+                        <div class="feature">✅ 50MB 이하 파일</div>
+                        <div class="feature">✅ 월 1000회 제한</div>
+                        <div class="feature">✅ 4x 업스케일링</div>
+                        <div class="feature">✅ 부분 확대/줌</div>
+                        <div class="feature">✅ 우선 처리</div>
+                    </div>
+                    <button class="cta-button primary">Start Premium</button>
+                </div>
+            </div>
+        </div>
 
         <!-- Footer -->
         <div class="footer">
             <p>&copy; 2025 Versatify.me - 모든 권리 보유</p>
-            <div class="footer-links">
-                <a href="#">개인정보보호정책</a>
-                <a href="#">이용약관</a>
-                <a href="#">고객지원</a>
-            </div>
+            <p>개인정보보호정책 | 이용약관 | 고객지원 | <span class="admin-icon" onclick="showAdminModal()">🔧</span></p>
         </div>
     </div>
 
-    <!-- Admin Login Modal -->
-    <div class="admin-modal" id="adminModal">
-        <div class="modal-content">
-            <div class="modal-header">🔐 관리자 로그인</div>
-            <input type="password" class="password-input" id="adminPassword" placeholder="비밀번호를 입력하세요">
-            <div class="error-message" id="errorMessage">비밀번호가 올바르지 않습니다.</div>
-            <div class="modal-buttons">
-                <button class="modal-btn modal-btn-primary" onclick="checkAdminPassword()">로그인</button>
-                <button class="modal-btn modal-btn-secondary" onclick="closeAdminModal()">취소</button>
-            </div>
-        </div>
-    </div>
+    <!-- Include existing app.js functionality -->
+    <script src="app.js"></script>
 
-    <!-- Image Converter Modal -->
-    <div class="converter-modal" id="converterModal">
-        <div class="converter-content">
-            <button class="close-button" onclick="closeConverterModal()">×</button>
-            <h2 class="converter-header">🖼️ 이미지 변환</h2>
+    <script type="module">
+        function showTab(tabName) {
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => content.classList.remove('active'));
             
-            <div class="converter-section">
-                <label class="converter-label">이미지 선택</label>
-                <div class="file-drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
-                    <div class="upload-icon">📁</div>
-                    <p id="dropZoneText">이미지 파일을 드래그하거나 클릭하여 선택하세요</p>
-                    <div class="file-info" style="margin-top: 10px; display: none;" id="fileInfo">
-                        <div class="file-type-display"></div>
-                    </div>
-                    <div class="file-type-tags">
-                        <span class="file-type-tag">JPG</span>
-                        <span class="file-type-tag">PNG</span>
-                        <span class="file-type-tag">WebP</span>
-                        <span class="file-type-tag">AVIF</span>
-                    </div>
-                </div>
-                <input type="file" id="fileInput" class="file-input" accept="image/*">
-            </div>
-
-            <div class="converter-section">
-                <label class="converter-label">변환 형식</label>
-                <select id="targetFormat" class="format-selector">
-                    <option value="">변환할 형식을 선택하세요</option>
-                    <option value="jpg">JPG (일반 이미지)</option>
-                    <option value="png">PNG (투명 배경)</option>
-                    <option value="webp">WebP (웹 최적화)</option>
-                    <option value="avif">AVIF (고압축률)</option>
-                </select>
-            </div>
-
-            <button id="convertButton" class="convert-button" disabled onclick="startConversion()">
-                변환 시작
-            </button>
-
-            <div class="progress-section" id="progressSection">
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progressFill"></div>
-                </div>
-                <p class="status-message" id="statusMessage">준비 중...</p>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        console.log('🚀 Versatify 시작! - 인라인 버전');
-
-        // 페이지 로드 완료 시 실행
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('📄 DOM 로드 완료');
+            const tabButtons = document.querySelectorAll('.tab-button');
+            tabButtons.forEach(button => button.classList.remove('active'));
             
-            // 콘텐츠 로드
-            loadMainContent();
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Enhanced scroll animation
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }, index * 100);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.tool-category').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'all 0.6s ease';
+            observer.observe(el);
         });
 
-        // 메인 콘텐츠 로드 함수
-        function loadMainContent() {
-            console.log('🔄 콘텐츠 로딩 시작');
-            
-            const contentElement = document.getElementById('content');
-            if (!contentElement) {
-                console.error('❌ content 요소를 찾을 수 없습니다!');
-                return;
-            }
-
-            // HTML 콘텐츠 생성
-            const htmlContent = `
-                <!-- 인기 도구 섹션 -->
-                <section class="popular-tools-section">
-                    <div class="section-header">
-                        <h2><span class="section-icon">🔥</span>인기 도구</h2>
-                        <p class="section-desc">가장 많이 사용되는 도구들을 빠르게 이용하세요</p>
-                    </div>
-                    <div class="popular-tools-grid">
-                        <div class="popular-tool-card" onclick="openTool('fileConverter')">
-                            <div class="tool-icon">📸</div>
-                            <h3>이미지 변환</h3>
-                            <p>JPG, PNG, WebP, AVIF 등 다양한 형식으로 변환</p>
-                            <div class="tool-badge">인기</div>
-                        </div>
-                        <div class="popular-tool-card" onclick="openTool('qr')">
-                            <div class="tool-icon">📱</div>
-                            <h3>QR 코드 생성</h3>
-                            <p>텍스트나 URL을 QR 코드로 빠르게 변환</p>
-                            <div class="tool-badge">빠름</div>
-                        </div>
-                        <div class="popular-tool-card" onclick="openTool('upscale')">
-                            <div class="tool-icon">🔍</div>
-                            <h3>이미지 업스케일</h3>
-                            <p>이미지를 2x, 4x로 확대하여 해상도 향상</p>
-                            <div class="tool-badge">고급</div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- 전체 도구 목록 -->
-                <section class="all-tools-section">
-                    <div class="section-header">
-                        <h2><span class="section-icon">🛠️</span>전체 도구</h2>
-                        <p class="section-desc">다양한 이미지 처리 도구를 이용해보세요</p>
-                    </div>
-                    
-                    <!-- 이미지 처리 도구 -->
-                    <div class="tool-category-section">
-                        <h3 class="category-title">
-                            <span class="category-icon">🖼️</span>
-                            이미지 처리
-                        </h3>
-                        <div class="tools-grid">
-                            <div class="tool-card" onclick="openTool('fileConverter')">
-                                <div class="tool-card-header">
-                                    <div class="tool-card-icon">📸</div>
-                                    <div class="tool-info">
-                                        <h4>이미지 변환</h4>
-                                        <p>형식 변환 및 크기 조정</p>
-                                    </div>
-                                </div>
-                                <div class="tool-features">
-                                    <span class="feature-tag">JPG</span>
-                                    <span class="feature-tag">PNG</span>
-                                    <span class="feature-tag">WebP</span>
-                                    <span class="feature-tag">AVIF</span>
-                                </div>
-                            </div>
-
-                            <div class="tool-card" onclick="openTool('upscale')">
-                                <div class="tool-card-header">
-                                    <div class="tool-card-icon">🔍</div>
-                                    <div class="tool-info">
-                                        <h4>이미지 업스케일</h4>
-                                        <p>해상도 2x, 4x 확대</p>
-                                    </div>
-                                </div>
-                                <div class="tool-features">
-                                    <span class="feature-tag">고화질</span>
-                                    <span class="feature-tag">AI 확대</span>
-                                </div>
-                            </div>
-
-                            <div class="tool-card" onclick="openTool('zoom')">
-                                <div class="tool-card-header">
-                                    <div class="tool-card-icon">🎯</div>
-                                    <div class="tool-info">
-                                        <h4>선택 영역 확대</h4>
-                                        <p>원하는 부분만 잘라서 확대</p>
-                                    </div>
-                                </div>
-                                <div class="tool-features">
-                                    <span class="feature-tag">정확한 선택</span>
-                                    <span class="feature-tag">고품질</span>
-                                </div>
-                            </div>
-
-                            <div class="tool-card" onclick="openTool('watermark')">
-                                <div class="tool-card-header">
-                                    <div class="tool-card-icon">©️</div>
-                                    <div class="tool-info">
-                                        <h4>워터마크 추가</h4>
-                                        <p>이미지에 텍스트 워터마크</p>
-                                    </div>
-                                </div>
-                                <div class="tool-features">
-                                    <span class="feature-tag">저작권 보호</span>
-                                    <span class="feature-tag">투명도 조절</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 생성 도구 -->
-                    <div class="tool-category-section">
-                        <h3 class="category-title">
-                            <span class="category-icon">⚡</span>
-                            생성 도구
-                        </h3>
-                        <div class="tools-grid">
-                            <div class="tool-card" onclick="openTool('qr')">
-                                <div class="tool-card-header">
-                                    <div class="tool-card-icon">📱</div>
-                                    <div class="tool-info">
-                                        <h4>QR 코드 생성</h4>
-                                        <p>텍스트나 URL을 QR로 변환</p>
-                                    </div>
-                                </div>
-                                <div class="tool-features">
-                                    <span class="feature-tag">즉시 생성</span>
-                                    <span class="feature-tag">고해상도</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- 관리자 링크 -->
-                <div class="admin-section">
-                    <a href="#" onclick="showAdminModal()" class="admin-link">
-                        🔧 관리자 도구
-                    </a>
-                </div>
-            `;
-
-            // DOM에 삽입
-            contentElement.innerHTML = htmlContent;
-            console.log('✅ 콘텐츠 로딩 완료!');
-        }
-
-        // 도구 열기 함수
-        function openTool(toolName) {
-            console.log('🔧 도구 열기:', toolName);
-            
-            if (toolName === 'fileConverter') {
-                showConverterModal();
-            } else {
-                alert(`${toolName} 도구를 준비 중입니다! 곧 만나보실 수 있어요. 😊`);
+        // Initialize Stagewise Toolbar in development mode only
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+            try {
+                const { initToolbar } = await import('@stagewise/toolbar');
+                const stagewiseConfig = {
+                    plugins: []
+                };
+                initToolbar(stagewiseConfig);
+                console.log('✅ Stagewise toolbar initialized');
+            } catch (err) {
+                console.log('Stagewise toolbar not available in production');
             }
         }
 
-        // 컨버터 모달 표시
-        function showConverterModal() {
-            console.log('📸 컨버터 모달 열기');
-            const modal = document.getElementById('converterModal');
-            if (modal) {
-                modal.classList.add('show');
-            } else {
-                console.error('❌ converterModal을 찾을 수 없습니다!');
-            }
-        }
-
-        // 컨버터 모달 닫기
-        function closeConverterModal() {
-            console.log('📸 컨버터 모달 닫기');
-            const modal = document.getElementById('converterModal');
-            if (modal) {
-                modal.classList.remove('show');
-            }
-        }
-
-        // 관리자 모달 표시
-        function showAdminModal() {
-            console.log('🔐 관리자 모달 열기');
-            const modal = document.getElementById('adminModal');
-            if (modal) {
-                modal.classList.add('show');
-            } else {
-                console.error('❌ adminModal을 찾을 수 없습니다!');
-            }
-        }
-
-        // 관리자 모달 닫기
-        function closeAdminModal() {
-            console.log('🔐 관리자 모달 닫기');
-            const modal = document.getElementById('adminModal');
-            if (modal) {
-                modal.classList.remove('show');
-            }
-            
-            // 입력값 초기화
-            const passwordInput = document.getElementById('adminPassword');
-            const errorMessage = document.getElementById('errorMessage');
-            
-            if (passwordInput) passwordInput.value = '';
-            if (errorMessage) errorMessage.style.display = 'none';
-        }
-
-        // 관리자 비밀번호 확인
-        function checkAdminPassword() {
-            console.log('🔍 관리자 인증 확인');
-            const passwordInput = document.getElementById('adminPassword');
-            const password = passwordInput ? passwordInput.value : '';
-            
-            if (!password) {
-                showAdminError('비밀번호를 입력해주세요.');
-                return;
-            }
-
-            // TODO: 실제 인증 로직 구현
-            alert('관리자 인증 기능을 구현 중입니다!');
-        }
-
-        // 관리자 에러 표시
-        function showAdminError(message) {
-            const errorElement = document.getElementById('errorMessage');
-            if (errorElement) {
-                errorElement.textContent = message;
-                errorElement.style.display = 'block';
-            }
-        }
-
-        // 변환 시작
-        function startConversion() {
-            console.log('🚀 변환 시작');
-            alert('이미지 변환 기능을 구현 중입니다!');
-        }
-
-        console.log('📝 JavaScript 로드 완료! - 인라인 실행');
+        // showTab을 글로벌로 노출
+        window.showTab = showTab;
     </script>
 </body>
 </html>
