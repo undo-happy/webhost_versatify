@@ -975,6 +975,7 @@ function getFileType(filename) {
 // 대상 형식 옵션 업데이트
 function updateTargetFormatOptions(fileType) {
     const targetFormatSelect = document.getElementById('targetFormat');
+    const currentExtension = selectedFile ? selectedFile.name.split('.').pop().toLowerCase() : null;
     
     // 기존 옵션 제거
     targetFormatSelect.innerHTML = '<option value="">변환할 형식을 선택하세요</option>';
@@ -987,8 +988,31 @@ function updateTargetFormatOptions(fileType) {
     
     targetFormatSelect.disabled = false;
     
-    // 새로운 옵션 추가
-    CONVERSION_FORMATS[fileType].targetFormats.forEach(format => {
+    // 새로운 옵션 추가 (현재 파일 확장자 제외)
+    const availableFormats = CONVERSION_FORMATS[fileType].targetFormats.filter(format => {
+        // 현재 파일과 같은 확장자는 제외
+        if (currentExtension && (
+            format.value === currentExtension || 
+            (currentExtension === 'jpeg' && format.value === 'jpg') ||
+            (currentExtension === 'jpg' && format.value === 'jpeg')
+        )) {
+            return false;
+        }
+        return true;
+    });
+    
+    // 변환 가능한 형식이 없는 경우
+    if (availableFormats.length === 0) {
+        const noOption = document.createElement('option');
+        noOption.value = '';
+        noOption.textContent = `이미 ${currentExtension.toUpperCase()} 형식입니다`;
+        noOption.disabled = true;
+        targetFormatSelect.appendChild(noOption);
+        return;
+    }
+    
+    // 변환 가능한 형식 추가
+    availableFormats.forEach(format => {
         const option = document.createElement('option');
         option.value = format.value;
         option.textContent = format.label;
@@ -998,7 +1022,7 @@ function updateTargetFormatOptions(fileType) {
     // 첫 번째 옵션에 도움말 추가
     const helpOption = document.createElement('option');
     helpOption.value = '';
-    helpOption.textContent = `💡 ${CONVERSION_FORMATS[fileType].targetFormats.length}개 형식으로 변환 가능`;
+    helpOption.textContent = `💡 ${availableFormats.length}개 형식으로 변환 가능`;
     helpOption.disabled = true;
     targetFormatSelect.insertBefore(helpOption, targetFormatSelect.children[1]);
 }
