@@ -11,6 +11,22 @@
             box-sizing: border-box;
         }
 
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 50%, #dee2e6 100%);
@@ -51,34 +67,16 @@
             color: #7E212C;
             font-size: 0.9rem;
             cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            transition: all 0.3s ease;
             backdrop-filter: blur(10px);
             text-decoration: none;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .auth-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.5s ease;
         }
 
         .auth-btn:hover {
             background: linear-gradient(135deg, #7E212C, #a63d47);
             color: white;
-            transform: translateY(-2px) scale(1.05);
-            box-shadow: 0 8px 20px rgba(126, 33, 44, 0.3);
-            border-color: transparent;
-        }
-
-        .auth-btn:hover::before {
-            left: 100%;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(126, 33, 44, 0.2);
         }
 
         .auth-btn:active {
@@ -147,33 +145,15 @@
             color: #7E212C;
             font-size: 1rem;
             cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            transition: all 0.3s ease;
             backdrop-filter: blur(10px);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .tab-button::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            transition: left 0.6s ease;
         }
 
         .tab-button:hover, .tab-button.active {
             background: linear-gradient(135deg, #7E212C, #a63d47);
             color: white;
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 10px 25px rgba(126, 33, 44, 0.3);
-            border-color: transparent;
-        }
-
-        .tab-button:hover::before {
-            left: 100%;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(126, 33, 44, 0.2);
         }
 
         .tab-button:active {
@@ -253,49 +233,28 @@
 
         /* Tool Categories */
         .tool-category {
-            background: rgba(255,255,255,0.9);
+            background: rgba(255,255,255,0.95);
             border-radius: 20px;
-            padding: 1.5rem;
-            box-shadow: 0 8px 32px rgba(126, 33, 44, 0.1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(126, 33, 44, 0.1);
-            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            padding: 2rem;
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(126, 33, 44, 0.05);
+            transition: all 0.3s ease;
+            animation: fadeInUp 0.8s ease;
+            box-shadow: 0 8px 32px rgba(126, 33, 44, 0.08);
             position: relative;
-            overflow: hidden;
         }
 
         .tool-category:hover {
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 20px 40px rgba(126, 33, 44, 0.15);
-            border-color: rgba(126, 33, 44, 0.2);
-            background: rgba(255,255,255,0.95);
-        }
-
-        .tool-category::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(126, 33, 44, 0.05), transparent);
-            transition: left 0.6s ease;
-        }
-
-        .tool-category:hover::before {
-            left: 100%;
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(126, 33, 44, 0.12);
+            background: rgba(255,255,255,1);
         }
 
         .category-header {
             display: flex;
             align-items: center;
             gap: 1rem;
-            margin-bottom: 1rem;
-            transition: all 0.3s ease;
-        }
-
-        .tool-category:hover .category-header {
-            transform: translateX(5px);
+            margin-bottom: 1.5rem;
         }
 
         .category-icon {
@@ -305,130 +264,61 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
-            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        .tool-category:hover .category-icon {
-            transform: rotate(10deg) scale(1.1);
-            box-shadow: 0 8px 25px rgba(126, 33, 44, 0.2);
-        }
-
-        .image-icon {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-size: 20px;
             color: white;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
         }
 
-        .qr-icon {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: white;
-        }
-
-        .watermark-icon {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            color: white;
-        }
-
-        .upscale-icon {
-            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-            color: white;
-        }
-
-        .zoom-icon {
-            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-            color: white;
-        }
-
-        .additional-icon {
-            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
-            color: #333;
-        }
+        .image-icon { background: linear-gradient(135deg, #7E212C, #a63d47); }
+        .qr-icon { background: linear-gradient(135deg, #CCD3D9, #a8b5c0); }
+        .watermark-icon { background: linear-gradient(135deg, #FED5D9, #f8a5aa); }
+        .upscale-icon { background: linear-gradient(135deg, #321E17, #5d3a2a); }
+        .zoom-icon { background: linear-gradient(135deg, #7E212C, #CCD3D9); }
+        .additional-icon { background: linear-gradient(135deg, #FED5D9, #CCD3D9); }
 
         .category-title {
-            font-size: 1.2rem;
+            font-size: 1.4rem;
             font-weight: 600;
-            color: #333;
-            margin-bottom: 0.25rem;
-            transition: color 0.3s ease;
-        }
-
-        .tool-category:hover .category-title {
-            color: #7E212C;
+            margin-bottom: 0.3rem;
+            color: #2d3436;
         }
 
         .category-desc {
             font-size: 0.9rem;
-            color: #666;
-            transition: color 0.3s ease;
-        }
-
-        .tool-category:hover .category-desc {
-            color: #555;
+            color: #636e72;
         }
 
         .tool-list {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 0.8rem;
         }
 
         .tool-item {
-            padding: 0.8rem;
-            background: rgba(126, 33, 44, 0.05);
-            border-radius: 10px;
+            background: rgba(255,255,255,0.7);
+            padding: 1rem;
+            border-radius: 8px;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            border: 1px solid transparent;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .tool-item::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(126, 33, 44, 0.1), transparent);
-            transition: left 0.5s ease;
+            text-align: center;
+            border: 1px solid rgba(126, 33, 44, 0.1);
+            transition: all 0.3s ease;
         }
 
         .tool-item:hover {
-            background: rgba(126, 33, 44, 0.1);
-            transform: translateX(8px) scale(1.02);
-            border-color: rgba(126, 33, 44, 0.2);
-            box-shadow: 0 4px 15px rgba(126, 33, 44, 0.1);
-        }
-
-        .tool-item:hover::before {
-            left: 100%;
-        }
-
-        .tool-item:active {
-            transform: translateX(8px) scale(0.98);
+            background: rgba(255,255,255,0.9);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(126, 33, 44, 0.15);
         }
 
         .tool-name {
             font-weight: 500;
-            color: #333;
-            margin-bottom: 0.25rem;
-            transition: all 0.3s ease;
-        }
-
-        .tool-item:hover .tool-name {
-            color: #7E212C;
-            font-weight: 600;
+            margin-bottom: 0.3rem;
+            color: #2d3436;
         }
 
         .tool-desc {
             font-size: 0.8rem;
-            color: #666;
-            transition: color 0.3s ease;
-        }
-
-        .tool-item:hover .tool-desc {
-            color: #555;
+            color: #636e72;
         }
 
         /* Special styling */
@@ -471,23 +361,6 @@
         .admin-icon:hover {
             opacity: 1;
             transform: scale(1.1);
-        }
-
-        /* Animations */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes gradientShift {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
         }
 
         /* Hidden sections for tab functionality */
@@ -692,12 +565,12 @@
             cursor: pointer;
             font-size: 1rem;
             font-weight: 500;
-            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            transition: all 0.3s ease;
         }
 
         .convert-button:hover, .download-btn:hover, .admin-btn:hover {
             background: linear-gradient(135deg, #a63d47, #7E212C);
-            transform: translateY(-3px) scale(1.05);
+            transform: translateY(-2px);
         }
 
         .convert-button:disabled {
@@ -827,31 +700,14 @@
             font-size: 1rem;
             font-weight: 500;
             cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            transition: all 0.3s ease;
             border: none;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .cta-button::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.6s ease;
         }
 
         .cta-button:hover {
             background: linear-gradient(135deg, #a63d47, #7E212C);
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 12px 30px rgba(126, 33, 44, 0.4);
-        }
-
-        .cta-button:hover::before {
-            left: 100%;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(126, 33, 44, 0.3);
         }
 
         .cta-button:active {
