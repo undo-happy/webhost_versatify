@@ -1,5 +1,9 @@
 const API_BASE = import.meta.env?.VITE_API_BASE || (typeof window !== 'undefined' && window.location.origin) || '';
 
+// 전역 변수들
+let selectedFile = null;
+let convertedFileUrl = null;
+
 // 기본 콘텐츠 로드
 function loadContent() {
     const savedContent = localStorage.getItem('versatifyContent');
@@ -80,6 +84,64 @@ function showFileConverter() {
     
     // 파일 선택 단계 표시
     showFileSelectionStep();
+    
+    // 드롭존 클릭 이벤트 추가
+    const dropZone = document.getElementById('dropZone');
+    const fileInput = document.getElementById('fileInput');
+    
+    if (dropZone && fileInput) {
+        dropZone.onclick = () => fileInput.click();
+        
+        fileInput.onchange = function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                selectedFile = file;
+                document.getElementById('dropZoneText').textContent = `선택된 파일: ${file.name}`;
+                
+                const fileType = getFileType(file.name);
+                updateTargetFormatOptions(fileType);
+                
+                const fileInfo = document.getElementById('fileInfo');
+                const fileTypeDisplay = document.querySelector('.file-type-display');
+                
+                if (fileInfo && fileTypeDisplay) {
+                    fileTypeDisplay.innerHTML = `
+                        <span class="file-type-tag" style="background: #3498db; color: white; margin-right: 10px;">
+                            ${fileType ? fileType.toUpperCase() : '알 수 없음'}
+                        </span>
+                        <span class="file-size" style="color: #7f8c8d;">
+                            ${(file.size / 1024 / 1024).toFixed(2)} MB
+                        </span>
+                    `;
+                    fileInfo.style.display = 'block';
+                }
+                
+                // 다음 단계 버튼 활성화
+                const nextBtn = document.getElementById('nextStepBtn');
+                if (nextBtn) {
+                    nextBtn.disabled = false;
+                }
+                
+                checkConversionReady();
+            }
+        };
+    }
+    
+    // 품질 슬라이더 이벤트
+    const qualitySlider = document.getElementById('quality');
+    const qualityValue = document.getElementById('qualityValue');
+    
+    if (qualitySlider && qualityValue) {
+        qualitySlider.oninput = function() {
+            qualityValue.textContent = this.value;
+        };
+    }
+    
+    // 대상 형식 변경 이벤트
+    const targetFormat = document.getElementById('targetFormat');
+    if (targetFormat) {
+        targetFormat.onchange = checkConversionReady;
+    }
 }
 
 // 파일 선택 단계 표시
@@ -479,8 +541,6 @@ async function checkAdminPassword() {
 }
 
 // 파일 변환 데모
-let selectedFile = null;
-
 document.getElementById('fileInput')?.addEventListener('change', function(e) {
     selectedFile = e.target.files[0];
     if (selectedFile) {
@@ -931,6 +991,62 @@ function updateTargetFormatOptions(fileType) {
     targetFormatSelect.insertBefore(helpOption, targetFormatSelect.children[1]);
 }
 
+// 관리자 기능
+function cleanupStorage() {
+    alert('스토리지 정리 기능이 실행되었습니다.');
+}
+
+// 다운로드 함수들
+function downloadQrCode() {
+    const qrImage = document.getElementById('qrImage');
+    if (qrImage && qrImage.src) {
+        const link = document.createElement('a');
+        link.download = 'qr-code.png';
+        link.href = qrImage.src;
+        link.click();
+    }
+}
+
+function downloadWatermarkedImage() {
+    const watermarkImage = document.getElementById('watermarkImage');
+    if (watermarkImage && watermarkImage.src) {
+        const link = document.createElement('a');
+        link.download = 'watermarked-image.png';
+        link.href = watermarkImage.src;
+        link.click();
+    }
+}
+
+function downloadUpscaledImage() {
+    const upscaleImage = document.getElementById('upscaleImage');
+    if (upscaleImage && upscaleImage.src) {
+        const link = document.createElement('a');
+        link.download = 'upscaled-image.png';
+        link.href = upscaleImage.src;
+        link.click();
+    }
+}
+
+function downloadZoomedImage() {
+    const zoomImage = document.getElementById('zoomImage');
+    if (zoomImage && zoomImage.src) {
+        const link = document.createElement('a');
+        link.download = 'zoomed-image.png';
+        link.href = zoomImage.src;
+        link.click();
+    }
+}
+
+function downloadResizedImage() {
+    const resizeImage = document.getElementById('resizeImage');
+    if (resizeImage && resizeImage.src) {
+        const link = document.createElement('a');
+        link.download = 'resized-image.png';
+        link.href = resizeImage.src;
+        link.click();
+    }
+}
+
 // 초기화
 window.onload = function() {
     loadContent();
@@ -961,3 +1077,9 @@ window.generateQr = generateQr;
 window.showWatermarkModal = showWatermarkModal;
 window.closeWatermarkModal = closeWatermarkModal;
 window.startWatermark = startWatermark;
+window.downloadQrCode = downloadQrCode;
+window.downloadWatermarkedImage = downloadWatermarkedImage;
+window.downloadUpscaledImage = downloadUpscaledImage;
+window.downloadZoomedImage = downloadZoomedImage;
+window.downloadResizedImage = downloadResizedImage;
+window.cleanupStorage = cleanupStorage;

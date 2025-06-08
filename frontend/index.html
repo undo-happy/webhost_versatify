@@ -411,6 +411,169 @@
             width: 90%;
             max-height: 80vh;
             overflow-y: auto;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            color: #333;
+        }
+
+        .close {
+            font-size: 2rem;
+            cursor: pointer;
+            color: #999;
+            transition: color 0.3s ease;
+        }
+
+        .close:hover {
+            color: #333;
+        }
+
+        .modal-body {
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group, .option-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group label, .option-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .input-group input, .input-group textarea, .input-group select,
+        .option-group input, .option-group select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .input-group input:focus, .input-group textarea:focus, .input-group select:focus,
+        .option-group input:focus, .option-group select:focus {
+            outline: none;
+            border-color: #7E212C;
+        }
+
+        .drop-zone {
+            border: 2px dashed #7E212C;
+            border-radius: 10px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        .drop-zone:hover {
+            background: #e9ecef;
+            border-color: #a63d47;
+        }
+
+        .file-info {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .converter-section {
+            margin-bottom: 2rem;
+        }
+
+        .converter-section h3 {
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .progress-section {
+            margin: 1.5rem 0;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #7E212C, #a63d47);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .result-area {
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .result-area img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .convert-button, .download-btn, .admin-btn {
+            background: linear-gradient(135deg, #7E212C, #a63d47);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .convert-button:hover, .download-btn:hover, .admin-btn:hover {
+            background: linear-gradient(135deg, #a63d47, #7E212C);
+            transform: translateY(-2px);
+        }
+
+        .convert-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .coordinate-inputs {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
+        }
+
+        .coordinate-inputs input {
+            margin-bottom: 0;
         }
 
         .close-button {
@@ -809,6 +972,272 @@
                         <div class="feature">✅ 우선 처리</div>
                     </div>
                     <button class="cta-button primary">Start Premium</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 모달들 -->
+        <!-- 이미지 변환 모달 -->
+        <div id="converterModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>🖼️ 이미지 변환</h2>
+                    <span class="close" onclick="closeConverterModal()">&times;</span>
+                </div>
+                <div class="converter-content">
+                    <div class="converter-section">
+                        <h3>파일 선택</h3>
+                        <div id="dropZone" class="drop-zone">
+                            <div id="dropZoneText">파일을 드래그하거나 클릭하여 선택하세요</div>
+                            <input type="file" id="fileInput" accept="image/*" style="display: none;">
+                        </div>
+                        <div id="fileInfo" class="file-info" style="display: none;">
+                            <div class="file-type-display"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="converter-section">
+                        <h3>변환 옵션</h3>
+                        <div class="option-group">
+                            <label for="targetFormat">변환할 형식:</label>
+                            <select id="targetFormat">
+                                <option value="">형식을 선택하세요</option>
+                            </select>
+                        </div>
+                        
+                        <div class="option-group">
+                            <label for="quality">품질 (1-100):</label>
+                            <input type="range" id="quality" min="1" max="100" value="85">
+                            <span id="qualityValue">85</span>
+                        </div>
+                    </div>
+                    
+                    <div id="progressSection" class="progress-section" style="display: none;">
+                        <div class="progress-bar">
+                            <div id="progressFill" class="progress-fill"></div>
+                        </div>
+                        <div id="progressText">변환 중...</div>
+                    </div>
+                    
+                    <div class="modal-actions">
+                        <button id="convertButton" class="convert-button" onclick="startConversion()" disabled>변환 시작</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- QR 코드 생성 모달 -->
+        <div id="qrModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>📱 QR 코드 생성</h2>
+                    <span class="close" onclick="closeQrModal()">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group">
+                        <label for="qrText">QR 코드로 만들 텍스트:</label>
+                        <textarea id="qrText" placeholder="URL, 텍스트, 연락처 정보 등을 입력하세요" rows="4"></textarea>
+                    </div>
+                    
+                    <div class="option-group">
+                        <label for="qrSize">크기:</label>
+                        <select id="qrSize">
+                            <option value="256">256x256</option>
+                            <option value="512" selected>512x512</option>
+                            <option value="1024">1024x1024</option>
+                        </select>
+                    </div>
+                    
+                    <div id="qrResult" class="result-area" style="display: none;">
+                        <img id="qrImage" alt="Generated QR Code">
+                        <button class="download-btn" onclick="downloadQrCode()">QR 코드 다운로드</button>
+                    </div>
+                    
+                    <div class="modal-actions">
+                        <button class="convert-button" onclick="generateQr()">QR 코드 생성</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 워터마크 모달 -->
+        <div id="watermarkModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>💧 워터마크 추가</h2>
+                    <span class="close" onclick="closeWatermarkModal()">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group">
+                        <label for="watermarkFile">이미지 파일:</label>
+                        <input type="file" id="watermarkFile" accept="image/*">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="watermarkText">워터마크 텍스트:</label>
+                        <input type="text" id="watermarkText" placeholder="추가할 텍스트를 입력하세요">
+                    </div>
+                    
+                    <div class="option-group">
+                        <label for="watermarkPosition">위치:</label>
+                        <select id="watermarkPosition">
+                            <option value="bottom-right">우측 하단</option>
+                            <option value="bottom-left">좌측 하단</option>
+                            <option value="top-right">우측 상단</option>
+                            <option value="top-left">좌측 상단</option>
+                            <option value="center">중앙</option>
+                        </select>
+                    </div>
+                    
+                    <div id="watermarkResult" class="result-area" style="display: none;">
+                        <img id="watermarkImage" alt="Watermarked Image">
+                        <button class="download-btn" onclick="downloadWatermarkedImage()">이미지 다운로드</button>
+                    </div>
+                    
+                    <div class="modal-actions">
+                        <button class="convert-button" onclick="startWatermark()">워터마크 추가</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 업스케일 모달 -->
+        <div id="upscaleModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>🔍 이미지 업스케일</h2>
+                    <span class="close" onclick="closeUpscaleModal()">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group">
+                        <label for="upscaleFile">이미지 파일:</label>
+                        <input type="file" id="upscaleFile" accept="image/*">
+                    </div>
+                    
+                    <div class="option-group">
+                        <label for="upscaleFactor">확대 배율:</label>
+                        <select id="upscaleFactor">
+                            <option value="2">2배 확대</option>
+                            <option value="4">4배 확대</option>
+                        </select>
+                    </div>
+                    
+                    <div id="upscaleResult" class="result-area" style="display: none;">
+                        <img id="upscaleImage" alt="Upscaled Image">
+                        <button class="download-btn" onclick="downloadUpscaledImage()">이미지 다운로드</button>
+                    </div>
+                    
+                    <div class="modal-actions">
+                        <button class="convert-button" onclick="startUpscale()">업스케일 시작</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 줌 모달 -->
+        <div id="zoomModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>🔎 부분 확대</h2>
+                    <span class="close" onclick="closeZoomModal()">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group">
+                        <label for="zoomFile">이미지 파일:</label>
+                        <input type="file" id="zoomFile" accept="image/*">
+                    </div>
+                    
+                    <div class="option-group">
+                        <label>확대할 영역 (픽셀):</label>
+                        <div class="coordinate-inputs">
+                            <input type="number" id="zoomX" placeholder="X" min="0">
+                            <input type="number" id="zoomY" placeholder="Y" min="0">
+                            <input type="number" id="zoomWidth" placeholder="너비" min="1">
+                            <input type="number" id="zoomHeight" placeholder="높이" min="1">
+                        </div>
+                    </div>
+                    
+                    <div id="zoomResult" class="result-area" style="display: none;">
+                        <img id="zoomImage" alt="Zoomed Image">
+                        <button class="download-btn" onclick="downloadZoomedImage()">이미지 다운로드</button>
+                    </div>
+                    
+                    <div class="modal-actions">
+                        <button class="convert-button" onclick="startZoom()">부분 확대 시작</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 관리자 모달 -->
+        <div id="adminModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>🔧 관리자 패널</h2>
+                    <span class="close" onclick="closeAdminModal()">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group">
+                        <label for="adminPassword">관리자 비밀번호:</label>
+                        <input type="password" id="adminPassword" placeholder="비밀번호를 입력하세요">
+                    </div>
+                    
+                    <div id="adminPanel" style="display: none;">
+                        <h3>시스템 상태</h3>
+                        <div id="systemStatus">로딩 중...</div>
+                        
+                        <h3>스토리지 관리</h3>
+                        <button class="admin-btn" onclick="cleanupStorage()">임시 파일 정리</button>
+                        
+                        <h3>API 상태</h3>
+                        <div id="apiStatus">확인 중...</div>
+                    </div>
+                    
+                    <div class="modal-actions">
+                        <button class="convert-button" onclick="checkAdminPassword()">로그인</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 리사이즈 모달 -->
+        <div id="resizeModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>📏 이미지 크기 조정</h2>
+                    <span class="close" onclick="closeResizeModal()">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group">
+                        <label for="resizeFile">이미지 파일:</label>
+                        <input type="file" id="resizeFile" accept="image/*">
+                    </div>
+                    
+                    <div class="option-group">
+                        <label for="resizeWidth">너비 (픽셀):</label>
+                        <input type="number" id="resizeWidth" placeholder="새로운 너비" min="1">
+                    </div>
+                    
+                    <div class="option-group">
+                        <label for="resizeHeight">높이 (픽셀):</label>
+                        <input type="number" id="resizeHeight" placeholder="새로운 높이" min="1">
+                    </div>
+                    
+                    <div class="option-group">
+                        <label>
+                            <input type="checkbox" id="maintainAspectRatio" checked>
+                            비율 유지
+                        </label>
+                    </div>
+                    
+                    <div id="resizeResult" class="result-area" style="display: none;">
+                        <img id="resizeImage" alt="Resized Image">
+                        <button class="download-btn" onclick="downloadResizedImage()">이미지 다운로드</button>
+                    </div>
+                    
+                    <div class="modal-actions">
+                        <button class="convert-button" onclick="startResize()">크기 조정 시작</button>
+                    </div>
                 </div>
             </div>
         </div>
