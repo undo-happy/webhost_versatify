@@ -357,16 +357,28 @@ async function generateQr() {
         return;
     }
 
-    try {        const response = await fetch(`${API_BASE}/api/generate?text=${encodeURIComponent(text)}`);
-        if (!response.ok) throw new Error(await response.text());
+    try {
+        const response = await fetch(`${API_BASE}/api/generate`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ text: text, format: 'png' })
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
 
         const blob = await response.blob();
         const url = URL.createObjectURL(blob);
 
         document.getElementById('qrImage').src = url;
         document.getElementById('qrDownload').href = url;
+        document.getElementById('qrDownload').download = `qr-code-${Date.now()}.png`;
         document.getElementById('qrResult').style.display = 'block';
     } catch (err) {
+        console.error('QR 코드 생성 오류:', err);
         alert('QR 코드 생성 실패: ' + err.message);
     }
 }

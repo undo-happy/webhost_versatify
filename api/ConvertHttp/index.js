@@ -1,28 +1,35 @@
 const multipart = require('parse-multipart-data');
 const { Transformer } = require('@napi-rs/image');
 const { v4: uuidv4 } = require('uuid');
-const { S3Client, PutObjectCommand, GetObjectCommand } = require('@aws-sdk/client-s3');
-const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
 
-// R2 설정
-const R2_ENDPOINT = process.env.R2_ENDPOINT || 'https://YOUR_ACCOUNT_ID.r2.cloudflarestorage.com';
-const R2_ACCESS_KEY_ID = process.env.R2_ACCESS_KEY_ID || 'YOUR_ACCESS_KEY_ID';
-const R2_SECRET_ACCESS_KEY = process.env.R2_SECRET_ACCESS_KEY || 'YOUR_SECRET_ACCESS_KEY';
-const R2_BUCKET_NAME = process.env.R2_BUCKET_NAME || 'converted-images';
+// 로컬 개발 모드 확인
+const isLocalDevelopment = process.env.NODE_ENV !== 'production' && 
+                          (!process.env.R2_ENDPOINT || process.env.R2_ENDPOINT.includes('demo'));
 
-// S3 클라이언트 초기화 (R2 호환)
-const s3Client = new S3Client({
-    region: 'auto',
-    endpoint: R2_ENDPOINT,
-    credentials: {
-        accessKeyId: R2_ACCESS_KEY_ID,
-        secretAccessKey: R2_SECRET_ACCESS_KEY
-    }
-});
+// R2 설정 (프로덕션용)
+let s3Client = null;
+if (!isLocalDevelopment) {
+    const { S3Client, PutObjectCommand, GetObjectCommand } = require('@aws-sdk/client-s3');
+    const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
+    
+    const R2_ENDPOINT = process.env.R2_ENDPOINT;
+    const R2_ACCESS_KEY_ID = process.env.R2_ACCESS_KEY_ID;
+    const R2_SECRET_ACCESS_KEY = process.env.R2_SECRET_ACCESS_KEY;
+    const R2_BUCKET_NAME = process.env.R2_BUCKET_NAME || 'converted-images';
+
+    s3Client = new S3Client({
+        region: 'auto',
+        endpoint: R2_ENDPOINT,
+        credentials: {
+            accessKeyId: R2_ACCESS_KEY_ID,
+            secretAccessKey: R2_SECRET_ACCESS_KEY
+        }
+    });
+}
 
 // 간단한 동시성 카운터
 let currentProcessing = 0;
-const MAX_CONCURRENT = 10; // Azure Functions 제한에 맞춘 동시 처리 수
+const MAX_CONCURRENT = 10;
 
 module.exports = async function (context, req) {
     context.log('HTTP trigger function processed a request.');
@@ -55,7 +62,7 @@ module.exports = async function (context, req) {
             timestamp: new Date().toISOString(),
             supportedFormats: ['jpeg', 'png', 'webp', 'avif'],
             endpoint: '/api/convert',
-            storage: 'Cloudflare R2',
+            mode: isLocalDevelopment ? 'Local Development' : 'Production (R2)',
             library: '@napi-rs/image',
             serverStatus: {
                 currentProcessing,
@@ -155,7 +162,6 @@ module.exports = async function (context, req) {
         }
         
         // 이미지 처리 (@napi-rs/image 사용)
-        // Buffer에서 이미지 로드
         const transformer = new Transformer(fileBuffer);
         
         // 메타데이터 가져오기
@@ -199,16 +205,35 @@ module.exports = async function (context, req) {
                 outputBuffer = await currentTransformer.webp(90);
         }
         
-        // 고유 파일 이름 생성
-        const convertedFileName = `${uuidv4()}.${targetFormat}`;
+        // 로컬 개발 모드에서는 base64로 직접 반환
+        if (isLocalDevelopment) {
+            const base64Data = outputBuffer.toString('base64');
+            const dataUrl = `data:image/${targetFormat};base64,${base64Data}`;
+            
+            context.res.status = 200;
+            context.res.body = {
+                success: true,
+                message: 'Image converted successfully (Local Development Mode)',
+                originalFile: fileName,
+                targetFormat: targetFormat,
+                fileSize: outputBuffer.length,
+                downloadUrl: dataUrl,
+                mode: 'Local Development',
+                dimensions: {
+                    width: metadata.width,
+                    height: metadata.height
+                }
+            };
+            return;
+        }
         
-        // 파일 만료 시간 설정 (현재 시간 + 3분)
+        // 프로덕션 모드에서는 R2에 업로드
+        const convertedFileName = `${uuidv4()}.${targetFormat}`;
         const expirationTime = new Date();
         expirationTime.setMinutes(expirationTime.getMinutes() + 3);
 
-        // R2에 업로드
         const uploadParams = {
-            Bucket: R2_BUCKET_NAME,
+            Bucket: process.env.R2_BUCKET_NAME,
             Key: convertedFileName,
             Body: outputBuffer,
             ContentType: `image/${targetFormat}`,
@@ -220,19 +245,17 @@ module.exports = async function (context, req) {
         
         await s3Client.send(new PutObjectCommand(uploadParams));
         
-        // 서명된 URL 생성
         const getCommand = new GetObjectCommand({
-            Bucket: R2_BUCKET_NAME,
+            Bucket: process.env.R2_BUCKET_NAME,
             Key: convertedFileName
         });
         
         const signedUrl = await getSignedUrl(s3Client, getCommand, { expiresIn: 3600 });
         
-        // 응답 반환
         context.res.status = 200;
         context.res.body = {
             success: true,
-            message: 'Image converted successfully with @napi-rs/image',
+            message: 'Image converted successfully with R2 storage',
             originalFile: fileName,
             targetFormat: targetFormat,
             fileSize: outputBuffer.length,
