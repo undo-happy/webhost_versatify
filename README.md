@@ -1,80 +1,61 @@
-# Versatify
+# Blog Generation Tool (MVP)
 
-Versatify는 이미지와 파일 도구를 한곳에서 제공하는 웹 서비스입니다. Azure Functions 기반 API와 간단한 프론트엔드를 통해 다음 기능을 제공합니다.
+A minimal, extensible FastAPI service to generate and publish blog posts to platforms (WordPress, Tistory; Naver via Selenium stub). Includes OpenAI integration, simple SEO helpers, and job scheduling via APScheduler.
 
-- 이미지 변환
-- 이미지 업스케일
-- 선택 영역 확대
-- 이미지 크기 조정
-- QR 코드 생성
-- 이미지 워터마킹
+## Quickstart
 
-Versatify is built with Azure Static Web Apps and provides these tools via serverless functions.
+1) Python 3.10+
 
-### Watermark API
-
-`POST /api/watermark`
-
-Parameters:
-
-- `file`: image file to watermark (multipart field)
-- `text`: watermark text
-- `opacity`: optional transparency between 0 and 1
-- `position`: `top-left`, `top-right`, `bottom-left`, `bottom-right`, or `center`
-
-The API returns a signed URL for downloading the watermarked image.
-
-### QR Code API
-
-`GET /api/generate?text=YOUR_TEXT`
-
-Parameters:
-
-- `text`: string to encode in the QR code
-
-The API returns the QR code image (PNG by default).
-
-## Development
-
-```bash
-# Install root dependencies (dev tools)
-npm install
-
-# Install dependencies for the API
-cd api && npm install
-
-# Install dependencies for the frontend
-cd ../frontend && npm install
-
-# Return to repo root and run tests
-cd .. && npm test
-cd api && npm test
-cd ../frontend && npm test
+2) Install dependencies
+```
+pip install -r requirements.txt
 ```
 
-### Local Development
+3) Configure environment
+- Copy `.env.example` to `.env`
+- Fill in `OPENAI_API_KEY`. Optional: platform credentials.
 
-Start both the Azure Functions backend and the Vite frontend together:
-
-```bash
-npm run dev
+4) Run API
+```
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-The script uses `npx` to launch Azure Functions. If you prefer a global
-installation, run `npm install -g azure-functions-core-tools@4`.
-
-Copy `api/local.settings.json.example` to `api/local.settings.json` for local
-credentials. The default values use the Azurite emulator and dummy R2
-credentials.
-
-```bash
-# Build frontend and API
-cd frontend && npm run build
-cd ../api && npm run build
+5) Try endpoints
+- Swagger UI: http://localhost:8000/docs
+- Generate draft:
+```
+curl -X POST http://localhost:8000/generate \
+  -H 'Content-Type: application/json' \
+  -d '{"topic": "AI 블로그 자동화", "style": "informative"}'
+```
+- Publish to WordPress (requires creds):
+```
+curl -X POST http://localhost:8000/publish/wordpress \
+  -H 'Content-Type: application/json' \
+  -d '{"title": "Test Title", "content": "<p>Hello</p>", "status": "draft"}'
 ```
 
-환경 변수 설정 예시는 `.env.example` 파일을 참고하세요. Cloudflare R2와 관리자 비밀번호 해시 등을 설정해야 합니다.
+## Structure
+```
+app/
+  core/config.py
+  main.py
+  models/schemas.py
+  pipeline/
+    generator.py
+    seo.py
+    plagiarism.py
+    scheduler.py
+  services/
+    llm_providers/openai_provider.py
+    platforms/
+      wordpress_client.py
+      tistory_client.py
+      naver_publisher.py (stub)
+```
 
-CleanupStorage 함수는 GitHub Actions 스케줄러를 통해 매일 호출되어 만료된 R2 파일을 정리합니다.
-
-See `docs/PROGRESS.md` for feature checklist and progress.
+## Notes
+- WordPress: supports Basic Auth (Application Passwords) or JWT token.
+- Tistory: uses official Open API.
+- Naver: no official API; Selenium automation is stubbed (bring your own driver).
+- This is an MVP scaffold; extend modules per your needs.
