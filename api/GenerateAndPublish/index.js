@@ -1,3 +1,4 @@
+const { requireClerkAuth } = require('../_auth');
 const DEFAULT_MODEL = process.env.UPSTAGE_MODEL || 'solar-pro2';
 
 function buildPrompt({ topic, style = 'informative', outline = [], targetLength = 1200, language = 'ko' }) {
@@ -104,6 +105,9 @@ module.exports = async function (context, req) {
   }
 
   try {
+    // Clerk 인증
+    await requireClerkAuth(req);
+
     const apiKey = process.env.UPSTAGE_API_KEY;
     if (!apiKey) {
       context.res.status = 500;
@@ -155,7 +159,7 @@ module.exports = async function (context, req) {
     context.res.body = { draft, publishResult };
   } catch (err) {
     context.log('GenerateAndPublish error:', err);
-    context.res.status = 500;
-    context.res.body = { error: 'Internal server error', message: err.message };
+    context.res.status = err.status || 500;
+    context.res.body = { error: err.message || 'Internal server error' };
   }
 };
