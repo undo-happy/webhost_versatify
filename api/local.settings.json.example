@@ -13,7 +13,7 @@
     "ADMIN_SALT": "your_admin_salt",
 
     "UPSTAGE_API_KEY": "your_upstage_api_key",
-    "UPSTAGE_MODEL": "solar-pro-2",
+    "UPSTAGE_MODEL": "solar-pro2",
 
     "WORDPRESS_BASE_URL": "https://your-wp-site.com",
     "WORDPRESS_USERNAME": "",

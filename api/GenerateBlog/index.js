@@ -1,4 +1,4 @@
-const DEFAULT_MODEL = process.env.UPSTAGE_MODEL || 'solar-pro-2';
+const DEFAULT_MODEL = process.env.UPSTAGE_MODEL || 'solar-pro2';
 
 function buildPrompt({ topic, style = 'informative', outline = [], targetLength = 1200, language = 'ko' }) {
     const outlineText = outline && outline.length ? `\nUse/Refine this outline:\n- ${outline.join('\n- ')}` : '';
