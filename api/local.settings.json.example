@@ -23,6 +23,8 @@
     "TISTORY_ACCESS_TOKEN": "",
     "TISTORY_BLOG_NAME": "",
 
-    "PUBLISH_QUEUE_NAME": "publish-jobs"
+    "PUBLISH_QUEUE_NAME": "publish-jobs",
+
+    "CLERK_SECRET_KEY": "sk_test_xxxxxxxxxxxxxxxxxxxxxx"
   }
 }
