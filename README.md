@@ -1,61 +1,67 @@
-# Blog Generation Tool (MVP)
+# Versatify (Azure Functions + Static Web Apps)
 
-A minimal, extensible FastAPI service to generate and publish blog posts to platforms (WordPress, Tistory; Naver via Selenium stub). Includes OpenAI integration, simple SEO helpers, and job scheduling via APScheduler.
+This project provides a set of serverless tools for image/file utilities with a static frontend.
 
-## Quickstart
+- Backend: Azure Functions (Node.js)
+- Frontend: Vite static site
+- Storage: Cloudflare R2 (production), Data URL (local dev fallback)
 
-1) Python 3.10+
+## Quickstart (Local)
 
-2) Install dependencies
+1) Install dependencies
 ```
-pip install -r requirements.txt
-```
+# Backend (Functions)
+cd api && npm install
 
-3) Configure environment
-- Copy `.env.example` to `.env`
-- Fill in `OPENAI_API_KEY`. Optional: platform credentials.
-
-4) Run API
-```
-uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+# Frontend
+cd ../frontend && npm install
 ```
 
-5) Try endpoints
-- Swagger UI: http://localhost:8000/docs
-- Generate draft:
+2) Configure local settings
 ```
-curl -X POST http://localhost:8000/generate \
-  -H 'Content-Type: application/json' \
-  -d '{"topic": "AI 블로그 자동화", "style": "informative"}'
-```
-- Publish to WordPress (requires creds):
-```
-curl -X POST http://localhost:8000/publish/wordpress \
-  -H 'Content-Type: application/json' \
-  -d '{"title": "Test Title", "content": "<p>Hello</p>", "status": "draft"}'
+cd ../api
+cp local.settings.json.example local.settings.json
+# Edit values: R2_* (optional for local), ADMIN_* for AdminAuth
 ```
 
-## Structure
+3) Run locally
 ```
-app/
-  core/config.py
-  main.py
-  models/schemas.py
-  pipeline/
-    generator.py
-    seo.py
-    plagiarism.py
-    scheduler.py
-  services/
-    llm_providers/openai_provider.py
-    platforms/
-      wordpress_client.py
-      tistory_client.py
-      naver_publisher.py (stub)
+# Start only the API (Azure Functions runtime required)
+npx func start
+
+# Start only the frontend
+cd ../frontend && npm run dev
+
+# Or from repo root, run both concurrently
+cd .. && npm run dev
+```
+- API default: http://localhost:7071
+- Frontend default: http://localhost:5173
+
+## Core Endpoints (HTTP)
+- POST `/api/convert` (multipart: file, targetFormat?, width?, height?)
+- POST `/api/upscale` (multipart: file, scale=2|4)
+- POST `/api/zoom` (multipart: file, x,y,width,height, scale=2|4)
+- POST `/api/watermark` (multipart: file, text, position, opacity)
+- POST `/api/generate` (QR; JSON: { text, format }) → binary image
+- POST `/api/admin-auth` (JSON: { password })
+- POST `/api/downloadsas`, `/api/issuesas`
+- POST `/api/cleanupstorage`
+
+Most functions also support:
+- `OPTIONS` for CORS preflight
+- `GET` for health/status (where applicable)
+
+## Admin Password Hash (one-off)
+```
+node generate-admin-hash.js <NEW_PASSWORD>
+# Set ADMIN_PASSWORD_HASH and ADMIN_SALT in Azure App Settings or local.settings.json
 ```
 
-## Notes
-- WordPress: supports Basic Auth (Application Passwords) or JWT token.
-- Tistory: uses official Open API.
-- Naver: no official API; Selenium automation is stubbed (bring your own driver).
-- This is an MVP scaffold; extend modules per your needs.
+## Production Notes
+- R2 credentials required in production (R2_ENDPOINT, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, R2_BUCKET_NAME)
+- Azure Static Web Apps routes `/api/*` to Functions; see `staticwebapp.config.json`
+
+## Docs
+- `docs/PRD.md` product overview
+- `docs/PROGRESS.md` current status
