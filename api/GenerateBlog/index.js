@@ -63,8 +63,7 @@ module.exports = async function (context, req) {
                 { role: 'user', content: user }
             ],
             temperature: 0.7,
-            // Apply reasoning effect: high (if supported by API; ignored otherwise)
-            reasoning: { effort: 'high' }
+            reasoning_effort: 'high'
         };
 
         const resp = await fetch('https://api.upstage.ai/v1/solar/chat/completions', {
