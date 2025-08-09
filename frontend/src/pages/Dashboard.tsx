@@ -7,9 +7,10 @@ export default function Dashboard() {
         <h2>시작하기</h2>
         <p>주제 입력 → 초안 생성 → 편집/미리보기 → 워드프레스/티스토리 발행 또는 큐에 등록</p>
         <div className="row" style={{ gap: 12 }}>
-          <Link to="/generate"><button>블로그 생성하기</button></Link>
-          <Link to="/history"><button>생성 내역 보기</button></Link>
-          <Link to="/settings"><button>환경 설정</button></Link>
+          <Link to="/app/generate"><button>블로그 생성하기</button></Link>
+          <Link to="/app/history"><button>생성 내역 보기</button></Link>
+          <Link to="/app/settings"><button>환경 설정</button></Link>
+          <Link to="/"><button className="secondary">홈으로</button></Link>
         </div>
       </section>
       <section className="card">
