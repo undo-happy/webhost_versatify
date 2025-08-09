@@ -1,39 +1,45 @@
-export async function authedFetch(url: string, options: RequestInit = {}, getToken: () => Promise<string | null>) {
-  const token = await getToken()
-  const headers = new Headers(options.headers || {})
-  if (!headers.has('Content-Type')) headers.set('Content-Type', 'application/json')
-  if (token) headers.set('Authorization', `Bearer ${token}`)
-  return fetch(url, { ...options, headers })
-}
+import type { Draft, ApiResult, Platform } from './types';
 
-export type GeneratePayload = {
-  topic: string
-  style?: string
-  outline?: string[]
-  targetLength?: number
-  language?: string
-}
+export function createApi(baseUrl: string, token?: string) {
+  const root = baseUrl.replace(/\/$/, '');
 
-export async function generateDraft(getToken: () => Promise<string | null>, payload: GeneratePayload) {
-  const res = await authedFetch('/api/generate-and-publish', {
-    method: 'POST',
-    body: JSON.stringify({ ...payload, publish: false })
-  }, getToken)
-  if (!res.ok) throw new Error(await res.text())
-  return res.json()
-}
+  async function call<T>(path: string, payload: unknown): Promise<T> {
+    const url = root + '/' + path.replace(/^\//, '');
+    const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+    const resp = await fetch(url, { method: 'POST', headers, body: JSON.stringify(payload ?? {}) });
+    const contentType = resp.headers.get('content-type') || '';
+    const body = contentType.includes('application/json') ? await resp.json() : await resp.text();
+    if (!resp.ok) {
+      throw new Error(typeof body === 'string' ? body : (body?.error || 'Request failed'));
+    }
+    return body as T;
+  }
 
-export async function publishPost(
-  getToken: () => Promise<string | null>,
-  payload: GeneratePayload & { platform: 'wordpress' | 'tistory' }
-) {
-  const body: any = { ...payload, publish: true, platform: payload.platform }
-  if (payload.platform === 'wordpress') body.wpOptions = { status: 'draft' }
-  if (payload.platform === 'tistory') body.tistoryOptions = { visibility: 3 }
-  const res = await authedFetch('/api/generate-and-publish', {
-    method: 'POST',
-    body: JSON.stringify(body)
-  }, getToken)
-  if (!res.ok) throw new Error(await res.text())
-  return res.json()
+  return {
+    generateBlog(payload: {
+      topic: string; style?: string; outline?: string[]; targetLength?: number; language?: string;
+    }): Promise<Draft> {
+      return call<Draft>('generate-blog', payload);
+    },
+
+    generateAndPublish(payload: {
+      topic: string; style?: string; outline?: string[]; targetLength?: number; language?: string;
+      publish: true; platform: Platform; wpOptions?: any; tistoryOptions?: any;
+    }): Promise<{ draft: Draft; publishResult: unknown }> {
+      return call('generate-and-publish', payload);
+    },
+
+    publishWordpress(payload: { title: string; content: string; status?: 'draft'|'publish'; categories?: number[]; tags?: number[]; }): Promise<ApiResult> {
+      return call('publish/wordpress', payload);
+    },
+
+    publishTistory(payload: { title: string; content: string; visibility?: number; category?: number; tag?: string; }): Promise<ApiResult> {
+      return call('publish/tistory', payload);
+    },
+
+    enqueuePublish(payload: { platform: Platform; payload: any }): Promise<ApiResult> {
+      return call('enqueue/publish', payload);
+    }
+  };
 }

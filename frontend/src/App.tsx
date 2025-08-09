@@ -1,38 +1,21 @@
-import React from 'react'
-import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/clerk-react'
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
-import Home from './pages/Home'
-import Studio from './pages/Studio'
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Layout from './components/Layout';
+import Dashboard from './pages/Dashboard';
+import Generate from './pages/Generate';
+import History from './pages/History';
+import Settings from './pages/Settings';
 
 export default function App() {
   return (
     <BrowserRouter>
-      <header className="header">
-        <div className="container header-inner">
-          <Link className="brand" to="/">Versatify</Link>
-          <nav className="nav">
-            <Link to="/">홈</Link>
-            <Link to="/studio">스튜디오</Link>
-          </nav>
-          <div className="auth">
-            <SignedOut>
-              <SignInButton>로그인</SignInButton>
-            </SignedOut>
-            <SignedIn>
-              <UserButton />
-            </SignedIn>
-          </div>
-        </div>
-      </header>
-      <main className="container main">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/studio" element={<Studio />} />
-        </Routes>
-      </main>
-      <footer className="footer">
-        <div className="container">© {new Date().getFullYear()} Versatify</div>
-      </footer>
+      <Routes>
+        <Route element={<Layout />}>
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/generate" element={<Generate />} />
+          <Route path="/history" element={<History />} />
+          <Route path="/settings" element={<Settings />} />
+        </Route>
+      </Routes>
     </BrowserRouter>
-  )
+  );
 }
