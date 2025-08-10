@@ -1,0 +1,25 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "FUNCTIONS_WORKER_RUNTIME": "node",
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+
+    "ADMIN_PASSWORD_HASH": "your_admin_hash",
+    "ADMIN_SALT": "your_admin_salt",
+
+    "UPSTAGE_API_KEY": "",
+    "UPSTAGE_MODEL": "solar-pro2",
+
+    "WORDPRESS_BASE_URL": "https://your-wp-site.com",
+    "WORDPRESS_USERNAME": "",
+    "WORDPRESS_PASSWORD": "",
+    "WORDPRESS_JWT_TOKEN": "",
+
+    "TISTORY_ACCESS_TOKEN": "",
+    "TISTORY_BLOG_NAME": "",
+
+    "PUBLISH_QUEUE_NAME": "publish-jobs",
+
+    "CLERK_SECRET_KEY": "sk_test_xxxxxxxxxxxxxxxxxxxxxx"
+  }
+}
