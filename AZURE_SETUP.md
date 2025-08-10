@@ -9,6 +9,8 @@ Versatify가 안전하게 작동하려면 Azure Portal에서 다음 환경변수
 ```
 ADMIN_PASSWORD_HASH = <generated_hash>
 ADMIN_SALT = versatify_salt_2025
+STORAGE_ACCOUNT = <your_storage_account_name>
+STORAGE_KEY = <your_storage_account_key>
 ```
 
 ### 🖥️ Azure Portal에서 설정하기
@@ -29,6 +31,14 @@ ADMIN_SALT = versatify_salt_2025
 - Value: `versatify_salt_2025`
 - **Add** 클릭
 
+**세 번째(선택, Azure Blob 사용 시 권장):**
+- Name: `STORAGE_ACCOUNT`
+- Value: `<your_storage_account_name>`
+
+**네 번째(선택, Azure Blob 사용 시 권장):**
+- Name: `STORAGE_KEY`
+- Value: `<your_storage_account_key>`
+
 6. 상단의 **Save** 버튼 클릭
 
 ### 🚀 자동 설정 (Azure CLI 사용)
@@ -37,12 +47,17 @@ Azure CLI가 설치되어 있다면 원하는 비밀번호를 환경 변수 `ADM
 `-AdminPassword` 매개변수로 전달하여 다음 스크립트를 실행하세요:
 
 ```powershell
-# 환경 변수 사용 예시
+# 필수: 관리자 비밀번호 (해시로 저장됨)
 $env:ADMIN_PASSWORD = "YourSecurePassword1!"
+
+# 선택: Azure Blob SAS 발급용 계정/키를 함께 설정하려면 지정
+$env:STORAGE_ACCOUNT = "yourstorageaccount"
+$env:STORAGE_KEY = "your_storage_key_value"
+
 ./azure-setup.ps1 -ResourceGroupName "your-resource-group" -StaticWebAppName "your-app-name"
 
 # 또는 매개변수 사용 예시
-./azure-setup.ps1 -ResourceGroupName "your-resource-group" -StaticWebAppName "your-app-name" -AdminPassword "YourSecurePassword1!"
+./azure-setup.ps1 -ResourceGroupName "your-resource-group" -StaticWebAppName "your-app-name" -AdminPassword "YourSecurePassword1!" -StorageAccount "yourstorageaccount" -StorageKey "your_storage_key_value"
 ```
 
 ### 🔑 새 관리자 비밀번호
@@ -53,6 +68,7 @@ $env:ADMIN_PASSWORD = "YourSecurePassword1!"
 
 - 환경변수를 설정하지 않으면 관리자 로그인이 **완전히 차단**됩니다
 - 이는 보안을 위한 의도된 동작입니다
+- `IssueSas` 함수에서 Azure Blob SAS를 사용하려면 `STORAGE_ACCOUNT`/`STORAGE_KEY`가 필요합니다
 - 설정 후 배포가 완료되기까지 2-3분 소요됩니다
 
 ### 🔍 설정 확인
