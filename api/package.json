@@ -11,11 +11,11 @@
     "node": ">=20.0.0"
   },
   "dependencies": {
+    "@azure/functions": "4.7.2",
     "@azure/storage-queue": "^12.19.0",
     "@clerk/backend": "^1.7.6"
   },
   "devDependencies": {
-    "@azure/functions": "4.7.2",
     "azure-functions-core-tools": "^4.0.7317"
   }
 }
