@@ -7,6 +7,9 @@
     "start-local": "npx func start",
     "build": "echo \"No build step required\""
   },
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "dependencies": {
     "@azure/storage-queue": "^12.19.0",
     "@clerk/backend": "^1.7.6"
