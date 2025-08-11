@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "playwright-local": {
+      "command": "node",
+      "args": [
+        "/Users/parkdawon/versatify/webhost_versatify/playwright-mcp/cli.js"
+      ]
+    }
+  }
+}
