@@ -2,6 +2,7 @@ import { useMemo, useState, useEffect } from 'react';
 import type { Draft } from '../lib/types';
 import { useDrafts } from '../state/DraftsContext';
 import { useApiClient } from '../lib/hooks';
+import FeatureGuard from '../components/FeatureGuard';
 
 function pretty(obj: unknown) {
   try { return JSON.stringify(obj, null, 2); } catch { return String(obj); }
@@ -163,8 +164,21 @@ export default function Generate() {
           </label>
           <div className="row">
             <button type="submit" disabled={isLoading} className="btn btn-primary">✨ 초안 생성</button>
-            <button type="button" onClick={() => onGenerateAndPublish('wordpress')} disabled={isLoading} className="btn btn-secondary">🚀 생성 후 WP 발행</button>
-            <button type="button" onClick={() => onGenerateAndPublish('tistory')} disabled={isLoading} className="btn btn-secondary">🚀 생성 후 티스토리 발행</button>
+            
+            <FeatureGuard 
+              feature="publish" 
+              fallback={
+                <div style={{ display: 'flex', gap: 'var(--space-4)', alignItems: 'center' }}>
+                  <button disabled className="btn btn-secondary" style={{ opacity: 0.5 }}>🚀 생성 후 WP 발행</button>
+                  <button disabled className="btn btn-secondary" style={{ opacity: 0.5 }}>🚀 생성 후 티스토리 발행</button>
+                  <span style={{ fontSize: 'var(--font-size-sm)', color: 'var(--color-gray-500)' }}>로그인 필요</span>
+                </div>
+              }
+              showPrompt={false}
+            >
+              <button type="button" onClick={() => onGenerateAndPublish('wordpress')} disabled={isLoading} className="btn btn-secondary">🚀 생성 후 WP 발행</button>
+              <button type="button" onClick={() => onGenerateAndPublish('tistory')} disabled={isLoading} className="btn btn-secondary">🚀 생성 후 티스토리 발행</button>
+            </FeatureGuard>
           </div>
         </form>
         {error && <p className="error">{error}</p>}
@@ -202,9 +216,10 @@ export default function Generate() {
         )}
       </section>
 
-      <section className="card">
-        <h2>발행</h2>
-        <div className="grid2">
+      <FeatureGuard feature="publish">
+        <section className="card">
+          <h2>발행</h2>
+          <div className="grid2">
           <div>
             <h3>WordPress</h3>
             <div className="grid2">
@@ -254,8 +269,9 @@ export default function Generate() {
               <button onClick={() => onQueue('tistory')} disabled={isLoading} className="btn btn-secondary">📋 티스토리 큐에 넣기</button>
             </div>
           </div>
-        </div>
-      </section>
+          </div>
+        </section>
+      </FeatureGuard>
 
       <section className="card">
         <h2>결과</h2>
