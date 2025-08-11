@@ -292,6 +292,30 @@
   box-shadow: var(--shadow-sm);
 }
 
+/* Button sizes */
+.btn-sm {
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--font-size-sm);
+}
+
+.btn-lg {
+  padding: var(--space-5) var(--space-10);
+  font-size: var(--font-size-lg);
+}
+
+/* Danger button for destructive actions */
+.btn-danger {
+  background: var(--color-error);
+  color: var(--color-white);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-danger:hover {
+  background: #dc2626;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-base);
+}
+
 /* App Layout - Sidebar Navigation */
 .app-layout {
   display: flex;

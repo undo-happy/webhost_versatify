@@ -1,4 +1,12 @@
-import type { Draft, ApiResult, Platform } from './types';
+import type { 
+  Draft, 
+  ApiResult, 
+  Platform, 
+  BlogGenerationPayload, 
+  GenerateAndPublishPayload, 
+  WordPressOptions, 
+  TistoryOptions 
+} from './types';
 
 export function createApi(baseUrl: string, token?: string) {
   const root = baseUrl || '/api';
@@ -24,28 +32,23 @@ export function createApi(baseUrl: string, token?: string) {
   }
 
   return {
-    generateBlog(payload: {
-      topic: string; style?: string; outline?: string[]; targetLength?: number; language?: string;
-    }): Promise<Draft> {
+    generateBlog(payload: BlogGenerationPayload): Promise<Draft> {
       return call<Draft>('generate-blog', payload);
     },
 
-    generateAndPublish(payload: {
-      topic: string; style?: string; outline?: string[]; targetLength?: number; language?: string;
-      publish: true; platform: Platform; wpOptions?: any; tistoryOptions?: any;
-    }): Promise<{ draft: Draft; publishResult: unknown }> {
+    generateAndPublish(payload: GenerateAndPublishPayload): Promise<{ draft: Draft; publishResult: unknown }> {
       return call('generate-and-publish', payload);
     },
 
-    publishWordpress(payload: { title: string; content: string; status?: 'draft'|'publish'; categories?: number[]; tags?: number[]; }): Promise<ApiResult> {
+    publishWordpress(payload: { title: string; content: string } & WordPressOptions): Promise<ApiResult> {
       return call('publish/wordpress', payload);
     },
 
-    publishTistory(payload: { title: string; content: string; visibility?: number; category?: number; tag?: string; }): Promise<ApiResult> {
+    publishTistory(payload: { title: string; content: string } & TistoryOptions): Promise<ApiResult> {
       return call('publish/tistory', payload);
     },
 
-    enqueuePublish(payload: { platform: Platform; payload: any }): Promise<ApiResult> {
+    enqueuePublish(payload: { platform: Platform; payload: unknown }): Promise<ApiResult> {
       return call('enqueue/publish', payload);
     }
   };

@@ -1,25 +1,15 @@
 import { useMemo, useState, useEffect } from 'react';
-import { createApi } from '../lib/api';
 import type { Draft } from '../lib/types';
-import { useSettings } from '../state/SettingsContext';
 import { useDrafts } from '../state/DraftsContext';
-import { useAuth } from '@clerk/clerk-react';
+import { useApiClient } from '../lib/hooks';
 
 function pretty(obj: unknown) {
   try { return JSON.stringify(obj, null, 2); } catch { return String(obj); }
 }
 
 export default function Generate() {
-  const { apiBaseUrl, authToken } = useSettings();
-  const { getToken } = useAuth();
   const { addDraft } = useDrafts();
-  
-  // Create API client with current auth
-  const createApiClient = async () => {
-    const clerkToken = await getToken();
-    const token = clerkToken || authToken;
-    return createApi(apiBaseUrl, token);
-  };
+  const apiClient = useApiClient();
 
   const [topic, setTopic] = useState('');
   const [style, setStyle] = useState('informative');
@@ -63,7 +53,7 @@ export default function Generate() {
     setIsLoading(true); setError(null); setResultLog('');
     try {
       if (!topic.trim()) throw new Error('주제를 입력하세요.');
-      const api = await createApiClient();
+      const api = await apiClient.getClient();
       const data = await api.generateBlog({
         topic: topic.trim(),
         style: style.trim() || undefined,
@@ -73,14 +63,16 @@ export default function Generate() {
       });
       setDraft(data);
       addDraft(data);
-    } catch (err: any) { setError(err.message || String(err)); }
+    } catch (err: unknown) { 
+      const message = err instanceof Error ? err.message : String(err);
+      setError(message); 
+    }
     finally { setIsLoading(false); }
   }
 
   async function onGenerateAndPublish(platform: 'wordpress'|'tistory') {
     setIsLoading(true); setError(null); setResultLog('');
     try {
-      if (!authToken) throw new Error('Clerk JWT 토큰을 설정하세요.');
       if (!topic.trim()) throw new Error('주제를 입력하세요.');
       const payload: any = {
         topic: topic.trim(), style: style.trim() || undefined,
@@ -94,7 +86,7 @@ export default function Generate() {
       } else {
         payload.tistoryOptions = { visibility: tistoryVisibility, category: tistoryCategory ? Number(tistoryCategory) : undefined, tag: tistoryTag || undefined };
       }
-      const api = await createApiClient();
+      const api = await apiClient.getClient();
       const res = await api.generateAndPublish(payload);
       setDraft(res.draft);
       addDraft(res.draft);
@@ -107,7 +99,7 @@ export default function Generate() {
     setIsLoading(true); setError(null); setResultLog('');
     try {
       if (!title.trim() || !contentHtml.trim()) throw new Error('제목과 콘텐츠가 필요합니다.');
-      const api = await createApiClient();
+      const api = await apiClient.getClient();
       const res = await api.publishWordpress({ title: title.trim(), content: contentHtml, status: publishWpStatus, categories: toNumberArray(publishWpCategories), tags: toNumberArray(publishWpTags) });
       setResultLog(pretty(res));
     } catch (err: any) { setError(err.message || String(err)); }
@@ -118,7 +110,7 @@ export default function Generate() {
     setIsLoading(true); setError(null); setResultLog('');
     try {
       if (!title.trim() || !contentHtml.trim()) throw new Error('제목과 콘텐츠가 필요합니다.');
-      const api = await createApiClient();
+      const api = await apiClient.getClient();
       const res = await api.publishTistory({ title: title.trim(), content: contentHtml, visibility: tistoryVisibility, category: tistoryCategory ? Number(tistoryCategory) : undefined, tag: tistoryTag || undefined });
       setResultLog(pretty(res));
     } catch (err: any) { setError(err.message || String(err)); }
@@ -135,7 +127,7 @@ export default function Generate() {
       } else {
         payload.visibility = tistoryVisibility; payload.category = tistoryCategory ? Number(tistoryCategory) : undefined; payload.tag = tistoryTag || undefined;
       }
-      const api = await createApiClient();
+      const api = await apiClient.getClient();
       const res = await api.enqueuePublish({ platform, payload });
       setResultLog(pretty(res));
     } catch (err: any) { setError(err.message || String(err)); }
@@ -170,9 +162,9 @@ export default function Generate() {
             <textarea value={outline} onChange={(e) => setOutline(e.target.value)} rows={5} placeholder={"- 서론\n- 핵심 개념\n- 예제 코드\n- 결론"} />
           </label>
           <div className="row">
-            <button type="submit" disabled={isLoading}>초안 생성</button>
-            <button type="button" onClick={() => onGenerateAndPublish('wordpress')} disabled={isLoading}>생성 후 WP 발행</button>
-            <button type="button" onClick={() => onGenerateAndPublish('tistory')} disabled={isLoading}>생성 후 티스토리 발행</button>
+            <button type="submit" disabled={isLoading} className="btn btn-primary">✨ 초안 생성</button>
+            <button type="button" onClick={() => onGenerateAndPublish('wordpress')} disabled={isLoading} className="btn btn-secondary">🚀 생성 후 WP 발행</button>
+            <button type="button" onClick={() => onGenerateAndPublish('tistory')} disabled={isLoading} className="btn btn-secondary">🚀 생성 후 티스토리 발행</button>
           </div>
         </form>
         {error && <p className="error">{error}</p>}
@@ -233,8 +225,8 @@ export default function Generate() {
               <input value={publishWpTags} onChange={(e) => setPublishWpTags(e.target.value)} placeholder="예: 7,9" />
             </label>
             <div className="row">
-              <button onClick={onPublishWordpress} disabled={isLoading}>WP 바로 발행</button>
-              <button onClick={() => onQueue('wordpress')} disabled={isLoading}>WP 큐에 넣기</button>
+              <button onClick={onPublishWordpress} disabled={isLoading} className="btn btn-primary">📤 WP 바로 발행</button>
+              <button onClick={() => onQueue('wordpress')} disabled={isLoading} className="btn btn-secondary">📋 WP 큐에 넣기</button>
             </div>
           </div>
           <div>
@@ -258,8 +250,8 @@ export default function Generate() {
               </label>
             </div>
             <div className="row">
-              <button onClick={onPublishTistory} disabled={isLoading}>티스토리 바로 발행</button>
-              <button onClick={() => onQueue('tistory')} disabled={isLoading}>티스토리 큐에 넣기</button>
+              <button onClick={onPublishTistory} disabled={isLoading} className="btn btn-primary">📤 티스토리 바로 발행</button>
+              <button onClick={() => onQueue('tistory')} disabled={isLoading} className="btn btn-secondary">📋 티스토리 큐에 넣기</button>
             </div>
           </div>
         </div>

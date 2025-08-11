@@ -15,3 +15,36 @@ export type ApiResult<T = unknown> = {
 } & Partial<T>;
 
 export type Platform = 'wordpress' | 'tistory';
+
+export type WordPressOptions = {
+  status?: 'draft' | 'publish';
+  categories?: number[];
+  tags?: number[];
+};
+
+export type TistoryOptions = {
+  visibility?: number;
+  category?: number;
+  tag?: string;
+};
+
+export type BlogGenerationPayload = {
+  topic: string;
+  style?: string;
+  outline?: string[];
+  targetLength?: number;
+  language?: string;
+};
+
+export type GenerateAndPublishPayload = BlogGenerationPayload & {
+  publish: true;
+  platform: Platform;
+  wpOptions?: WordPressOptions;
+  tistoryOptions?: TistoryOptions;
+};
+
+export type PublishResult = {
+  ok: boolean;
+  result?: unknown;
+  error?: string;
+};
