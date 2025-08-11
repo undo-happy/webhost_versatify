@@ -26,7 +26,7 @@ export default function Home() {
               </Link>
             </div>
             <div style={{ marginTop: 'var(--space-6)', fontSize: 'var(--font-size-sm)', color: 'var(--color-gray-500)' }}>
-              💡 로그인 없이도 데모 모드로 모든 기능을 체험할 수 있습니다
+              🔐 로그인 후 실제 AI 모델과 발행 기능을 사용하세요
             </div>
           </div>
         </div>
@@ -166,28 +166,28 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Demo Mode Info */}
+        {/* Login Info */}
         <section className="content-section" style={{ background: 'var(--gradient-subtle)', border: '1px solid var(--color-primary-light)' }}>
           <div className="text-center">
-            <h2 className="section-title" style={{ color: 'var(--color-primary)' }}>💡 데모 모드</h2>
+            <h2 className="section-title" style={{ color: 'var(--color-primary)' }}>🔐 로그인 및 설정</h2>
             <p style={{ fontSize: 'var(--font-size-lg)', color: 'var(--color-gray-700)', marginBottom: 'var(--space-8)' }}>
-              API 키 없이도 모든 기능을 체험해볼 수 있습니다
+              실제 AI 모델과 발행 기능을 사용하려면 로그인하고 API를 설정하세요
             </p>
             <div className="feature-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))' }}>
               <div style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: 'var(--font-size-3xl)', marginBottom: 'var(--space-3)' }}>🎭</div>
-                <h4 style={{ margin: '0 0 var(--space-2)', color: 'var(--color-gray-900)' }}>실제와 동일한 경험</h4>
-                <p style={{ color: 'var(--color-gray-600)', fontSize: 'var(--font-size-sm)' }}>모든 UI와 기능이 실제와 동일하게 작동합니다</p>
+                <div style={{ fontSize: 'var(--font-size-3xl)', marginBottom: 'var(--space-3)' }}>👤</div>
+                <h4 style={{ margin: '0 0 var(--space-2)', color: 'var(--color-gray-900)' }}>Clerk 로그인</h4>
+                <p style={{ color: 'var(--color-gray-600)', fontSize: 'var(--font-size-sm)' }}>간편한 소셜 로그인으로 JWT 인증 자동 설정</p>
               </div>
               <div style={{ textAlign: 'center' }}>
                 <div style={{ fontSize: 'var(--font-size-3xl)', marginBottom: 'var(--space-3)' }}>🔧</div>
-                <h4 style={{ margin: '0 0 var(--space-2)', color: 'var(--color-gray-900)' }}>API 키로 실제 모드</h4>
-                <p style={{ color: 'var(--color-gray-600)', fontSize: 'var(--font-size-sm)' }}>API 키 입력 시 실제 AI 생성과 발행 기능 사용</p>
+                <h4 style={{ margin: '0 0 var(--space-2)', color: 'var(--color-gray-900)' }}>API 서버 연결</h4>
+                <p style={{ color: 'var(--color-gray-600)', fontSize: 'var(--font-size-sm)' }}>백엔드 서버 주소 설정으로 실제 기능 활성화</p>
               </div>
               <div style={{ textAlign: 'center' }}>
                 <div style={{ fontSize: 'var(--font-size-3xl)', marginBottom: 'var(--space-3)' }}>🚀</div>
-                <h4 style={{ margin: '0 0 var(--space-2)', color: 'var(--color-gray-900)' }}>즉시 시작</h4>
-                <p style={{ color: 'var(--color-gray-600)', fontSize: 'var(--font-size-sm)' }}>로그인이나 회원가입 없이 바로 사용 가능</p>
+                <h4 style={{ margin: '0 0 var(--space-2)', color: 'var(--color-gray-900)' }}>즉시 사용</h4>
+                <p style={{ color: 'var(--color-gray-600)', fontSize: 'var(--font-size-sm)' }}>설정 완료 후 AI 블로그 생성과 자동 발행 시작</p>
               </div>
             </div>
           </div>

@@ -1,16 +1,16 @@
 import { useSettings } from '../state/SettingsContext';
-import { isDemoBaseUrl } from '../lib/api';
+import { useAuth } from '@clerk/clerk-react';
 
 export default function Settings() {
   const { apiBaseUrl, setApiBaseUrl, authToken, setAuthToken } = useSettings();
-  const demo = isDemoBaseUrl(apiBaseUrl);
+  const { getToken } = useAuth();
   
   return (
     <div>
       <div className="card">
-        <h2>⚙️ API 키 설정</h2>
+        <h2>⚙️ API 설정</h2>
         <p style={{ color: 'var(--color-gray-600)', marginBottom: 'var(--space-8)' }}>
-          모든 기능을 사용하려면 API 키를 설정하세요. 설정하지 않으면 데모 모드로 작동합니다.
+          백엔드 API 서버와 인증 설정을 구성하세요.
         </p>
         
         <div className="form">
@@ -22,64 +22,67 @@ export default function Settings() {
               placeholder="/api 또는 https://your-api.com/api" 
             />
             <div style={{ fontSize: 'var(--font-size-sm)', color: 'var(--color-gray-500)', marginTop: 'var(--space-2)' }}>
-              백엔드 API 서버 주소를 입력하세요. 비어있으면 데모 모드로 작동합니다.
+              백엔드 API 서버 주소 (기본값: /api)
             </div>
           </label>
           
           <label>
-            <span>인증 토큰 (선택)</span>
+            <span>수동 인증 토큰 (선택)</span>
             <input 
               type="password" 
               value={authToken} 
               onChange={(e) => setAuthToken(e.target.value)} 
-              placeholder="JWT 토큰 또는 API 키" 
+              placeholder="API 키 또는 커스텀 토큰" 
             />
             <div style={{ fontSize: 'var(--font-size-sm)', color: 'var(--color-gray-500)', marginTop: 'var(--space-2)' }}>
-              Clerk JWT 또는 API 인증을 위한 토큰입니다.
+              로그인 대신 수동 토큰을 사용하려면 입력하세요. 로그인되어 있으면 Clerk JWT가 자동으로 사용됩니다.
             </div>
           </label>
+          
+          <button 
+            className="btn btn-secondary"
+            onClick={async () => {
+              const token = await getToken();
+              if (token) {
+                alert(`현재 Clerk JWT: ${token.slice(0, 50)}...`);
+              } else {
+                alert('로그인되지 않았습니다.');
+              }
+            }}
+          >
+            🔑 현재 JWT 토큰 확인
+          </button>
         </div>
       </div>
 
       <div className="card">
-        <h3>🎯 빠른 설정 가이드</h3>
+        <h3>🎯 설정 가이드</h3>
         <div className="feature-grid" style={{ gridTemplateColumns: '1fr' }}>
           <div className="step-card">
             <div className="step-number">1</div>
-            <h4 className="step-title">데모 모드로 시작</h4>
+            <h4 className="step-title">로그인하기</h4>
             <p className="step-description">
-              API 키 없이도 모든 UI와 기능을 체험할 수 있습니다. 위 설정을 비워두면 자동으로 데모 모드가 활성화됩니다.
+              사이드바에서 로그인하면 Clerk JWT가 자동으로 API 호출에 사용됩니다.
             </p>
           </div>
           
           <div className="step-card">
             <div className="step-number">2</div>
-            <h4 className="step-title">실제 API 연동</h4>
+            <h4 className="step-title">API 서버 설정</h4>
             <p className="step-description">
-              백엔드 서버 주소를 입력하면 실제 AI 생성과 WordPress/티스토리 발행 기능을 사용할 수 있습니다.
+              백엔드 서버 주소를 설정하세요. Azure Functions나 Express 서버 주소를 입력하면 됩니다.
             </p>
           </div>
           
           <div className="step-card">
             <div className="step-number">3</div>
-            <h4 className="step-title">보안 인증 (선택)</h4>
+            <h4 className="step-title">블로그 생성 시작</h4>
             <p className="step-description">
-              추가 보안이 필요한 경우 JWT 토큰을 입력하세요. Clerk 인증 또는 사용자 정의 API 키를 지원합니다.
+              모든 설정이 완료되면 실제 AI 모델을 사용해 블로그를 생성하고 WordPress/티스토리에 발행할 수 있습니다.
             </p>
           </div>
         </div>
       </div>
-
-      {demo && (
-        <div className="card" style={{ background: 'var(--gradient-subtle)', border: '1px solid var(--color-primary-light)' }}>
-          <div style={{ textAlign: 'center' }}>
-            <h3 style={{ color: 'var(--color-primary)', margin: '0 0 var(--space-4)' }}>🎭 현재 데모 모드</h3>
-            <p style={{ color: 'var(--color-gray-700)' }}>
-              실제 API 키 없이 모든 기능을 체험하고 있습니다. 위 설정을 통해 실제 모드로 전환할 수 있습니다.
-            </p>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

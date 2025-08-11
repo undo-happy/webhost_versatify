@@ -3,6 +3,7 @@ import { createApi } from '../lib/api';
 import type { Draft } from '../lib/types';
 import { useSettings } from '../state/SettingsContext';
 import { useDrafts } from '../state/DraftsContext';
+import { useAuth } from '@clerk/clerk-react';
 
 function pretty(obj: unknown) {
   try { return JSON.stringify(obj, null, 2); } catch { return String(obj); }
@@ -10,8 +11,15 @@ function pretty(obj: unknown) {
 
 export default function Generate() {
   const { apiBaseUrl, authToken } = useSettings();
-  const api = useMemo(() => createApi(apiBaseUrl, authToken), [apiBaseUrl, authToken]);
+  const { getToken } = useAuth();
   const { addDraft } = useDrafts();
+  
+  // Create API client with current auth
+  const createApiClient = async () => {
+    const clerkToken = await getToken();
+    const token = clerkToken || authToken;
+    return createApi(apiBaseUrl, token);
+  };
 
   const [topic, setTopic] = useState('');
   const [style, setStyle] = useState('informative');
@@ -55,6 +63,7 @@ export default function Generate() {
     setIsLoading(true); setError(null); setResultLog('');
     try {
       if (!topic.trim()) throw new Error('주제를 입력하세요.');
+      const api = await createApiClient();
       const data = await api.generateBlog({
         topic: topic.trim(),
         style: style.trim() || undefined,
@@ -85,6 +94,7 @@ export default function Generate() {
       } else {
         payload.tistoryOptions = { visibility: tistoryVisibility, category: tistoryCategory ? Number(tistoryCategory) : undefined, tag: tistoryTag || undefined };
       }
+      const api = await createApiClient();
       const res = await api.generateAndPublish(payload);
       setDraft(res.draft);
       addDraft(res.draft);
@@ -97,6 +107,7 @@ export default function Generate() {
     setIsLoading(true); setError(null); setResultLog('');
     try {
       if (!title.trim() || !contentHtml.trim()) throw new Error('제목과 콘텐츠가 필요합니다.');
+      const api = await createApiClient();
       const res = await api.publishWordpress({ title: title.trim(), content: contentHtml, status: publishWpStatus, categories: toNumberArray(publishWpCategories), tags: toNumberArray(publishWpTags) });
       setResultLog(pretty(res));
     } catch (err: any) { setError(err.message || String(err)); }
@@ -107,6 +118,7 @@ export default function Generate() {
     setIsLoading(true); setError(null); setResultLog('');
     try {
       if (!title.trim() || !contentHtml.trim()) throw new Error('제목과 콘텐츠가 필요합니다.');
+      const api = await createApiClient();
       const res = await api.publishTistory({ title: title.trim(), content: contentHtml, visibility: tistoryVisibility, category: tistoryCategory ? Number(tistoryCategory) : undefined, tag: tistoryTag || undefined });
       setResultLog(pretty(res));
     } catch (err: any) { setError(err.message || String(err)); }
@@ -123,6 +135,7 @@ export default function Generate() {
       } else {
         payload.visibility = tistoryVisibility; payload.category = tistoryCategory ? Number(tistoryCategory) : undefined; payload.tag = tistoryTag || undefined;
       }
+      const api = await createApiClient();
       const res = await api.enqueuePublish({ platform, payload });
       setResultLog(pretty(res));
     } catch (err: any) { setError(err.message || String(err)); }

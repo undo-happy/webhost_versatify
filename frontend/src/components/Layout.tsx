@@ -1,11 +1,8 @@
 import { NavLink, Outlet, Link } from 'react-router-dom';
 import '../App.css';
-import { isDemoBaseUrl } from '../lib/api';
-import { useSettings } from '../state/SettingsContext';
+import { SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/clerk-react';
 
 export default function Layout() {
-  const { apiBaseUrl } = useSettings();
-  const demo = isDemoBaseUrl(apiBaseUrl);
   
   return (
     <div className="app-layout">
@@ -17,11 +14,18 @@ export default function Layout() {
               AI 블로그 자동화
             </Link>
           </h1>
-          {demo && (
-            <div className="status-badge demo">
-              🎭 데모 모드
-            </div>
-          )}
+          <div style={{ marginTop: 'var(--space-4)' }}>
+            <SignedIn>
+              <UserButton afterSignOutUrl="/" />
+            </SignedIn>
+            <SignedOut>
+              <SignInButton>
+                <button className="btn btn-primary" style={{ width: '100%', fontSize: 'var(--font-size-sm)' }}>
+                  🔐 로그인
+                </button>
+              </SignInButton>
+            </SignedOut>
+          </div>
         </div>
         
         <nav>
