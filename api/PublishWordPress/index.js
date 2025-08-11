@@ -1,3 +1,5 @@
+const { requireClerkAuth } = require('../_auth');
+
 function buildHeaders() {
   const headers = { 'Content-Type': 'application/json' };
   const jwt = process.env.WORDPRESS_JWT_TOKEN;
@@ -38,6 +40,10 @@ module.exports = async function (context, req) {
   }
 
   try {
+    // 발행 기능은 인증 필수
+    const user = await requireClerkAuth(req);
+    context.log('WordPress publish request from user:', user.userId);
+
     const baseUrl = process.env.WORDPRESS_BASE_URL;
     if (!baseUrl) {
       context.res.status = 500;

@@ -1,3 +1,4 @@
+const { checkAuth, addAuthInfo } = require('../_auth');
 const DEFAULT_MODEL = process.env.UPSTAGE_MODEL || 'solar-pro2';
 
 function buildPrompt({ topic, style = 'informative', outline = [], targetLength = 1200, language = 'ko' }) {
@@ -39,6 +40,21 @@ module.exports = async function (context, req) {
     }
 
     try {
+        // 체험 모드 지원: 인증 선택적, rate limiting 적용
+        const rateLimitOptions = { requests: 5, windowMs: 300000 }; // 5분간 5회
+        const auth = await checkAuth(req, 'optional', rateLimitOptions);
+        context.log('Auth result:', auth.authLevel, auth.isAuthenticated ? 'authenticated' : 'trial mode');
+        
+        if (auth.rateLimit && !auth.rateLimit.allowed) {
+            context.res.status = 429;
+            context.res.body = { 
+                error: 'Rate limit exceeded', 
+                retryAfter: auth.rateLimit.retryAfter,
+                message: 'Too many requests from trial mode. Please sign up for unlimited access.'
+            };
+            return;
+        }
+
         const apiKey = process.env.UPSTAGE_API_KEY;
         if (!apiKey) {
             context.res.status = 500;
@@ -49,8 +65,14 @@ module.exports = async function (context, req) {
         const { topic, style, outline, targetLength, language } = req.body || {};
         if (!topic) {
             context.res.status = 400;
-            context.res.body = { error: 'topic is required' };
+            context.res.body = addAuthInfo({ error: 'topic is required' }, auth);
             return;
+        }
+
+        // 체험 모드에서는 생성 횟수 제한 (향후 구현)
+        if (!auth.isAuthenticated) {
+            context.log('Trial mode: generating blog without authentication');
+            // TODO: 체험 사용자 Rate Limiting 추가
         }
 
         const system = 'You are a senior SEO content writer. Produce factual, non-plagiarized, well-structured HTML content with semantic tags and logical flow.';
@@ -90,8 +112,7 @@ module.exports = async function (context, req) {
         const meta_title = title.slice(0, 60);
         const meta_description = summary.slice(0, 155);
 
-        context.res.status = 200;
-        context.res.body = {
+        const responseData = {
             title,
             content_html: content,
             summary,
@@ -99,6 +120,9 @@ module.exports = async function (context, req) {
             meta_title,
             meta_description
         };
+
+        context.res.status = 200;
+        context.res.body = addAuthInfo(responseData, auth);
     } catch (err) {
         context.log.error('GenerateBlog error:', err);
         context.res.status = 500;

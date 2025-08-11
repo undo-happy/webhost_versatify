@@ -49,6 +49,12 @@ export default function Layout() {
               </NavLink>
             </li>
             <li className="sidebar-nav-item">
+              <NavLink to="/app/queue" className="sidebar-nav-link">
+                <span>⏳</span>
+                발행 큐
+              </NavLink>
+            </li>
+            <li className="sidebar-nav-item">
               <NavLink to="/app/settings" className="sidebar-nav-link">
                 <span>⚙️</span>
                 설정
