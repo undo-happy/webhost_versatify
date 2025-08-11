@@ -6,25 +6,58 @@ import { useSettings } from '../state/SettingsContext';
 export default function Layout() {
   const { apiBaseUrl } = useSettings();
   const demo = isDemoBaseUrl(apiBaseUrl);
+  
   return (
-    <div className="container">
-      {demo && (
-        <div className="row" style={{ background: '#fff3cd', color: '#8a6d3b', padding: 8, border: '1px solid #ffeeba', borderRadius: 6, marginBottom: 12 }}>
-          데모 모드: 실제 API 없이 작동 중입니다.
+    <div className="app-layout">
+      {/* Sidebar Navigation */}
+      <aside className="sidebar">
+        <div className="sidebar-header">
+          <h1 className="sidebar-title">
+            <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+              AI 블로그 자동화
+            </Link>
+          </h1>
+          {demo && (
+            <div className="status-badge demo">
+              🎭 데모 모드
+            </div>
+          )}
         </div>
-      )}
-      <header className="row" style={{ justifyContent: 'space-between', marginBottom: 12 }}>
-        <h1 style={{ margin: 0 }}>
-          <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>블로그 자동화</Link>
-        </h1>
-        <nav className="row" style={{ gap: 12 }}>
-          <NavLink to="/app" end>대시보드</NavLink>
-          <NavLink to="/app/generate">생성</NavLink>
-          <NavLink to="/app/history">내역</NavLink>
-          <NavLink to="/app/settings">설정</NavLink>
+        
+        <nav>
+          <ul className="sidebar-nav">
+            <li className="sidebar-nav-item">
+              <NavLink to="/app" end className="sidebar-nav-link">
+                <span>📊</span>
+                대시보드
+              </NavLink>
+            </li>
+            <li className="sidebar-nav-item">
+              <NavLink to="/app/generate" className="sidebar-nav-link">
+                <span>✨</span>
+                블로그 생성
+              </NavLink>
+            </li>
+            <li className="sidebar-nav-item">
+              <NavLink to="/app/history" className="sidebar-nav-link">
+                <span>📝</span>
+                생성 내역
+              </NavLink>
+            </li>
+            <li className="sidebar-nav-item">
+              <NavLink to="/app/settings" className="sidebar-nav-link">
+                <span>⚙️</span>
+                설정
+              </NavLink>
+            </li>
+          </ul>
         </nav>
-      </header>
-      <Outlet />
+      </aside>
+      
+      {/* Main Content */}
+      <main className="main-content">
+        <Outlet />
+      </main>
     </div>
   );
 }

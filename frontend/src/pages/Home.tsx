@@ -3,17 +3,19 @@ import { Link } from 'react-router-dom';
 export default function Home() {
   return (
     <div className="page-container">
-      <div className="container">
-        {/* Hero Section */}
-        <section className="hero">
+      {/* Hero Section */}
+      <section className="hero-section">
+        <div className="container">
           <div className="hero-content">
             <h1 className="hero-title">
-              AI 블로그 자동화<br />
+              AI 블로그 자동화
+              <br />
               생성부터 발행까지 한 번에
             </h1>
             <p className="hero-subtitle">
-              주제 입력만으로 SEO 최적화 초안 생성, 라이브 미리보기·편집, WordPress/티스토리 즉시 발행 또는 발행 큐 등록까지. 
-              이제 콘텐츠 운영을 자동화하세요.
+              주제 입력만으로 SEO 최적화 초안 생성, 실시간 편집/미리보기, WordPress/티스토리 즉시 발행 또는 발행 큐 등록까지.
+              <br />
+              <strong>API 키만 입력하면 모든 기능이 바로 동작합니다.</strong>
             </p>
             <div className="hero-actions">
               <Link to="/app/generate" className="btn btn-primary">
@@ -23,10 +25,45 @@ export default function Home() {
                 📊 대시보드 보기
               </Link>
             </div>
+            <div style={{ marginTop: 'var(--space-6)', fontSize: 'var(--font-size-sm)', color: 'var(--color-gray-500)' }}>
+              💡 로그인 없이도 데모 모드로 모든 기능을 체험할 수 있습니다
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div className="container">
+        {/* Quick Actions */}
+        <section className="content-section">
+          <h2 className="section-title">빠른 시작</h2>
+          <div className="feature-grid">
+            <Link to="/app/generate" className="feature-card" style={{ textDecoration: 'none', color: 'inherit' }}>
+              <div className="feature-icon">✨</div>
+              <h3 className="feature-title">블로그 생성하기</h3>
+              <p className="feature-description">
+                주제만 입력하면 AI가 SEO 최적화된 블로그 콘텐츠를 자동으로 생성합니다. 실시간 미리보기와 편집 기능도 제공됩니다.
+              </p>
+            </Link>
+            
+            <Link to="/app/settings" className="feature-card" style={{ textDecoration: 'none', color: 'inherit' }}>
+              <div className="feature-icon">⚙️</div>
+              <h3 className="feature-title">API 키 설정</h3>
+              <p className="feature-description">
+                WordPress, 티스토리, AI 모델 API 키를 한 번만 설정하면 모든 기능이 자동으로 연동됩니다.
+              </p>
+            </Link>
+            
+            <Link to="/app/history" className="feature-card" style={{ textDecoration: 'none', color: 'inherit' }}>
+              <div className="feature-icon">📝</div>
+              <h3 className="feature-title">생성 내역</h3>
+              <p className="feature-description">
+                이전에 생성한 모든 블로그 콘텐츠를 관리하고, 언제든지 다시 편집하거나 발행할 수 있습니다.
+              </p>
+            </Link>
           </div>
         </section>
 
-        {/* Features Section */}
+        {/* Core Features */}
         <section className="content-section">
           <h2 className="section-title">핵심 기능</h2>
           <div className="feature-grid">
@@ -80,31 +117,31 @@ export default function Home() {
           </div>
         </section>
 
-        {/* How It Works Section */}
+        {/* How It Works */}
         <section className="content-section">
-          <h2 className="section-title">작동 방식</h2>
+          <h2 className="section-title">사용 방법</h2>
           <div className="step-grid">
             <div className="step-card">
               <div className="step-number">1</div>
-              <h3 className="step-title">주제 입력</h3>
+              <h3 className="step-title">API 키 설정</h3>
               <p className="step-description">
-                주제를 입력하고 스타일·길이·언어와 아웃라인을 선택합니다. AI가 최적의 콘텐츠 구조를 제안합니다.
+                설정 페이지에서 WordPress, 티스토리, AI 모델 API 키를 입력합니다. 한 번만 설정하면 모든 기능이 자동으로 연동됩니다.
               </p>
             </div>
             
             <div className="step-card">
               <div className="step-number">2</div>
-              <h3 className="step-title">내용 확인</h3>
+              <h3 className="step-title">주제 입력</h3>
               <p className="step-description">
-                생성된 초안을 제목/본문으로 다듬고 실시간 미리보기로 확인합니다. 원하는 대로 수정 및 편집이 가능합니다.
+                블로그 주제를 입력하고 스타일, 길이, 언어를 선택합니다. AI가 최적의 콘텐츠 구조를 자동으로 제안합니다.
               </p>
             </div>
             
             <div className="step-card">
               <div className="step-number">3</div>
-              <h3 className="step-title">발행 설정</h3>
+              <h3 className="step-title">실시간 편집</h3>
               <p className="step-description">
-                WordPress/티스토리 발행 옵션을 설정합니다. 상태, 카테고리/태그, 공개범위 등을 세밀하게 조정할 수 있습니다.
+                생성된 초안을 실시간 미리보기를 통해 확인하고 편집합니다. 제목, 본문 모두 자유롭게 수정할 수 있습니다.
               </p>
             </div>
             
@@ -112,45 +149,7 @@ export default function Home() {
               <div className="step-number">4</div>
               <h3 className="step-title">자동 발행</h3>
               <p className="step-description">
-                즉시 발행하거나 큐에 등록해 예약/배치로 운영합니다. 완전 자동화된 콘텐츠 발행 시스템을 경험하세요.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* What's New Section */}
-        <section className="content-section">
-          <h2 className="section-title">새로운 기능</h2>
-          <div className="feature-grid">
-            <div className="feature-card">
-              <div className="feature-icon">⚡</div>
-              <h3 className="feature-title">생성+발행 일괄 처리</h3>
-              <p className="feature-description">
-                한 번의 요청으로 생성과 발행까지 처리. 더욱 빠르고 효율적인 콘텐츠 제작 워크플로우를 제공합니다.
-              </p>
-            </div>
-            
-            <div className="feature-card">
-              <div className="feature-icon">📋</div>
-              <h3 className="feature-title">발행 큐 시스템</h3>
-              <p className="feature-description">
-                즉시 발행 없이 큐 적재로 운영 유연성 향상. 콘텐츠 스케줄링과 배치 처리로 체계적인 블로그 관리가 가능합니다.
-              </p>
-            </div>
-            
-            <div className="feature-card">
-              <div className="feature-icon">🔒</div>
-              <h3 className="feature-title">강화된 보안</h3>
-              <p className="feature-description">
-                Clerk JWT로 퍼블리시 엔드포인트 보호. 인증과 권한 관리를 통해 안전한 콘텐츠 발행 환경을 구축했습니다.
-              </p>
-            </div>
-            
-            <div className="feature-card">
-              <div className="feature-icon">🎯</div>
-              <h3 className="feature-title">확장된 플랫폼 옵션</h3>
-              <p className="feature-description">
-                WP 카테고리/태그, 티스토리 공개범위/카테고리/태그 옵션이 확장되어 더 세밀한 콘텐츠 관리가 가능합니다.
+                WordPress/티스토리에 즉시 발행하거나 발행 큐에 등록합니다. 카테고리, 태그, 공개범위 등 세부 설정도 가능합니다.
               </p>
             </div>
           </div>
@@ -158,11 +157,38 @@ export default function Home() {
           <div className="text-center mt-12">
             <div className="hero-actions">
               <Link to="/app/generate" className="btn btn-primary">
-                ✨ 새로운 기능 체험하기
+                ✨ 지금 시작하기
               </Link>
               <Link to="/app/settings" className="btn btn-secondary">
                 ⚙️ 설정 먼저 하기
               </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* Demo Mode Info */}
+        <section className="content-section" style={{ background: 'var(--gradient-subtle)', border: '1px solid var(--color-primary-light)' }}>
+          <div className="text-center">
+            <h2 className="section-title" style={{ color: 'var(--color-primary)' }}>💡 데모 모드</h2>
+            <p style={{ fontSize: 'var(--font-size-lg)', color: 'var(--color-gray-700)', marginBottom: 'var(--space-8)' }}>
+              API 키 없이도 모든 기능을 체험해볼 수 있습니다
+            </p>
+            <div className="feature-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))' }}>
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ fontSize: 'var(--font-size-3xl)', marginBottom: 'var(--space-3)' }}>🎭</div>
+                <h4 style={{ margin: '0 0 var(--space-2)', color: 'var(--color-gray-900)' }}>실제와 동일한 경험</h4>
+                <p style={{ color: 'var(--color-gray-600)', fontSize: 'var(--font-size-sm)' }}>모든 UI와 기능이 실제와 동일하게 작동합니다</p>
+              </div>
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ fontSize: 'var(--font-size-3xl)', marginBottom: 'var(--space-3)' }}>🔧</div>
+                <h4 style={{ margin: '0 0 var(--space-2)', color: 'var(--color-gray-900)' }}>API 키로 실제 모드</h4>
+                <p style={{ color: 'var(--color-gray-600)', fontSize: 'var(--font-size-sm)' }}>API 키 입력 시 실제 AI 생성과 발행 기능 사용</p>
+              </div>
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ fontSize: 'var(--font-size-3xl)', marginBottom: 'var(--space-3)' }}>🚀</div>
+                <h4 style={{ margin: '0 0 var(--space-2)', color: 'var(--color-gray-900)' }}>즉시 시작</h4>
+                <p style={{ color: 'var(--color-gray-600)', fontSize: 'var(--font-size-sm)' }}>로그인이나 회원가입 없이 바로 사용 가능</p>
+              </div>
             </div>
           </div>
         </section>
@@ -172,6 +198,9 @@ export default function Home() {
       <footer className="footer">
         <div className="container">
           <p>© {new Date().getFullYear()} AI 블로그 자동화. 모든 권리 보유.</p>
+          <p style={{ marginTop: 'var(--space-2)', fontSize: 'var(--font-size-sm)' }}>
+            WordPress, 티스토리 블로그 자동 생성 및 발행 서비스
+          </p>
         </div>
       </footer>
     </div>
