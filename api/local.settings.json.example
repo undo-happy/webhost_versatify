@@ -1,0 +1,30 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "FUNCTIONS_WORKER_RUNTIME": "node",
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "STORAGE_ACCOUNT": "your_storage_account",
+    "STORAGE_KEY": "your_storage_key",
+    "R2_ENDPOINT": "https://YOUR_ACCOUNT_ID.r2.cloudflarestorage.com",
+    "R2_ACCESS_KEY_ID": "YOUR_ACCESS_KEY_ID",
+    "R2_SECRET_ACCESS_KEY": "YOUR_SECRET_ACCESS_KEY",
+    "R2_BUCKET_NAME": "converted-images",
+    "ADMIN_PASSWORD_HASH": "your_admin_hash",
+    "ADMIN_SALT": "your_admin_salt",
+
+    "UPSTAGE_API_KEY": "your_upstage_api_key",
+    "UPSTAGE_MODEL": "solar-pro2",
+
+    "WORDPRESS_BASE_URL": "https://your-wp-site.com",
+    "WORDPRESS_USERNAME": "",
+    "WORDPRESS_PASSWORD": "",
+    "WORDPRESS_JWT_TOKEN": "",
+
+    "TISTORY_ACCESS_TOKEN": "",
+    "TISTORY_BLOG_NAME": "",
+
+    "PUBLISH_QUEUE_NAME": "publish-jobs",
+
+    "CLERK_SECRET_KEY": "sk_test_xxxxxxxxxxxxxxxxxxxxxx"
+  }
+}

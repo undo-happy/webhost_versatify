@@ -1,0 +1,11 @@
+{
+  "bindings": [
+    {
+      "name": "myQueueItem",
+      "type": "queueTrigger",
+      "direction": "in",
+      "queueName": "%PUBLISH_QUEUE_NAME%",
+      "connection": "AzureWebJobsStorage"
+    }
+  ]
+}

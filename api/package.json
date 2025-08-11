@@ -1,0 +1,21 @@
+{
+  "name": "versatify-api",
+  "version": "1.0.0",
+  "description": "Azure Functions API for Versatify image conversion service with Cloudflare R2",
+  "scripts": {
+    "start": "func start",
+    "start-local": "npx func start",
+    "build": "echo \"No build step required\""
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "dependencies": {
+    "@azure/functions": "4.7.2",
+    "@azure/storage-queue": "^12.19.0",
+    "@clerk/backend": "^1.7.6"
+  },
+  "devDependencies": {
+    "azure-functions-core-tools": "^4.0.7317"
+  }
+}
