@@ -14,14 +14,23 @@ if (!clerkPubKey) {
   console.warn('VITE_CLERK_PUBLISHABLE_KEY not found. Authentication will be disabled. Add your Clerk Publishable Key to .env file.');
 }
 
+// App wrapper component that conditionally includes ClerkProvider
+const AppWithProviders = () => (
+  <SettingsProvider>
+    <DraftsProvider>
+      <App />
+    </DraftsProvider>
+  </SettingsProvider>
+);
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <ClerkProvider publishableKey={clerkPubKey || 'pk_test_fallback_key_demo_mode'}>
-      <SettingsProvider>
-        <DraftsProvider>
-          <App />
-        </DraftsProvider>
-      </SettingsProvider>
-    </ClerkProvider>
+    {clerkPubKey ? (
+      <ClerkProvider publishableKey={clerkPubKey}>
+        <AppWithProviders />
+      </ClerkProvider>
+    ) : (
+      <AppWithProviders />
+    )}
   </React.StrictMode>,
 )
