@@ -19,31 +19,49 @@ export type AuthState = {
  * 체험 모드와 로그인 모드를 구분하여 기능 제한
  */
 export function useAuthState(): AuthState {
-  const { isSignedIn, userId } = useAuth();
-  const { user } = useUser();
+  try {
+    const { isSignedIn, userId } = useAuth();
+    const { user } = useUser();
 
-  const authState: AuthState = {
-    isAuthenticated: isSignedIn || false,
-    user: isSignedIn && user ? {
-      userId: userId || user.id,
-      email: user.primaryEmailAddress?.emailAddress
-    } : null,
-    canPublish: isSignedIn || false,
-    canSave: isSignedIn || false, 
-    canQueue: isSignedIn || false,
-    limitations: []
-  };
+    const authState: AuthState = {
+      isAuthenticated: isSignedIn || false,
+      user: isSignedIn && user ? {
+        userId: userId || user.id,
+        email: user.primaryEmailAddress?.emailAddress
+      } : null,
+      canPublish: isSignedIn || false,
+      canSave: isSignedIn || false, 
+      canQueue: isSignedIn || false,
+      limitations: []
+    };
 
-  // 체험 모드일 때 제한사항 추가
-  if (!isSignedIn) {
-    authState.limitations = [
-      '로그인하면 실제 블로그에 발행할 수 있습니다',
-      '로그인하면 생성한 콘텐츠를 저장할 수 있습니다',
-      '로그인하면 발행 큐 기능을 사용할 수 있습니다'
-    ];
+    // 체험 모드일 때 제한사항 추가
+    if (!isSignedIn) {
+      authState.limitations = [
+        '로그인하면 실제 블로그에 발행할 수 있습니다',
+        '로그인하면 생성한 콘텐츠를 저장할 수 있습니다',
+        '로그인하면 발행 큐 기능을 사용할 수 있습니다'
+      ];
+    }
+
+    return authState;
+  } catch (error) {
+    // Clerk가 제대로 초기화되지 않은 경우 안전한 fallback
+    console.warn('Clerk authentication not available, falling back to demo mode:', error);
+    
+    return {
+      isAuthenticated: false,
+      user: null,
+      canPublish: false,
+      canSave: false,
+      canQueue: false,
+      limitations: [
+        'Clerk 인증이 설정되지 않았습니다',
+        '체험 모드에서는 콘텐츠 생성만 가능합니다',
+        'VITE_CLERK_PUBLISHABLE_KEY를 .env 파일에 추가하세요'
+      ]
+    };
   }
-
-  return authState;
 }
 
 /**
