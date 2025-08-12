@@ -21,6 +21,7 @@ export default function Layout() {
           <NavLink to="/app" end>대시보드</NavLink>
           <NavLink to="/app/generate">생성</NavLink>
           <NavLink to="/app/history">내역</NavLink>
+          <NavLink to="/app/queue">큐</NavLink>
           <NavLink to="/app/settings">설정</NavLink>
         </nav>
       </header>

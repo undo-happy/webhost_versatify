@@ -4,6 +4,7 @@ import Dashboard from './pages/Dashboard';
 import Generate from './pages/Generate';
 import History from './pages/History';
 import Settings from './pages/Settings';
+import Queue from './pages/Queue';
 import Home from './pages/Home';
 
 export default function App() {
@@ -15,6 +16,7 @@ export default function App() {
           <Route index element={<Dashboard />} />
           <Route path="generate" element={<Generate />} />
           <Route path="history" element={<History />} />
+          <Route path="queue" element={<Queue />} />
           <Route path="settings" element={<Settings />} />
         </Route>
       </Routes>
