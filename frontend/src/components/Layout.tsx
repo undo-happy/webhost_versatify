@@ -1,73 +1,30 @@
 import { NavLink, Outlet, Link } from 'react-router-dom';
 import '../App.css';
-import { SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/clerk-react';
+import { isDemoBaseUrl } from '../lib/api';
+import { useSettings } from '../state/SettingsContext';
 
 export default function Layout() {
-  
+  const { apiBaseUrl } = useSettings();
+  const demo = isDemoBaseUrl(apiBaseUrl);
   return (
-    <div className="app-layout">
-      {/* Sidebar Navigation */}
-      <aside className="sidebar">
-        <div className="sidebar-header">
-          <h1 className="sidebar-title">
-            <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
-              AI 블로그 자동화
-            </Link>
-          </h1>
-          <div style={{ marginTop: 'var(--space-4)' }}>
-            <SignedIn>
-              <UserButton afterSignOutUrl="/" />
-            </SignedIn>
-            <SignedOut>
-              <SignInButton>
-                <button className="btn btn-primary" style={{ width: '100%', fontSize: 'var(--font-size-sm)' }}>
-                  🔐 로그인
-                </button>
-              </SignInButton>
-            </SignedOut>
-          </div>
+    <div className="container">
+      {demo && (
+        <div className="row" style={{ background: '#fff3cd', color: '#8a6d3b', padding: 8, border: '1px solid #ffeeba', borderRadius: 6, marginBottom: 12 }}>
+          데모 모드: 실제 API 없이 작동 중입니다.
         </div>
-        
-        <nav>
-          <ul className="sidebar-nav">
-            <li className="sidebar-nav-item">
-              <NavLink to="/app" end className="sidebar-nav-link">
-                <span>📊</span>
-                대시보드
-              </NavLink>
-            </li>
-            <li className="sidebar-nav-item">
-              <NavLink to="/app/generate" className="sidebar-nav-link">
-                <span>✨</span>
-                블로그 생성
-              </NavLink>
-            </li>
-            <li className="sidebar-nav-item">
-              <NavLink to="/app/history" className="sidebar-nav-link">
-                <span>📝</span>
-                생성 내역
-              </NavLink>
-            </li>
-            <li className="sidebar-nav-item">
-              <NavLink to="/app/queue" className="sidebar-nav-link">
-                <span>⏳</span>
-                발행 큐
-              </NavLink>
-            </li>
-            <li className="sidebar-nav-item">
-              <NavLink to="/app/settings" className="sidebar-nav-link">
-                <span>⚙️</span>
-                설정
-              </NavLink>
-            </li>
-          </ul>
+      )}
+      <header className="row" style={{ justifyContent: 'space-between', marginBottom: 12 }}>
+        <h1 style={{ margin: 0 }}>
+          <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>블로그 자동화</Link>
+        </h1>
+        <nav className="row" style={{ gap: 12 }}>
+          <NavLink to="/app" end>대시보드</NavLink>
+          <NavLink to="/app/generate">생성</NavLink>
+          <NavLink to="/app/history">내역</NavLink>
+          <NavLink to="/app/settings">설정</NavLink>
         </nav>
-      </aside>
-      
-      {/* Main Content */}
-      <main className="main-content">
-        <Outlet />
-      </main>
+      </header>
+      <Outlet />
     </div>
   );
 }
