@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { useAuth } from '@clerk/clerk-react';
 import { useSettings } from '../state/SettingsContext';
 import { createApi } from './api';
+import type { ApiClient } from './types';
 
 /**
  * Custom hook that provides an API client with automatic authentication
@@ -13,10 +14,10 @@ export function useApiClient() {
   
   return useMemo(() => {
     return {
-      async getClient() {
+      async getClient(): Promise<ApiClient> {
         const clerkToken = await getToken();
         const token = clerkToken || authToken;
-        return createApi(apiBaseUrl, token);
+        return createApi(apiBaseUrl, token) as unknown as ApiClient;
       }
     };
   }, [apiBaseUrl, authToken, getToken]);

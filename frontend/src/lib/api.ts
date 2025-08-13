@@ -59,6 +59,22 @@ export function createApi(baseUrl: string, token?: string) {
 
       async enqueuePublish(_payload: { platform: Platform; payload: any }): Promise<ApiResult> {
         return Promise.resolve({ ok: true, result: { demo: true } });
+      },
+
+      async getQueueStatus(): Promise<any> {
+        return Promise.resolve({ 
+          summary: { pending: 2, processing: 0, completed: 5, failed: 1 },
+          queues: {
+            pending: [
+              { taskId: 1, platform: 'wordpress', createdAt: new Date().toISOString() },
+              { taskId: 2, platform: 'tistory', createdAt: new Date().toISOString() }
+            ],
+            completed: [
+              { taskId: 3, platform: 'wordpress', createdAt: new Date().toISOString() }
+            ]
+          },
+          totalTasks: 7
+        });
       }
     };
   }
@@ -100,6 +116,11 @@ export function createApi(baseUrl: string, token?: string) {
 
     enqueuePublish(payload: { platform: Platform; payload: any }): Promise<ApiResult> {
       return call('enqueue/publish', payload);
+    },
+
+    async getQueueStatus(): Promise<any> {
+      // 임시 구현: 서버가 준비되기 전까지 0으로 채움
+      return Promise.resolve({ summary: { pending: 0, processing: 0, completed: 0, failed: 0 }, queues: { pending: [], completed: [] }, totalTasks: 0 });
     }
   };
 }
