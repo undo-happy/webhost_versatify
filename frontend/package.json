@@ -8,7 +8,8 @@
     "build": "tsc -b && vite build",
     "build:demo": "VITE_DEMO_MODE=true VITE_API_BASE_URL=demo tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@clerk/clerk-react": "^5.40.0",
@@ -28,6 +29,7 @@
     "puppeteer": "^24.16.1",
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.39.0",
-    "vite": "^7.1.0"
+    "vite": "^7.1.0",
+    "@playwright/test": "^1.47.0"
   }
 }
