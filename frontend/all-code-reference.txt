@@ -1,0 +1,1839 @@
+=================================================================
+              VERSATIFY 블로그 자동화 도구 - 전체 코드 레퍼런스
+=================================================================
+
+📁 프로젝트 구조:
+- React + TypeScript 기반 SaaS 블로그 자동화 도구
+- AI가 3분만에 SEO 최적화 블로그 글 생성
+- WordPress, 티스토리 등 멀티 플랫폼 자동 발행
+- 로그인 전: 랜딩페이지 (Home.tsx) 
+- 로그인 후: 대시보드 (Dashboard2.tsx)
+
+=================================================================
+🏠 HOME.TSX - 랜딩페이지 (로그인 전 화면)
+=================================================================
+
+import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+
+export default function Home() {
+  const [isVisible, setIsVisible] = useState(false);
+  
+  useEffect(() => {
+    setIsVisible(true);
+  }, []);
+
+  return (
+    <div style={{ 
+      minHeight: '100vh', 
+      background: '#ffffff',
+      fontFamily: 'system-ui, -apple-system, sans-serif',
+      lineHeight: 1.6
+    }}>
+      {/* Header */}
+      <header style={{
+        background: '#ffffff',
+        borderBottom: '1px solid #e9ecef',
+        padding: '16px 0',
+        position: 'sticky',
+        top: 0,
+        zIndex: 100,
+        boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
+      }}>
+        <div style={{
+          maxWidth: '1200px',
+          margin: '0 auto',
+          padding: '0 24px',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center'
+        }}>
+          <div style={{
+            fontSize: '24px',
+            fontWeight: '700',
+            color: '#2c3e50'
+          }}>
+            Versatify
+          </div>
+          <div style={{ 
+            display: 'flex', 
+            gap: '24px', 
+            alignItems: 'center' 
+          }}>
+            <a href="#features" style={{ 
+              color: '#7f8c8d', 
+              textDecoration: 'none', 
+              fontSize: '16px',
+              fontWeight: '500',
+              height: '20px',
+              display: 'flex',
+              alignItems: 'center'
+            }}>기능</a>
+            <a href="#pricing" style={{ 
+              color: '#7f8c8d', 
+              textDecoration: 'none', 
+              fontSize: '16px',
+              fontWeight: '500',
+              height: '20px',
+              display: 'flex',
+              alignItems: 'center'
+            }}>가격</a>
+            <Link to="/dashboard">
+              <button style={{
+                background: 'transparent',
+                color: '#2c3e50',
+                border: '2px solid #e9ecef',
+                borderRadius: '8px',
+                padding: '12px 24px',
+                fontSize: '16px',
+                fontWeight: '600',
+                cursor: 'pointer',
+                transition: 'all 0.2s ease',
+                height: '48px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}>
+                데모 보기
+              </button>
+            </Link>
+            <Link to="/app/generate">
+              <button style={{
+                background: '#e74c3c',
+                color: '#ffffff',
+                border: 'none',
+                borderRadius: '8px',
+                padding: '12px 24px',
+                fontSize: '16px',
+                fontWeight: '600',
+                cursor: 'pointer',
+                transition: 'all 0.2s ease',
+                boxShadow: '0 4px 12px rgba(231, 76, 60, 0.3)',
+                height: '48px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}>
+                무료 시작
+              </button>
+            </Link>
+          </div>
+        </div>
+      </header>
+
+      {/* Hero Section */}
+      <section style={{
+        padding: '80px 24px',
+        textAlign: 'center',
+        background: 'linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%)',
+        opacity: isVisible ? 1 : 0,
+        transform: isVisible ? 'translateY(0)' : 'translateY(20px)',
+        transition: 'all 0.8s ease-out'
+      }}>
+        <div style={{
+          maxWidth: '1200px',
+          margin: '0 auto'
+        }}>
+          {/* Trust Badge */}
+          <div style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            background: 'linear-gradient(135deg, #e8f5e8, #d4edda)',
+            color: '#155724',
+            padding: '8px 16px',
+            borderRadius: '24px',
+            fontSize: '14px',
+            fontWeight: '600',
+            marginBottom: '32px',
+            border: '1px solid #c3e6cb'
+          }}>
+            ✅ AI 기반 블로그 자동화 솔루션
+          </div>
+
+          <h1 style={{
+            fontSize: '56px',
+            fontWeight: '700',
+            color: '#2c3e50',
+            margin: '0 0 24px 0',
+            lineHeight: '1.1',
+            letterSpacing: '-0.02em',
+            textAlign: 'center'
+          }}>
+            <span style={{ color: '#e74c3c' }}>3분</span>만에<br />
+            블로그 글을<br />
+            <span style={{ 
+              background: 'linear-gradient(135deg, #e74c3c, #3498db)', 
+              WebkitBackgroundClip: 'text', 
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text'
+            }}>AI로 완성하세요</span>
+          </h1>
+          
+          <p style={{
+            fontSize: '24px',
+            color: '#7f8c8d',
+            margin: '0 0 32px 0',
+            lineHeight: '1.5',
+            maxWidth: '700px',
+            marginLeft: 'auto',
+            marginRight: 'auto',
+            fontWeight: '400',
+            textAlign: 'center'
+          }}>
+            주제만 입력하면 <strong style={{ color: '#2c3e50' }}>SEO 최적화된 고품질 콘텐츠</strong>를 생성하고<br />
+            WordPress, 티스토리에 자동으로 발행합니다
+          </p>
+
+          {/* Value Props */}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+            gap: '24px',
+            margin: '32px auto 48px auto',
+            maxWidth: '800px'
+          }}>
+            <div style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              justifyContent: 'center',
+              gap: '12px',
+              padding: '16px',
+              background: '#ffffff',
+              borderRadius: '12px',
+              boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
+            }}>
+              <span style={{ fontSize: '24px' }}>⚡</span>
+              <span style={{ fontSize: '16px', color: '#2c3e50', fontWeight: '600' }}>10분 → 3분 단축</span>
+            </div>
+            <div style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              justifyContent: 'center',
+              gap: '12px',
+              padding: '16px',
+              background: '#ffffff',
+              borderRadius: '12px',
+              boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
+            }}>
+              <span style={{ fontSize: '24px' }}>🎯</span>
+              <span style={{ fontSize: '16px', color: '#2c3e50', fontWeight: '600' }}>SEO 자동 최적화</span>
+            </div>
+            <div style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              justifyContent: 'center',
+              gap: '12px',
+              padding: '16px',
+              background: '#ffffff',
+              borderRadius: '12px',
+              boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
+            }}>
+              <span style={{ fontSize: '24px' }}>🚀</span>
+              <span style={{ fontSize: '16px', color: '#2c3e50', fontWeight: '600' }}>원클릭 멀티 발행</span>
+            </div>
+          </div>
+          
+          {/* Primary CTA */}
+          <div style={{ marginBottom: '48px' }}>
+            <Link to="/app/generate">
+              <button style={{
+                background: 'linear-gradient(135deg, #e74c3c 0%, #c0392b 100%)',
+                color: '#ffffff',
+                border: 'none',
+                borderRadius: '12px',
+                padding: '20px 40px',
+                fontSize: '18px',
+                fontWeight: '700',
+                cursor: 'pointer',
+                boxShadow: '0 8px 25px rgba(231, 76, 60, 0.4)',
+                transition: 'all 0.3s ease',
+                marginRight: '16px'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translateY(-2px)';
+                e.currentTarget.style.boxShadow = '0 12px 35px rgba(231, 76, 60, 0.5)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = '0 8px 25px rgba(231, 76, 60, 0.4)';
+              }}
+              >
+                🚀 무료로 시작하기
+              </button>
+            </Link>
+            <Link to="/dashboard">
+              <button style={{
+                background: 'transparent',
+                color: '#2c3e50',
+                border: '2px solid #e9ecef',
+                borderRadius: '12px',
+                padding: '18px 38px',
+                fontSize: '18px',
+                fontWeight: '700',
+                cursor: 'pointer',
+                transition: 'all 0.3s ease'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = '#3498db';
+                e.currentTarget.style.color = '#3498db';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = '#e9ecef';
+                e.currentTarget.style.color = '#2c3e50';
+              }}
+              >
+                📱 데모 체험하기
+              </button>
+            </Link>
+          </div>
+
+          <p style={{ 
+            fontSize: '14px', 
+            color: '#95a5a6', 
+            margin: 0,
+            fontWeight: '500'
+          }}>
+            신용카드 불필요 • 언제든 취소 가능 • 첫 10개 글 무료
+          </p>
+        </div>
+      </section>
+
+      {/* Live Demo Preview */}
+      <section style={{
+        background: '#ffffff',
+        padding: '80px 24px',
+        borderTop: '1px solid #f1f5f9'
+      }}>
+        <div style={{ 
+          maxWidth: '1200px', 
+          margin: '0 auto',
+          textAlign: 'center' 
+        }}>
+          <h2 style={{
+            fontSize: '32px',
+            fontWeight: '700',
+            color: '#2c3e50',
+            margin: '0 0 16px 0',
+            textAlign: 'center'
+          }}>
+            실제 작동 모습을 확인하세요
+          </h2>
+          <p style={{
+            fontSize: '18px',
+            color: '#7f8c8d',
+            margin: '0 0 48px 0',
+            maxWidth: '600px',
+            marginLeft: 'auto',
+            marginRight: 'auto',
+            textAlign: 'center'
+          }}>
+            몇 초만에 어떻게 고품질 블로그가 생성되는지 직접 보세요
+          </p>
+
+          {/* Demo Screenshot Placeholder */}
+          <div style={{
+            background: 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)',
+            borderRadius: '16px',
+            padding: '80px 40px',
+            border: '2px solid #e9ecef',
+            marginBottom: '32px'
+          }}>
+            <div style={{
+              background: '#ffffff',
+              borderRadius: '12px',
+              padding: '40px',
+              boxShadow: '0 8px 30px rgba(0,0,0,0.12)',
+              maxWidth: '800px',
+              margin: '0 auto'
+            }}>
+              <div style={{ fontSize: '64px', marginBottom: '24px' }}>🎬</div>
+              <h3 style={{ 
+                fontSize: '24px', 
+                color: '#2c3e50', 
+                margin: '0 0 16px 0',
+                fontWeight: '600'
+              }}>
+                실제 대시보드 미리보기
+              </h3>
+              <p style={{ 
+                color: '#7f8c8d', 
+                fontSize: '16px',
+                margin: 0,
+                lineHeight: '1.6'
+              }}>
+                여기에 실제 대시보드 스크린샷이나<br />
+                블로그 생성 과정 영상이 들어갑니다
+              </p>
+            </div>
+          </div>
+
+          <Link to="/dashboard">
+            <button style={{
+              background: 'linear-gradient(135deg, #3498db, #2980b9)',
+              color: '#ffffff',
+              border: 'none',
+              borderRadius: '8px',
+              padding: '16px 32px',
+              fontSize: '16px',
+              fontWeight: '600',
+              cursor: 'pointer',
+              boxShadow: '0 4px 15px rgba(52, 152, 219, 0.3)',
+              transition: 'all 0.3s ease'
+            }}>
+              📱 라이브 데모 체험하기
+            </button>
+          </Link>
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section id="features" style={{
+        background: 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)',
+        padding: '80px 24px',
+        position: 'relative',
+        overflow: 'hidden'
+      }}>
+        {/* Background Pattern */}
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'radial-gradient(circle at 20% 20%, rgba(52, 152, 219, 0.1) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(231, 76, 60, 0.1) 0%, transparent 50%)',
+          pointerEvents: 'none'
+        }}></div>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
+          <div style={{ textAlign: 'center', marginBottom: '64px' }}>
+            <h2 style={{
+              fontSize: '32px',
+              fontWeight: '700',
+              color: '#2c3e50',
+              margin: '0 0 16px 0',
+              textAlign: 'center'
+            }}>
+              강력한 AI 기능들
+            </h2>
+            <p style={{
+              fontSize: '18px',
+              color: '#7f8c8d',
+              margin: 0,
+              maxWidth: '600px',
+              marginLeft: 'auto',
+              marginRight: 'auto'
+            }}>
+              블로그 운영에 필요한 모든 기능을 하나의 플랫폼에서 해결하세요
+            </p>
+          </div>
+
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', 
+            gap: '32px',
+            alignItems: 'start',
+            justifyItems: 'center' 
+          }}>
+            {[
+              { 
+                icon: '✍️', 
+                title: 'AI 콘텐츠 생성', 
+                desc: '주제만 입력하면 고품질 블로그 글을 자동으로 생성합니다. 자연스러운 문체와 SEO 최적화가 기본으로 제공됩니다.',
+                color: '#e74c3c'
+              },
+              { 
+                icon: '📅', 
+                title: '발행 스케줄링', 
+                desc: '원하는 시간에 자동으로 발행되도록 예약할 수 있습니다. 여러 플랫폼에 동시 예약도 가능합니다.',
+                color: '#3498db'
+              },
+              { 
+                icon: '🔗', 
+                title: '멀티 플랫폼 연동', 
+                desc: 'WordPress, 티스토리, 네이버 블로그 등 주요 플랫폼에 API 연동으로 원클릭 발행이 가능합니다.',
+                color: '#2ecc71'
+              },
+              { 
+                icon: '📊', 
+                title: 'SEO 최적화', 
+                desc: '검색엔진 최적화된 제목, 메타 태그, 키워드 밀도를 자동으로 분석하고 적용합니다.',
+                color: '#f39c12'
+              },
+              { 
+                icon: '🎨', 
+                title: '다양한 템플릿', 
+                desc: '리뷰, 가이드, 뉴스, 기술 글 등 다양한 목적에 맞는 템플릿을 제공합니다.',
+                color: '#9b59b6'
+              },
+              { 
+                icon: '📈', 
+                title: '성과 분석', 
+                desc: '생성된 콘텐츠의 조회수, 검색 순위, 참여도 등을 추적하고 분석합니다.',
+                color: '#1abc9c'
+              }
+            ].map((feature, i) => (
+              <div key={i} style={{
+                background: '#ffffff',
+                borderRadius: '16px',
+                padding: '32px',
+                textAlign: 'center',
+                boxShadow: '0 8px 30px rgba(0,0,0,0.1)',
+                transition: 'all 0.3s ease',
+                border: `2px solid ${feature.color}20`
+              }}>
+                <div style={{ 
+                  fontSize: '48px', 
+                  marginBottom: '24px',
+                  filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.1))'
+                }}>
+                  {feature.icon}
+                </div>
+                <h3 style={{
+                  fontSize: '24px',
+                  fontWeight: '600',
+                  color: '#2c3e50',
+                  margin: '0 0 16px 0'
+                }}>
+                  {feature.title}
+                </h3>
+                <p style={{
+                  fontSize: '16px',
+                  color: '#7f8c8d',
+                  margin: 0,
+                  lineHeight: '1.6'
+                }}>
+                  {feature.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* How It Works */}
+      <section style={{
+        background: '#ffffff',
+        padding: '80px 24px',
+        position: 'relative'
+      }}>
+        {/* Subtle Pattern */}
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'linear-gradient(45deg, transparent 0%, rgba(52, 152, 219, 0.02) 50%, transparent 100%)',
+          pointerEvents: 'none'
+        }}></div>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
+          <div style={{ textAlign: 'center', marginBottom: '64px' }}>
+            <h2 style={{
+              fontSize: '32px',
+              fontWeight: '700',
+              color: '#2c3e50',
+              margin: '0 0 16px 0'
+            }}>
+              3단계로 끝나는 간단한 과정
+            </h2>
+            <p style={{
+              fontSize: '18px',
+              color: '#7f8c8d',
+              margin: 0,
+              maxWidth: '600px',
+              marginLeft: 'auto',
+              marginRight: 'auto'
+            }}>
+              복잡한 설정 없이 누구나 쉽게 시작할 수 있습니다
+            </p>
+          </div>
+
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
+            gap: '48px',
+            marginBottom: '64px',
+            alignItems: 'start',
+            justifyItems: 'center'
+          }}>
+            {[
+              {
+                step: '01',
+                icon: '✍️',
+                title: '주제 입력',
+                desc: '원하는 블로그 주제와 키워드를 간단히 입력하세요. 카테고리와 스타일도 선택할 수 있습니다.',
+                color: '#e74c3c'
+              },
+              {
+                step: '02',
+                icon: '🤖',
+                title: 'AI 생성',
+                desc: '고급 AI가 SEO 최적화된 고품질 콘텐츠를 3분 내에 생성합니다. 실시간으로 진행 상황을 확인할 수 있습니다.',
+                color: '#3498db'
+              },
+              {
+                step: '03',
+                icon: '🚀',
+                title: '자동 발행',
+                desc: 'WordPress, 티스토리 등 원하는 플랫폼에 바로 발행하거나 예약 발행할 수 있습니다.',
+                color: '#2ecc71'
+              }
+            ].map((step, i) => (
+              <div key={i} style={{
+                textAlign: 'center',
+                position: 'relative'
+              }}>
+                <div style={{
+                  width: '80px',
+                  height: '80px',
+                  borderRadius: '50%',
+                  background: `linear-gradient(135deg, ${step.color}, ${step.color}dd)`,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  margin: '0 auto 24px auto',
+                  fontSize: '32px',
+                  boxShadow: `0 8px 25px ${step.color}40`
+                }}>
+                  {step.icon}
+                </div>
+                <div style={{
+                  position: 'absolute',
+                  top: '-8px',
+                  left: '50%',
+                  transform: 'translateX(-50%)',
+                  background: step.color,
+                  color: '#ffffff',
+                  padding: '4px 12px',
+                  borderRadius: '12px',
+                  fontSize: '12px',
+                  fontWeight: '700'
+                }}>
+                  {step.step}
+                </div>
+                <h3 style={{
+                  fontSize: '24px',
+                  fontWeight: '600',
+                  color: '#2c3e50',
+                  margin: '0 0 16px 0'
+                }}>
+                  {step.title}
+                </h3>
+                <p style={{
+                  fontSize: '16px',
+                  color: '#7f8c8d',
+                  margin: 0,
+                  lineHeight: '1.6'
+                }}>
+                  {step.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          {/* Before/After Comparison */}
+          <div style={{
+            background: 'linear-gradient(135deg, #f8f9fa, #ffffff)',
+            borderRadius: '20px',
+            padding: '48px',
+            boxShadow: '0 8px 30px rgba(0,0,0,0.1)',
+            border: '1px solid #e9ecef'
+          }}>
+            <h3 style={{
+              fontSize: '24px',
+              fontWeight: '700',
+              color: '#2c3e50',
+              textAlign: 'center',
+              marginBottom: '40px'
+            }}>
+              기존 방식 vs Versatify
+            </h3>
+            <div style={{ 
+              display: 'grid', 
+              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
+              gap: '40px',
+              alignItems: 'start'
+            }}>
+              {/* Before */}
+              <div>
+                <h4 style={{
+                  fontSize: '18px',
+                  fontWeight: '600',
+                  color: '#e74c3c',
+                  marginBottom: '24px',
+                  textAlign: 'center',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px'
+                }}>
+                  😰 기존 방식
+                </h4>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                  {[
+                    '⏰ 주제 조사에 1-2시간 소요',
+                    '✍️ 글 작성에 3-4시간 필요',
+                    '🔍 SEO 최적화 별도 작업',
+                    '📝 각 플랫폼별 수동 발행',
+                    '😵 총 6-8시간 소요'
+                  ].map((item, i) => (
+                    <div key={i} style={{
+                      fontSize: '16px',
+                      color: '#7f8c8d',
+                      padding: '12px 16px',
+                      background: '#fef2f2',
+                      borderRadius: '8px',
+                      border: '1px solid #fecaca'
+                    }}>
+                      {item}
+                    </div>
+                  ))}
+                </div>
+              </div>
+              
+              {/* After */}
+              <div>
+                <h4 style={{
+                  fontSize: '18px',
+                  fontWeight: '600',
+                  color: '#2ecc71',
+                  marginBottom: '24px',
+                  textAlign: 'center',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px'
+                }}>
+                  🎉 Versatify 사용 시
+                </h4>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                  {[
+                    '⚡ 주제 입력 30초',
+                    '🤖 AI 자동 생성 3분',
+                    '🎯 SEO 최적화 자동 적용',
+                    '🚀 멀티 플랫폼 원클릭 발행',
+                    '✨ 총 3분 30초 완료!'
+                  ].map((item, i) => (
+                    <div key={i} style={{
+                      fontSize: '16px',
+                      color: '#7f8c8d',
+                      padding: '12px 16px',
+                      background: '#f0f9f0',
+                      borderRadius: '8px',
+                      border: '1px solid #c6f6c6'
+                    }}>
+                      {item}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing Section */}
+      <section id="pricing" style={{
+        background: 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)',
+        padding: '80px 24px'
+      }}>
+        <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: '64px' }}>
+            <h2 style={{
+              fontSize: '32px',
+              fontWeight: '700',
+              color: '#2c3e50',
+              margin: '0 0 16px 0'
+            }}>
+              투명한 가격, 확실한 가치
+            </h2>
+            <p style={{
+              fontSize: '18px',
+              color: '#7f8c8d',
+              margin: 0,
+              maxWidth: '600px',
+              marginLeft: 'auto',
+              marginRight: 'auto'
+            }}>
+              무료로 시작해서 필요할 때 업그레이드하세요
+            </p>
+          </div>
+
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', 
+            gap: '32px',
+            marginBottom: '48px',
+            alignItems: 'stretch',
+            justifyItems: 'center'
+          }}>
+            {/* Free Plan */}
+            <div style={{
+              background: '#ffffff',
+              borderRadius: '20px',
+              padding: '48px 40px',
+              textAlign: 'center',
+              border: '2px solid #e9ecef',
+              position: 'relative',
+              boxShadow: '0 8px 30px rgba(0,0,0,0.1)',
+              transition: 'all 0.3s ease'
+            }}>
+              <h3 style={{
+                fontSize: '24px',
+                fontWeight: '700',
+                color: '#2c3e50',
+                margin: '0 0 8px 0'
+              }}>
+                Free
+              </h3>
+              <p style={{
+                fontSize: '16px',
+                color: '#7f8c8d',
+                margin: '0 0 32px 0'
+              }}>
+                시작하기 좋은 무료 플랜
+              </p>
+              <div style={{ marginBottom: '40px' }}>
+                <span style={{
+                  fontSize: '48px',
+                  fontWeight: '700',
+                  color: '#2c3e50'
+                }}>
+                  ₩0
+                </span>
+                <span style={{
+                  fontSize: '18px',
+                  color: '#7f8c8d'
+                }}>
+                  /월
+                </span>
+              </div>
+              
+              <div style={{
+                textAlign: 'left',
+                marginBottom: '40px'
+              }}>
+                {[
+                  '월 10개 블로그 글 생성',
+                  '기본 템플릿 사용',
+                  'WordPress/티스토리 발행',
+                  '커뮤니티 지원',
+                  '기본 SEO 최적화'
+                ].map((feature, j) => (
+                  <div key={j} style={{
+                    fontSize: '16px',
+                    color: '#7f8c8d',
+                    marginBottom: '16px',
+                    padding: '0 0 0 32px',
+                    position: 'relative',
+                    display: 'flex',
+                    alignItems: 'center'
+                  }}>
+                    <span style={{
+                      position: 'absolute',
+                      left: 0,
+                      color: '#2ecc71',
+                      fontWeight: '700',
+                      fontSize: '18px'
+                    }}>✓</span>
+                    {feature}
+                  </div>
+                ))}
+              </div>
+              
+              <Link to="/app/generate">
+                <button style={{
+                  width: '100%',
+                  background: 'transparent',
+                  color: '#2c3e50',
+                  border: '2px solid #e9ecef',
+                  borderRadius: '12px',
+                  padding: '16px 32px',
+                  fontSize: '16px',
+                  fontWeight: '600',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease'
+                }}>
+                  무료로 시작하기
+                </button>
+              </Link>
+            </div>
+
+            {/* Pro Plan */}
+            <div style={{
+              background: '#ffffff',
+              borderRadius: '20px',
+              padding: '48px 40px',
+              textAlign: 'center',
+              border: '2px solid #e74c3c',
+              position: 'relative',
+              boxShadow: '0 12px 40px rgba(231, 76, 60, 0.2)',
+              transform: 'scale(1.05)',
+              transition: 'all 0.3s ease'
+            }}>
+              {/* Popular Badge */}
+              <div style={{
+                position: 'absolute',
+                top: '-16px',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                background: 'linear-gradient(135deg, #e74c3c, #c0392b)',
+                color: '#ffffff',
+                padding: '8px 24px',
+                borderRadius: '20px',
+                fontSize: '14px',
+                fontWeight: '700',
+                boxShadow: '0 4px 15px rgba(231, 76, 60, 0.4)'
+              }}>
+                🔥 가장 인기
+              </div>
+              
+              <h3 style={{
+                fontSize: '24px',
+                fontWeight: '700',
+                color: '#2c3e50',
+                margin: '0 0 8px 0'
+              }}>
+                Pro
+              </h3>
+              <p style={{
+                fontSize: '16px',
+                color: '#7f8c8d',
+                margin: '0 0 32px 0'
+              }}>
+                전문 블로거를 위한 무제한 플랜
+              </p>
+              <div style={{ marginBottom: '40px' }}>
+                <span style={{
+                  fontSize: '48px',
+                  fontWeight: '700',
+                  color: '#2c3e50'
+                }}>
+                  ₩19,900
+                </span>
+                <span style={{
+                  fontSize: '18px',
+                  color: '#7f8c8d'
+                }}>
+                  /월
+                </span>
+              </div>
+              
+              <div style={{
+                textAlign: 'left',
+                marginBottom: '40px'
+              }}>
+                {[
+                  '무제한 블로그 글 생성',
+                  '고급 템플릿 및 스타일',
+                  '예약 발행 기능',
+                  '고급 SEO 최적화',
+                  '우선 고객 지원',
+                  'API 연동 지원',
+                  '상세 분석 리포트'
+                ].map((feature, j) => (
+                  <div key={j} style={{
+                    fontSize: '16px',
+                    color: '#7f8c8d',
+                    marginBottom: '16px',
+                    padding: '0 0 0 32px',
+                    position: 'relative',
+                    display: 'flex',
+                    alignItems: 'center'
+                  }}>
+                    <span style={{
+                      position: 'absolute',
+                      left: 0,
+                      color: '#e74c3c',
+                      fontWeight: '700',
+                      fontSize: '18px'
+                    }}>✓</span>
+                    {feature}
+                  </div>
+                ))}
+              </div>
+              
+              <Link to="/app/generate">
+                <button style={{
+                  width: '100%',
+                  background: 'linear-gradient(135deg, #e74c3c, #c0392b)',
+                  color: '#ffffff',
+                  border: 'none',
+                  borderRadius: '12px',
+                  padding: '16px 32px',
+                  fontSize: '16px',
+                  fontWeight: '600',
+                  cursor: 'pointer',
+                  boxShadow: '0 8px 25px rgba(231, 76, 60, 0.4)',
+                  transition: 'all 0.3s ease'
+                }}>
+                  14일 무료 체험 시작
+                </button>
+              </Link>
+              
+              <p style={{
+                fontSize: '14px',
+                color: '#95a5a6',
+                margin: '16px 0 0 0'
+              }}>
+                체험 기간 중 언제든 취소 가능
+              </p>
+            </div>
+          </div>
+
+          {/* Money Back Guarantee */}
+          <div style={{
+            textAlign: 'center',
+            padding: '32px',
+            background: '#ffffff',
+            borderRadius: '16px',
+            border: '1px solid #e9ecef',
+            boxShadow: '0 4px 20px rgba(0,0,0,0.1)'
+          }}>
+            <div style={{ fontSize: '48px', marginBottom: '16px' }}>💯</div>
+            <h4 style={{
+              fontSize: '20px',
+              fontWeight: '600',
+              color: '#2c3e50',
+              margin: '0 0 8px 0'
+            }}>
+              30일 무조건 환불 보장
+            </h4>
+            <p style={{
+              fontSize: '16px',
+              color: '#7f8c8d',
+              margin: 0
+            }}>
+              만족하지 않으시면 이유를 묻지 않고 전액 환불해드립니다
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section style={{
+        background: '#ffffff',
+        padding: '80px 24px'
+      }}>
+        <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: '64px' }}>
+            <h2 style={{
+              fontSize: '32px',
+              fontWeight: '700',
+              color: '#2c3e50',
+              margin: '0 0 16px 0'
+            }}>
+              자주 묻는 질문
+            </h2>
+            <p style={{
+              fontSize: '18px',
+              color: '#7f8c8d',
+              margin: 0
+            }}>
+              궁금한 점이 있으시면 언제든 문의해주세요
+            </p>
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            {[
+              {
+                q: 'AI가 생성한 글의 품질은 어떤가요?',
+                a: '최신 AI 기술을 사용하여 자연스럽고 읽기 쉬운 고품질 콘텐츠를 생성합니다. SEO 최적화와 논리적인 구조로 작성되며, 생성 후 언제든지 수정할 수 있습니다.'
+              },
+              {
+                q: '어떤 블로그 플랫폼을 지원하나요?',
+                a: 'WordPress, 티스토리, 네이버 블로그 등 주요 플랫폼을 지원합니다. API 연동을 통해 원클릭으로 발행할 수 있으며, 새로운 플랫폼도 지속적으로 추가하고 있습니다.'
+              },
+              {
+                q: '무료 플랜으로 충분한가요?',
+                a: '개인 블로거나 소규모 비즈니스라면 월 10개 글로도 충분합니다. 더 많은 글이 필요하거나 고급 기능을 원한다면 Pro 플랜을 추천합니다.'
+              },
+              {
+                q: '생성된 글을 수정할 수 있나요?',
+                a: '네, 생성된 글은 자유롭게 수정 가능합니다. 내장된 에디터로 바로 편집하거나 HTML로 직접 수정할 수 있습니다.'
+              },
+              {
+                q: '언제든지 취소할 수 있나요?',
+                a: '네, 언제든지 취소 가능합니다. 유료 플랜은 30일 무조건 환불 보장을 제공하며, 취소 시 즉시 처리됩니다.'
+              }
+            ].map((faq, i) => (
+              <div key={i} style={{
+                background: '#f8f9fa',
+                borderRadius: '16px',
+                padding: '32px',
+                border: '1px solid #e9ecef',
+                transition: 'all 0.3s ease'
+              }}>
+                <h4 style={{
+                  fontSize: '18px',
+                  fontWeight: '600',
+                  color: '#2c3e50',
+                  margin: '0 0 16px 0'
+                }}>
+                  Q. {faq.q}
+                </h4>
+                <p style={{
+                  fontSize: '16px',
+                  color: '#7f8c8d',
+                  margin: 0,
+                  lineHeight: '1.6'
+                }}>
+                  A. {faq.a}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Final CTA Section */}
+      <section style={{
+        background: 'linear-gradient(135deg, #2c3e50 0%, #34495e 100%)',
+        padding: '80px 24px',
+        textAlign: 'center',
+        color: '#ffffff'
+      }}>
+        <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+          <h2 style={{
+            fontSize: '32px',
+            fontWeight: '700',
+            margin: '0 0 16px 0'
+          }}>
+            더 이상 시간 낭비하지 마세요
+          </h2>
+          <p style={{
+            fontSize: '20px',
+            margin: '0 0 40px 0',
+            opacity: 0.9,
+            lineHeight: '1.5'
+          }}>
+            지금 시작하면 <span style={{ color: '#e74c3c', fontWeight: '700' }}>첫 10개 글을 무료</span>로 생성할 수 있습니다.<br />
+            블로그 운영, 이제 3분이면 충분합니다.
+          </p>
+          <Link to="/app/generate">
+            <button style={{
+              background: 'linear-gradient(135deg, #e74c3c, #c0392b)',
+              color: '#ffffff',
+              border: 'none',
+              borderRadius: '12px',
+              padding: '20px 40px',
+              fontSize: '18px',
+              fontWeight: '700',
+              cursor: 'pointer',
+              boxShadow: '0 8px 25px rgba(231, 76, 60, 0.5)',
+              marginBottom: '16px',
+              transition: 'all 0.3s ease'
+            }}>
+              🚀 지금 바로 무료 시작하기
+            </button>
+          </Link>
+          <p style={{
+            fontSize: '16px',
+            opacity: 0.8,
+            margin: 0
+          }}>
+            설치 불필요 • 5초만에 가입 • 바로 사용 가능
+          </p>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer style={{
+        background: '#ffffff',
+        borderTop: '1px solid #e9ecef',
+        padding: '48px 24px'
+      }}>
+        <div style={{
+          maxWidth: '1200px',
+          margin: '0 auto',
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+          gap: '32px',
+          marginBottom: '32px',
+          alignItems: 'start'
+        }}>
+          <div>
+            <div style={{
+              fontSize: '24px',
+              fontWeight: '700',
+              color: '#2c3e50',
+              marginBottom: '16px'
+            }}>
+              Versatify
+            </div>
+            <p style={{
+              fontSize: '16px',
+              color: '#7f8c8d',
+              margin: '0 0 16px 0',
+              lineHeight: '1.6'
+            }}>
+              AI로 더 스마트한 블로그 운영을<br />
+              시작하세요. 3분이면 충분합니다.
+            </p>
+          </div>
+          <div>
+            <h4 style={{
+              fontSize: '18px',
+              fontWeight: '600',
+              color: '#2c3e50',
+              marginBottom: '16px'
+            }}>
+              제품
+            </h4>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              <a href="#features" style={{ color: '#7f8c8d', textDecoration: 'none', fontSize: '16px' }}>기능</a>
+              <a href="#pricing" style={{ color: '#7f8c8d', textDecoration: 'none', fontSize: '16px' }}>가격</a>
+              <Link to="/dashboard" style={{ color: '#7f8c8d', textDecoration: 'none', fontSize: '16px' }}>데모</Link>
+            </div>
+          </div>
+          <div>
+            <h4 style={{
+              fontSize: '18px',
+              fontWeight: '600',
+              color: '#2c3e50',
+              marginBottom: '16px'
+            }}>
+              지원
+            </h4>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              <Link to="/terms" style={{ color: '#7f8c8d', textDecoration: 'none', fontSize: '16px' }}>이용약관</Link>
+              <Link to="/privacy" style={{ color: '#7f8c8d', textDecoration: 'none', fontSize: '16px' }}>개인정보처리방침</Link>
+              <a href="mailto:support@versatify.co" style={{ color: '#7f8c8d', textDecoration: 'none', fontSize: '16px' }}>문의하기</a>
+            </div>
+          </div>
+        </div>
+        <div style={{
+          textAlign: 'center',
+          paddingTop: '32px',
+          borderTop: '1px solid #f1f5f9',
+          fontSize: '16px',
+          color: '#95a5a6'
+        }}>
+          © 2025 Versatify. 블로그 자동화의 새로운 기준.
+        </div>
+      </footer>
+    </div>
+  );
+}
+
+
+=================================================================
+📊 DASHBOARD2.TSX - 메인 대시보드 (로그인 후 화면, 이미지와 동일한 UI)
+=================================================================
+
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { useAuthState } from '../lib/auth';
+
+export default function Dashboard2() {
+  const auth = useAuthState();
+  
+  // 사용자 이름 추출
+  const getUserName = () => {
+    if (auth.user?.email) {
+      const emailName = auth.user.email.split('@')[0];
+      return emailName.charAt(0).toUpperCase() + emailName.slice(1);
+    }
+    return 'Blogger';
+  };
+
+  return (
+    <div style={{ 
+      display: 'flex', 
+      minHeight: '100vh', 
+      background: '#f8f9fa',
+      fontFamily: 'system-ui, -apple-system, sans-serif'
+    }}>
+      {/* Left Sidebar */}
+      <div style={{
+        width: '260px',
+        background: '#ffffff',
+        padding: '24px 20px',
+        borderRight: '1px solid #e9ecef'
+      }}>
+        {/* Profile */}
+        <div style={{ marginBottom: '32px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
+            <div style={{
+              width: '40px',
+              height: '40px',
+              borderRadius: '50%',
+              background: 'linear-gradient(135deg, #e74c3c, #f39c12)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: '#ffffff',
+              fontSize: '14px',
+              fontWeight: '600'
+            }}>
+              {getUserName().substring(0, 2).toUpperCase()}
+            </div>
+            <div>
+              <div style={{ fontWeight: '600', fontSize: '14px', color: '#2c3e50' }}>Hi {getUserName()}!</div>
+              <div style={{ fontSize: '12px', color: '#7f8c8d' }}>블로그 작성자</div>
+            </div>
+          </div>
+          <div style={{ fontSize: '11px', color: '#95a5a6', marginBottom: '8px' }}>16% task completed</div>
+          <div style={{
+            width: '100%',
+            height: '4px',
+            background: '#ecf0f1',
+            borderRadius: '2px',
+            overflow: 'hidden'
+          }}>
+            <div style={{ width: '16%', height: '100%', background: '#e74c3c', borderRadius: '2px' }} />
+          </div>
+        </div>
+
+        {/* Menu */}
+        <div style={{ marginBottom: '32px' }}>
+          <div style={{ fontSize: '11px', fontWeight: '600', color: '#95a5a6', marginBottom: '16px', textTransform: 'uppercase' }}>Menu</div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+            <MenuItem icon="📝" label="블로그 생성" to="/app/generate" />
+            <MenuItem icon="📥" label="생성 내역" to="/app/history" active />
+            <MenuItem icon="📁" label="발행 큐" to="/app/queue" />
+            <MenuItem icon="👥" label="Templates" />
+            <MenuItem icon="💬" label="Messages" badge="5" />
+            <MenuItem icon="⚙️" label="설정" to="/app/settings" />
+          </div>
+        </div>
+
+        {/* Favorites */}
+        <div style={{ marginBottom: '32px' }}>
+          <div style={{ fontSize: '11px', fontWeight: '600', color: '#95a5a6', marginBottom: '16px', textTransform: 'uppercase' }}>Favorites</div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <FavoriteItem color="#3498db" label="기술 블로그 디자인" to="/app/generate?template=tech" />
+            <FavoriteItem color="#2ecc71" label="모바일 앱 플랜..." to="/app/generate?template=mobile" />
+            <FavoriteItem color="#9b59b6" label="UI 디자인 워크..." to="/app/generate?template=ui" />
+          </div>
+        </div>
+
+        <div style={{ fontSize: '10px', color: '#95a5a6' }}>2024 Versatify</div>
+      </div>
+
+      {/* Main Content */}
+      <div style={{ flex: '1', padding: '32px 40px', maxWidth: '700px' }}>
+        {/* Header */}
+        <div style={{ marginBottom: '32px' }}>
+          <h1 style={{ fontSize: '28px', fontWeight: '700', color: '#2c3e50', margin: '0 0 16px 0' }}>Hi {getUserName()}!</h1>
+        </div>
+
+        {/* Hero Cards */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '40px' }}>
+          {/* 블로그 생성 Card */}
+          <Link to="/app/generate" style={{ textDecoration: 'none' }}>
+            <div style={{
+              background: 'linear-gradient(135deg, #e74c3c 0%, #c0392b 100%)',
+              borderRadius: '12px',
+              padding: '24px',
+              color: '#ffffff',
+              position: 'relative',
+              overflow: 'hidden',
+              cursor: 'pointer',
+              minHeight: '120px'
+            }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
+                <div style={{ fontSize: '20px' }}>💡</div>
+                <div style={{ fontSize: '16px', color: 'rgba(255,255,255,0.7)' }}>⋯</div>
+              </div>
+              <h3 style={{ fontSize: '16px', fontWeight: '700', margin: '0 0 12px 0' }}>R&D for New Banking Mobile App</h3>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: '#ffffff', border: '2px solid #e74c3c' }} />
+                  <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: '#f1c40f', marginLeft: '-8px', border: '2px solid #e74c3c' }} />
+                  <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: '#2ecc71', marginLeft: '-8px', border: '2px solid #e74c3c' }} />
+                </div>
+              </div>
+            </div>
+          </Link>
+
+          {/* 템플릿 Card */}
+          <Link to="/app/generate?template=signup" style={{ textDecoration: 'none' }}>
+            <div style={{
+              background: 'linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%)',
+              borderRadius: '12px',
+              padding: '24px',
+              color: '#ffffff',
+              position: 'relative',
+              overflow: 'hidden',
+              cursor: 'pointer',
+              minHeight: '120px'
+            }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
+                <div style={{ fontSize: '20px' }}>✋</div>
+                <div style={{ position: 'absolute', right: '20px', top: '10px', fontSize: '40px', opacity: 0.3 }}>👋</div>
+              </div>
+              <h3 style={{ fontSize: '16px', fontWeight: '700', margin: '0 0 12px 0' }}>Create Signup Pages</h3>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: '#ffffff', border: '2px solid #9b59b6' }} />
+                  <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: '#f1c40f', marginLeft: '-8px', border: '2px solid #9b59b6' }} />
+                  <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: '#2ecc71', marginLeft: '-8px', border: '2px solid #9b59b6' }} />
+                </div>
+              </div>
+            </div>
+          </Link>
+        </div>
+
+        {/* Monthly Tasks */}
+        <div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+            <h2 style={{ fontSize: '22px', fontWeight: '700', color: '#2c3e50', margin: 0 }}>Monthly Tasks</h2>
+            <div style={{ display: 'flex', gap: '12px' }}>
+              <button style={{ 
+                background: 'transparent', 
+                border: 'none', 
+                color: '#7f8c8d',
+                fontSize: '14px',
+                cursor: 'pointer'
+              }}>Archive</button>
+              <Link to="/app/generate">
+                <button style={{
+                  background: '#3498db',
+                  color: '#ffffff',
+                  border: 'none',
+                  borderRadius: '6px',
+                  padding: '8px 16px',
+                  fontSize: '14px',
+                  fontWeight: '500',
+                  cursor: 'pointer'
+                }}>+ New</button>
+              </Link>
+            </div>
+          </div>
+
+          {/* Task Tabs */}
+          <div style={{ display: 'flex', gap: '24px', marginBottom: '24px', borderBottom: '1px solid #e9ecef' }}>
+            <button style={{
+              background: 'none',
+              border: 'none',
+              color: '#3498db',
+              fontSize: '14px',
+              fontWeight: '600',
+              padding: '0 0 12px 0',
+              borderBottom: '2px solid #3498db',
+              cursor: 'pointer'
+            }}>Active Tasks</button>
+            <button style={{
+              background: 'none',
+              border: 'none',
+              color: '#7f8c8d',
+              fontSize: '14px',
+              padding: '0 0 12px 0',
+              cursor: 'pointer'
+            }}>Completed</button>
+          </div>
+
+          {/* Search */}
+          <div style={{ marginBottom: '24px' }}>
+            <input 
+              placeholder="🔍 Search"
+              style={{
+                width: '200px',
+                padding: '8px 12px',
+                border: '1px solid #e9ecef',
+                borderRadius: '6px',
+                fontSize: '14px',
+                background: '#f8f9fa'
+              }}
+            />
+          </div>
+
+          {/* Task List */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            <div style={{ fontSize: '11px', fontWeight: '600', color: '#95a5a6', textTransform: 'uppercase' }}>Today</div>
+            
+            <TaskItem 
+              icon="U"
+              iconBg="#e74c3c"
+              title="Uber"
+              subtitle="Landing page design • Assigned 2 days ago"
+              avatars={[1, 2, 3]}
+            />
+            
+            <TaskItem 
+              icon="f"
+              iconBg="#1877f2"
+              title="Facebook Ads"
+              subtitle="Facebook Ads Design for Captiva.book • Like created 4 days ago"
+              avatars={[1, 2]}
+            />
+            
+            <TaskItem 
+              icon="P"
+              iconBg="#9b59b6"
+              title="Payoneer"
+              subtitle="Payoneer Checkout Page • Due in 5 days"
+              avatars={[1, 2, 3]}
+            />
+            
+            <div style={{ fontSize: '11px', fontWeight: '600', color: '#95a5a6', textTransform: 'uppercase', marginTop: '16px' }}>Tomorrow</div>
+            
+            <TaskItem 
+              icon="U"
+              iconBg="#2ecc71"
+              title="Upwork"
+              subtitle="Upwork Identity Graphic task. App • Assigned for four days"
+              avatars={[1, 2, 3]}
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Right Panel */}
+      <div style={{ width: '280px', padding: '32px 24px', background: '#ffffff' }}>
+        {/* Today's Schedule */}
+        <div style={{ marginBottom: '32px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+            <h3 style={{ fontSize: '16px', fontWeight: '700', color: '#2c3e50', margin: 0 }}>Today's Schedule</h3>
+            <div style={{ fontSize: '16px', color: '#7f8c8d' }}>📅</div>
+          </div>
+          
+          <div style={{ marginBottom: '16px' }}>
+            <div style={{ fontSize: '11px', color: '#e74c3c', marginBottom: '4px' }}>30 minute call with Client</div>
+            <div style={{ fontSize: '14px', fontWeight: '600', color: '#2c3e50' }}>Project Discovery Call</div>
+          </div>
+          
+          <div style={{
+            background: '#2ecc71',
+            borderRadius: '12px',
+            padding: '16px',
+            color: '#ffffff',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <div style={{ display: 'flex' }}>
+                <div style={{ width: '24px', height: '24px', borderRadius: '50%', background: '#ffffff' }} />
+                <div style={{ width: '24px', height: '24px', borderRadius: '50%', background: '#f1c40f', marginLeft: '-8px' }} />
+                <div style={{ width: '24px', height: '24px', borderRadius: '50%', background: '#e74c3c', marginLeft: '-8px' }} />
+              </div>
+              <span style={{ fontSize: '14px', fontWeight: '600' }}>28:35</span>
+            </div>
+            <div style={{ display: 'flex', gap: '8px' }}>
+              <span>🔗</span>
+              <span>⋯</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Design Project */}
+        <div style={{ marginBottom: '32px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+            <h3 style={{ fontSize: '16px', fontWeight: '700', color: '#2c3e50', margin: 0 }}>Design Project</h3>
+            <div style={{ fontSize: '16px', color: '#7f8c8d' }}>⋯</div>
+          </div>
+          
+          <div style={{ marginBottom: '12px' }}>
+            <div style={{ fontSize: '11px', color: '#7f8c8d', marginBottom: '4px' }}>⏰ In progress</div>
+          </div>
+          
+          <div style={{ display: 'flex', gap: '20px', marginBottom: '16px' }}>
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ fontSize: '20px', fontWeight: '700', color: '#2c3e50' }}>114*</div>
+              <div style={{ fontSize: '10px', color: '#7f8c8d' }}>Done</div>
+            </div>
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ fontSize: '20px', fontWeight: '700', color: '#2c3e50' }}>24*</div>
+              <div style={{ fontSize: '10px', color: '#7f8c8d' }}>In progress</div>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <div style={{ fontSize: '10px', color: '#7f8c8d' }}>Members</div>
+              <div style={{ display: 'flex' }}>
+                <div style={{ width: '16px', height: '16px', borderRadius: '50%', background: '#e74c3c' }} />
+                <div style={{ width: '16px', height: '16px', borderRadius: '50%', background: '#2ecc71', marginLeft: '-4px' }} />
+                <div style={{ width: '16px', height: '16px', borderRadius: '50%', background: '#f1c40f', marginLeft: '-4px' }} />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* New Task */}
+        <div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+            <h3 style={{ fontSize: '16px', fontWeight: '700', color: '#2c3e50', margin: 0 }}>New Task</h3>
+            <div style={{ fontSize: '16px', color: '#7f8c8d' }}>⋯</div>
+          </div>
+          
+          <div style={{ marginBottom: '12px' }}>
+            <div style={{ fontSize: '11px', color: '#7f8c8d', marginBottom: '8px' }}>Create new</div>
+            <Link to="/app/generate">
+              <button style={{
+                width: '100%',
+                padding: '8px 12px',
+                border: '1px solid #e9ecef',
+                borderRadius: '6px',
+                background: '#ffffff',
+                textAlign: 'left',
+                fontSize: '14px',
+                color: '#7f8c8d',
+                cursor: 'pointer'
+              }}>새 블로그 작성하기</button>
+            </Link>
+          </div>
+          
+          {/* Emoji selector */}
+          <div style={{ display: 'flex', gap: '8px', marginBottom: '16px', flexWrap: 'wrap' }}>
+            {['😀', '😊', '🔒', '😭', '🤔', '🔥', '👍', '😍', '😢'].map(emoji => (
+              <span key={emoji} style={{ 
+                fontSize: '16px', 
+                cursor: 'pointer',
+                padding: '4px',
+                borderRadius: '4px'
+              }}>{emoji}</span>
+            ))}
+          </div>
+          
+          <div style={{ marginBottom: '16px' }}>
+            <div style={{ fontSize: '11px', color: '#7f8c8d', marginBottom: '8px' }}>Add Collaborators</div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <div style={{ display: 'flex' }}>
+                <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: '#3498db', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '10px', color: '#fff' }}>A</div>
+                <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: '#2ecc71', marginLeft: '-8px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '10px', color: '#fff' }}>X</div>
+              </div>
+              <span style={{ fontSize: '12px', color: '#7f8c8d' }}>Angela X.</span>
+              <span style={{ fontSize: '12px', color: '#7f8c8d' }}>×</span>
+              <span style={{ fontSize: '12px', color: '#7f8c8d' }}>Dima</span>
+              <span style={{ fontSize: '12px', color: '#7f8c8d' }}>×</span>
+              <Link to="/app/generate">
+                <button style={{
+                  width: '28px',
+                  height: '28px',
+                  borderRadius: '50%',
+                  background: '#e74c3c',
+                  color: '#ffffff',
+                  border: 'none',
+                  cursor: 'pointer',
+                  fontSize: '14px'
+                }}>+</button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function MenuItem({ icon, label, active, badge, to }: { icon: string; label: string; active?: boolean; badge?: string; to?: string }) {
+  const content = (
+    <div style={{
+      display: 'flex',
+      alignItems: 'center',
+      gap: '12px',
+      padding: '8px 12px',
+      borderRadius: '6px',
+      background: active ? '#ecf0f1' : 'transparent',
+      cursor: 'pointer',
+      position: 'relative',
+      textDecoration: 'none',
+      color: 'inherit'
+    }}>
+      <span style={{ fontSize: '14px' }}>{icon}</span>
+      <span style={{ 
+        fontSize: '13px', 
+        color: active ? '#2c3e50' : '#7f8c8d',
+        fontWeight: active ? '600' : '400'
+      }}>{label}</span>
+      {badge && (
+        <span style={{
+          position: 'absolute',
+          right: '12px',
+          background: '#e74c3c',
+          color: '#ffffff',
+          fontSize: '10px',
+          fontWeight: '600',
+          padding: '2px 6px',
+          borderRadius: '8px',
+          minWidth: '14px',
+          textAlign: 'center'
+        }}>{badge}</span>
+      )}
+    </div>
+  );
+
+  return to ? <Link to={to} style={{ textDecoration: 'none', color: 'inherit' }}>{content}</Link> : content;
+}
+
+function FavoriteItem({ color, label, to }: { color: string; label: string; to?: string }) {
+  const content = (
+    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer', padding: '4px 0' }}>
+      <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: color }} />
+      <span style={{ fontSize: '13px', color: '#7f8c8d' }}>{label}</span>
+    </div>
+  );
+
+  return to ? <Link to={to} style={{ textDecoration: 'none', color: 'inherit' }}>{content}</Link> : content;
+}
+
+function TaskItem({ icon, iconBg, title, subtitle, avatars }: { 
+  icon: string; 
+  iconBg: string; 
+  title: string; 
+  subtitle: string; 
+  avatars: number[];
+}) {
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '8px 0', borderBottom: '1px solid #f8f9fa' }}>
+      <div style={{
+        width: '32px',
+        height: '32px',
+        borderRadius: '6px',
+        background: iconBg,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        color: '#ffffff',
+        fontSize: '14px',
+        fontWeight: '600'
+      }}>
+        {icon}
+      </div>
+      <div style={{ flex: 1 }}>
+        <div style={{ fontSize: '14px', fontWeight: '600', color: '#2c3e50', marginBottom: '2px' }}>{title}</div>
+        <div style={{ fontSize: '11px', color: '#7f8c8d' }}>{subtitle}</div>
+      </div>
+      <div style={{ display: 'flex' }}>
+        {avatars.map((_, i) => (
+          <div key={i} style={{
+            width: '20px',
+            height: '20px',
+            borderRadius: '50%',
+            background: `hsl(${i * 60 + 200}, 60%, 50%)`,
+            marginLeft: i > 0 ? '-6px' : '0',
+            border: '2px solid #ffffff'
+          }} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+
+=================================================================
+🚀 APP.TSX - 라우팅 및 인증 로직
+=================================================================
+
+import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
+import Layout from './components/Layout';
+import Generate from './pages/Generate';
+import History from './pages/History';
+import Settings from './pages/Settings';
+import Home from './pages/Home';
+import Queue from './pages/Queue';
+import GadgetBlogger from './pages/GadgetBlogger';
+import TestPage from './pages/TestPage';
+import Dashboard2 from './pages/Dashboard2';
+import Blog from './pages/Blog';
+import Post from './pages/Post';
+import Contact from './pages/Contact';
+import Terms from './pages/Terms';
+import Privacy from './pages/Privacy';
+import { SettingsProvider } from './state/SettingsContext';
+import { DraftsProvider } from './state/DraftsContext';
+import { useAuthState } from './lib/auth';
+
+function MainPage() {
+  const auth = useAuthState();
+  
+  // 로그인된 사용자는 대시보드로, 아니면 랜딩페이지로
+  if (auth.isAuthenticated) {
+    return <Navigate to="/app" replace />;
+  }
+  
+  return <Home />;
+}
+
+export default function App() {
+  return (
+    <SettingsProvider>
+      <DraftsProvider>
+        <HashRouter>
+          <Routes>
+            <Route path="/" element={<MainPage />} />
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/post/:id" element={<Post />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/terms" element={<Terms />} />
+            <Route path="/privacy" element={<Privacy />} />
+            <Route path="/test" element={<TestPage />} />
+            <Route path="/gadget" element={<GadgetBlogger />} />
+            <Route path="/dashboard" element={<Dashboard2 />} />
+            <Route path="/app" element={<Layout />}> 
+              <Route index element={<Dashboard2 />} />
+              <Route path="generate" element={<Generate />} />
+              <Route path="history" element={<History />} />
+              <Route path="queue" element={<Queue />} />
+              <Route path="settings" element={<Settings />} />
+            </Route>
+          </Routes>
+        </HashRouter>
+      </DraftsProvider>
+    </SettingsProvider>
+  );
+}
+
+
+=================================================================
+📄 주요 라우트 구조
+=================================================================
+
+/ (root)
+├── 비로그인: Home.tsx (랜딩페이지)
+└── 로그인: 자동 리다이렉트 /app → Dashboard2.tsx
+
+/dashboard
+└── Dashboard2.tsx (데모용 대시보드, 로그인 불필요)
+
+/app (로그인 필요)
+├── /app (index) → Dashboard2.tsx 
+├── /app/generate → Generate.tsx (블로그 생성)
+├── /app/history → History.tsx (생성 히스토리)
+├── /app/queue → Queue.tsx (발행 스케줄)
+└── /app/settings → Settings.tsx (설정)
+
+기타 페이지:
+├── /blog → Blog.tsx
+├── /contact → Contact.tsx
+├── /terms → Terms.tsx
+├── /privacy → Privacy.tsx
+└── /test → TestPage.tsx
+
+
+=================================================================
+💡 프로젝트 핵심 특징
+=================================================================
+
+1. **3-Panel 레이아웃**: 왼쪽 사이드바 + 중앙 메인 + 오른쪽 패널
+2. **인증 기반 라우팅**: 로그인 전/후 다른 화면
+3. **블로그 자동화**: AI 기반 콘텐츠 생성 → 스케줄링 → 멀티 플랫폼 발행
+4. **현대적 UI**: 카드 기반 디자인, 그라데이션, 완벽한 정렬
+5. **반응형**: 그리드 시스템으로 모든 화면 크기 대응
+
+=================================================================
+🎨 컬러 팔레트
+=================================================================
+
+Primary: #e74c3c (빨강)
+Secondary: #3498db (파랑)  
+Success: #2ecc71 (녹색)
+Warning: #f39c12 (주황)
+Purple: #9b59b6 (보라)
+Dark: #2c3e50 (짙은 회색)
+Light: #f8f9fa (밝은 회색)
+Border: #e9ecef (테두리)
+Text: #7f8c8d (중간 회색)
+
+=================================================================
+📱 주요 기능들
+=================================================================
+
+- AI 콘텐츠 생성 (Generate.tsx)
+- SEO 자동 최적화
+- 발행 스케줄링 (Queue.tsx) 
+- 멀티 플랫폼 연동 (WordPress, 티스토리)
+- 생성 히스토리 관리 (History.tsx)
+- 다양한 템플릿
+- 성과 분석
+
+이제 다른 AI가 이 레퍼런스를 보고 완전히 새로운 디자인을 만들 수 있습니다!

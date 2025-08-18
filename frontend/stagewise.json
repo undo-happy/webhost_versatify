@@ -1,0 +1,6 @@
+{
+  "port": 5173,
+  "framework": "react",
+  "buildTool": "vite",
+  "autoStart": true
+}

@@ -45,3 +45,7 @@ module.exports = async function (context, req) {
     context.res = { status: 500, body: { error: `SAS URL 확보 실패: ${error.message}` } };
   }
 };
+<<<<<<< HEAD
+=======
+
+>>>>>>> 5f2fa307 (feat(frontend): replace UI with minimal NewHome landing (CSS-inlined via styles))

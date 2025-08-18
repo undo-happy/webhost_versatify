@@ -79,11 +79,24 @@ export function createApi(baseUrl: string, token?: string) {
     };
   }
 
-  async function call<T>(path: string, payload: unknown): Promise<T> {
-    const url = root + '/' + path.replace(/^\//, '');
+  async function callPost<T>(path: string, payload: unknown): Promise<T> {
+    const url = root + '/api/' + path.replace(/^\//, '');
     const headers: Record<string, string> = { 'Content-Type': 'application/json' };
     if (token) headers['Authorization'] = `Bearer ${token}`;
     const resp = await fetch(url, { method: 'POST', headers, body: JSON.stringify(payload ?? {}) });
+    const contentType = resp.headers.get('content-type') || '';
+    const body = contentType.includes('application/json') ? await resp.json() : await resp.text();
+    if (!resp.ok) {
+      throw new Error(typeof body === 'string' ? body : (body?.error || 'Request failed'));
+    }
+    return body as T;
+  }
+
+  async function callGet<T>(path: string): Promise<T> {
+    const url = root + '/api/' + path.replace(/^\//, '');
+    const headers: Record<string, string> = {};
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+    const resp = await fetch(url, { method: 'GET', headers });
     const contentType = resp.headers.get('content-type') || '';
     const body = contentType.includes('application/json') ? await resp.json() : await resp.text();
     if (!resp.ok) {
@@ -96,31 +109,47 @@ export function createApi(baseUrl: string, token?: string) {
     generateBlog(payload: {
       topic: string; style?: string; outline?: string[]; targetLength?: number; language?: string;
     }): Promise<Draft> {
-      return call<Draft>('generate-blog', payload);
+      return callPost<Draft>('GenerateBlog', payload);
     },
 
     generateAndPublish(payload: {
       topic: string; style?: string; outline?: string[]; targetLength?: number; language?: string;
       publish: true; platform: Platform; wpOptions?: any; tistoryOptions?: any;
     }): Promise<{ draft: Draft; publishResult: unknown }> {
-      return call('generate-and-publish', payload);
+      return callPost('GenerateAndPublish', payload);
     },
 
     publishWordpress(payload: { title: string; content: string; status?: 'draft'|'publish'; categories?: number[]; tags?: number[]; }): Promise<ApiResult> {
-      return call('publish/wordpress', payload);
+      return callPost('PublishWordPress', payload);
     },
 
     publishTistory(payload: { title: string; content: string; visibility?: number; category?: number; tag?: string; }): Promise<ApiResult> {
-      return call('publish/tistory', payload);
+      return callPost('PublishTistory', payload);
     },
 
     enqueuePublish(payload: { platform: Platform; payload: any }): Promise<ApiResult> {
-      return call('enqueue/publish', payload);
+      return callPost('EnqueuePublish', payload);
     },
 
     async getQueueStatus(): Promise<any> {
-      // 임시 구현: 서버가 준비되기 전까지 0으로 채움
-      return Promise.resolve({ summary: { pending: 0, processing: 0, completed: 0, failed: 0 }, queues: { pending: [], completed: [] }, totalTasks: 0 });
+      return callGet('GetQueueStatus');
+    },
+
+    analyzeSEO(payload: { content: string; title?: string; metaDescription?: string; keywords?: string[]; }): Promise<any> {
+      return callPost('AnalyzeSEO', payload);
+    },
+
+    checkGrammar(payload: { text: string; language?: string; useAI?: boolean; }): Promise<any> {
+      return callPost('CheckGrammar', payload);
+    },
+
+    addToQueue(payload: { title: string; content: string; platforms: Platform[]; }): Promise<ApiResult> {
+      return callPost('EnqueuePublish', { 
+        tasks: payload.platforms.map(platform => ({
+          platform,
+          payload: { title: payload.title, content: payload.content }
+        }))
+      });
     }
   };
 }

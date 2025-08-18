@@ -1,5 +1,5 @@
 import { HashRouter, Routes, Route } from 'react-router-dom';
-import Dashboard from './pages/Dashboard';
+import Dashboard from './pages/Dashboard2';
 import Generate from './pages/Generate';
 import History from './pages/History';
 import Settings from './pages/Settings';
