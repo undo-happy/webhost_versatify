@@ -1,16 +1,5 @@
 const { requireClerkAuth } = require('../_auth');
-const AWS = require('aws-sdk');
-
-// R2 클라이언트 설정
-function getR2Client() {
-  return new AWS.S3({
-    endpoint: process.env.R2_ENDPOINT,
-    accessKeyId: process.env.R2_ACCESS_KEY_ID,
-    secretAccessKey: process.env.R2_SECRET_ACCESS_KEY,
-    region: 'auto',
-    signatureVersion: 'v4'
-  });
-}
+const { QueueStorage } = require('../_queue');
 
 module.exports = async function (context, req) {
   context.log('GetQueueStatus invoked');
@@ -39,65 +28,36 @@ module.exports = async function (context, req) {
     const user = await requireClerkAuth(req);
     context.log('Queue status request from user:', user.userId);
 
-    const s3 = getR2Client();
-    const bucketName = process.env.R2_BUCKET_NAME;
-    if (!bucketName) {
-      context.res.status = 500;
-      context.res.body = { error: 'R2_BUCKET_NAME not configured' };
-      return;
-    }
-
-    // 사용자의 큐 폴더들 조회
-    const queueStatuses = ['pending', 'processing', 'completed', 'failed'];
-    const results = {};
+    // 향상된 큐 시스템 사용
+    const queueStorage = new QueueStorage();
+    const storageInfo = queueStorage.getStorageInfo();
     
-    for (const status of queueStatuses) {
-      const prefix = `users/${user.userId}/queue/${status}/`;
-      
-      try {
-        const objects = await s3.listObjectsV2({
-          Bucket: bucketName,
-          Prefix: prefix,
-          MaxKeys: 100
-        }).promise();
-        
-        const tasks = [];
-        for (const obj of objects.Contents || []) {
-          try {
-            const data = await s3.getObject({
-              Bucket: bucketName,
-              Key: obj.Key
-            }).promise();
-            
-            const taskData = JSON.parse(data.Body.toString());
-            tasks.push({
-              taskId: taskData.taskId,
-              platform: taskData.platform,
-              createdAt: taskData.createdAt,
-              status: taskData.status,
-              ...(taskData.error && { error: taskData.error }),
-              ...(taskData.result && { result: taskData.result })
-            });
-          } catch (parseErr) {
-            context.log.warn('Failed to parse task:', obj.Key, parseErr);
-          }
-        }
-        
-        results[status] = tasks.sort((a, b) => 
-          new Date(b.createdAt) - new Date(a.createdAt)
-        );
-      } catch (listErr) {
-        context.log.warn(`Failed to list ${status} tasks:`, listErr);
-        results[status] = [];
-      }
-    }
+    context.log('Queue storage info:', storageInfo);
 
+    const results = await queueStorage.getQueueStatus(user.userId);
     const totalTasks = Object.values(results).reduce((sum, arr) => sum + arr.length, 0);
+
+    // 스토리지별 태스크 카운트
+    const storageStats = {
+      r2: 0,
+      local: 0,
+      local_backup: 0
+    };
+
+    Object.values(results).forEach(tasks => {
+      tasks.forEach(task => {
+        if (task.storage) {
+          storageStats[task.storage] = (storageStats[task.storage] || 0) + 1;
+        }
+      });
+    });
 
     context.res.status = 200;
     context.res.body = {
       userId: user.userId,
       totalTasks,
+      storageInfo,
+      storageStats,
       queues: results,
       summary: {
         pending: results.pending.length,
